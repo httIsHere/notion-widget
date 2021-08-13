@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-08-13 09:37:29
- * @LastEditTime: 2021-08-13 11:49:17
+ * @LastEditTime: 2021-08-13 13:59:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mobile-frontend-lanqb/Users/httishere/workspace/httishere/notion/progress.html
@@ -57,10 +57,10 @@
     document.getElementById('left').children[0].innerHTML = now_year;
     let year_start = new Date(`${now_year}/1/1`).getTime();
     let _du = _time - year_start;
-    let days = Math.floor(_du / (24 * 60 * 60 * 1000));
+    let days = Math.ceil(_du / (24 * 60 * 60 * 1000));
     let total = now_year % 4 === 0 && now_year % 100 !== 0 ? 366 : 365;
     let _year = document.getElementById('year');
-    _year.children[0].innerHTML = `<span>今年: ${days} / ${total}</span>`;
+    _year.children[0].innerHTML = `<span>今年: ${days} / ${total} (${(days*100 / total).toFixed(0)}%)</span>`;
     _year.children[0].style.width = `${days*100 / total}%`;
     document.getElementById('left').children[1].innerHTML = `${now_date.getMonth()+1}/${now_date.getDate()}`;
 

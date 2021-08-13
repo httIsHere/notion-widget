@@ -1,0 +1,77 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-08-13 16:33:08
+ * @LastEditTime: 2021-08-13 16:47:37
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /notion/charts-kg.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js"></script>
+    <title>年度体重记录</title>
+  </head>
+  <body>
+    <div id="main" style="width: 600px; height: 400px"></div>
+    <script type="text/javascript">
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById("main"));
+
+      // 指定图表的配置项和数据
+      var option = {
+        tooltip: {
+          trigger: "axis",
+        },
+        legend: {
+          data: ["体重", "体脂率", "BMI"],
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {},
+          },
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: ["2021.06", "2021.07", "2021.08", "2021.09", "2021.10", "2021.11", "2021.12"],
+        },
+        yAxis: {
+          type: "value",
+        },
+        series: [
+          {
+            name: "体重",
+            type: "line",
+            stack: "总量",
+            data: [67.2, 67.3, 65.3],
+          },
+          {
+            name: "体脂率",
+            type: "line",
+            stack: "总量",
+            data: [35.3, 34.9, 34.6],
+          },
+          {
+            name: "BMI",
+            type: "line",
+            stack: "总量",
+            data: [24.9, 25, 24.2],
+          },
+        ],
+      };
+
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option);
+    </script>
+  </body>
+</html>
