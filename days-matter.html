@@ -1,7 +1,7 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-19 10:45:40
- * @LastEditTime: 2021-08-19 11:33:47
+ * @LastEditTime: 2021-08-19 11:40:54
  * @LastEditors: Please set LastEditors
  * @Description: 简易倒数日组件
  * @FilePath: /notion/days-matter.html
@@ -40,8 +40,8 @@
       }
       return null;
     }
-    var week = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    var week_ZN = ['', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+    var week = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', ];
+    var week_ZN = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', ];
     window.onload = function() {
         let target_day = getQueryString('day'), name = getQueryString('name');
         let _now = new Date().getTime(), _target = new Date(target_day).getTime();
@@ -53,7 +53,8 @@
         let d_days = Math.ceil(times / 1000 / 60 / 60 / 24);
         document.getElementById('number').innerHTML = d_days;
         let _date = new Date(target_day).getDay();
-        target_day.split('/').join('-');
+        console.log(_date)
+        target_day = target_day.split('/').join('-');
         let text = _target > _now ? '目标日' : '起始日';
         document.getElementById('date').innerHTML = `${text}：${target_day} ${week_ZN[_date]}`;
     }
