@@ -1,34 +1,31 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-19 10:45:40
- * @LastEditTime: 2021-08-19 10:59:26
+ * @LastEditTime: 2021-08-19 11:04:19
  * @LastEditors: Please set LastEditors
  * @Description: 简易倒数日组件
  * @FilePath: /notion/days-matter.html
 -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Days Matter</title>
-</head>
-<body>
+  </head>
+  <body>
     <input type="text" /><button>submit</button>
-    <p>
-        <script>let msg = Object.keys(localStorage);
-            msg.forEach(item => {
-                document.write(item + '\n')
-                document.write("</br>"); 
-            })</script>
-    </p>
-</body>
-<script>
-    document.getElementsByTagName('button')[0].onclick = function(e) {
-        let _input = document.getElementsByTagName('input')[0];
-        localStorage.setItem(_input.value, new Date().getTime());
-    }
-    
-</script>
+  </body>
+  <script>
+    document.getElementsByTagName("button")[0].onclick = function (e) {
+      let _input = document.getElementsByTagName("input")[0];
+      localStorage.setItem(_input.value, new Date().getTime());
+      let msg = Object.keys(localStorage);
+      msg.forEach((item) => {
+        document.write(item + "\n");
+        document.write("</br>");
+      });
+    };
+  </script>
 </html>
