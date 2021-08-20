@@ -1,7 +1,7 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-19 10:45:40
- * @LastEditTime: 2021-08-19 11:40:54
+ * @LastEditTime: 2021-08-20 14:38:12
  * @LastEditors: Please set LastEditors
  * @Description: 简易倒数日组件
  * @FilePath: /notion/days-matter.html
@@ -15,7 +15,7 @@
     <title>Days Matter</title>
     <style>
       body, html { background-color: #ffffff; margin: 0; padding: 0; }
-      .container { height: 100vh; background-color: #ffffff; padding: 20px;}
+      .container { height: 100vh; background-color: #ffffff;}
       .days-box {width: 300px; margin: 0 auto; border-radius: 5px; border: 1px solid #333333; overflow: hidden;}
       .head {width: 100%; height: 50px; text-align: center; background-color: #333333; color: #ffffff; font-size: 18px; line-height: 50px;}
       .content {width: 100%; height:120px; font-size:72px; color: #333333; font-weight: bold; font-family: monospace; text-align: center;line-height: 120px; border-bottom: 1px dashed #eeeeee;}
@@ -53,7 +53,6 @@
         let d_days = Math.ceil(times / 1000 / 60 / 60 / 24);
         document.getElementById('number').innerHTML = d_days;
         let _date = new Date(target_day).getDay();
-        console.log(_date)
         target_day = target_day.split('/').join('-');
         let text = _target > _now ? '目标日' : '起始日';
         document.getElementById('date').innerHTML = `${text}：${target_day} ${week_ZN[_date]}`;
