@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-08-13 09:37:29
- * @LastEditTime: 2021-08-20 16:31:49
+ * @LastEditTime: 2021-08-22 14:27:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mobile-frontend-lanqb/Users/httishere/workspace/httishere/notion/progress.html
@@ -49,6 +49,7 @@
     let _time = now_date.getTime();
     // 周
     let _day = now_date.getDay();
+    _day = _day ? _day : 7;
     let _week = document.getElementById('week');
     _week.children[0].innerHTML = `<span>本周: ${_day} / 7</span>`;
     _week.children[0].style.width = `${_day*100 / 7}%`;
