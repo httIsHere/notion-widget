@@ -1,0 +1,50 @@
+<!--
+ * @Author: httishere
+ * @Date: 2021-08-20 22:57:16
+ * @LastEditTime: 2021-08-23 13:46:35
+ * @LastEditors: Please set LastEditors
+ * @Description: 引用块，简约
+ * @FilePath: /notion/quote.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote</title>
+    <style>
+        body, html { background-color: #ffffff; margin: 0; padding: 0; }
+        @font-face { font-family: 'Rampart-One'; src: url('./fonts/Rampart_One/RampartOne-Regular.ttf');}
+        .quote-box {width: 100%; margin: 0 auto; height: 100vh; background: #ffffff;box-sizing: border-box; padding: 40px}
+        svg {position: absolute;}
+        svg.icon-top {top: -30px; left: -30px;}
+        svg.icon-bottom {transform: rotate(180deg); bottom: -30px; right: -20px;}
+        .quote-box__inner {font-size: 18px;position: relative; line-height: 1.8;}
+        #text {font-family: 'Rampart-One'; font-size: 22px; margin: 0; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <div class="quote-box">
+        <div class="quote-box__inner">
+            <svg t="1629471757239" class="icon icon-top" viewBox="0 0 1195 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1750" width="26" height="26"><path d="M1125.400405 972.814933 651.636395 972.814933 651.636395 631.106304C651.636395 491.702016 663.719168 382.333696 687.885227 302.997931 712.0512 223.662165 737.181781 170.700459 802.935893 107.231829 868.68992 43.763285 914.312789 24.717568 1010.828373 0L1078.255957 145.030059C1010.828373 170.796971 969.749333 182.289237 906.391381 248.024235 843.033429 313.759232 838.360149 377.340075 838.360149 431.988736L1125.400405 431.988736 1125.400405 972.814933ZM473.764096 972.814933 0 972.814933 0 631.106304C0 491.702016 12.082859 382.333696 36.248832 302.997931 60.414891 223.662165 85.545472 170.700459 151.299499 107.231829 217.053611 43.763285 262.676395 24.717568 359.192064 0L426.619563 145.030059C359.192064 170.796971 318.112939 182.289237 254.754987 248.024235 191.397035 313.759232 186.723755 377.340075 186.723755 431.988736L473.764096 431.988736 473.764096 972.814933Z" p-id="1751" fill="#2c2c2c"></path></svg>
+            <p id="text"></p>
+            <svg t="1629471757239" class="icon icon-bottom" viewBox="0 0 1195 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1750" width="26" height="26"><path d="M1125.400405 972.814933 651.636395 972.814933 651.636395 631.106304C651.636395 491.702016 663.719168 382.333696 687.885227 302.997931 712.0512 223.662165 737.181781 170.700459 802.935893 107.231829 868.68992 43.763285 914.312789 24.717568 1010.828373 0L1078.255957 145.030059C1010.828373 170.796971 969.749333 182.289237 906.391381 248.024235 843.033429 313.759232 838.360149 377.340075 838.360149 431.988736L1125.400405 431.988736 1125.400405 972.814933ZM473.764096 972.814933 0 972.814933 0 631.106304C0 491.702016 12.082859 382.333696 36.248832 302.997931 60.414891 223.662165 85.545472 170.700459 151.299499 107.231829 217.053611 43.763285 262.676395 24.717568 359.192064 0L426.619563 145.030059C359.192064 170.796971 318.112939 182.289237 254.754987 248.024235 191.397035 313.759232 186.723755 377.340075 186.723755 431.988736L473.764096 431.988736 473.764096 972.814933Z" p-id="1751" fill="#2c2c2c"></path></svg>
+        </div>
+    </div>
+</body>
+<script>
+    function getQueryString(name) {
+      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      let r = window.location.search.substr(1).match(reg);
+      if (r != null) {
+        return decodeURIComponent(r[2]);
+      }
+      return null;
+    }
+    window.onload = function() {
+        let _quote_content = getQueryString('text');
+        document.getElementById('text').innerHTML = _quote_content;
+    }
+</script>
+</html>
