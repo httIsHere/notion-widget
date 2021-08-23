@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-08-13 09:37:29
- * @LastEditTime: 2021-08-22 14:27:55
+ * @LastEditTime: 2021-08-23 15:14:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mobile-frontend-lanqb/Users/httishere/workspace/httishere/notion/progress.html
@@ -18,13 +18,15 @@
         .progress-group {width: 500px; margin: 0 auto; font-family: Verdana; height: 100vh; background: #ffffff;padding: 0;}
         #left {width: 100px;}
         #right {width: 100%;}
-        li {list-style: none; width: 100%; margin-bottom: 10px;height: 20px;border-radius: 20px; background: #f3f3f3; color: #ffffff;line-height:20px; overflow: hidden;}
+        li {list-style: none; width: 450px; height: 20px;border-radius: 20px; background: #f3f3f3; color: #ffffff;line-height:20px; overflow: hidden;}
         li div {background: #333333;height: 100%; width: 0;border-radius: 20px;font-size:12px;text-align:right; line-height: 20px;}
         li div span {margin-right: 10px; line-height: 20px;}
         h2 {margin: 0; line-height: 28px;}
         .countdown {display: flex; justify-content: center; align-items: center;margin-bottom: 20px;}
         .countdown span {width: 50px; border-radius: 10px; border: 2px solid #333333; text-align:center; height: 50px;line-height: 50px; display: inline-block; margin: 0 20px; font-size: 24px;}
         .top {display: flex;}
+        .progress-item {display: flex; align-items: center;margin-bottom: 10px;}
+        .progress-item>span {font-size:12px;}
     </style>
 </head>
 <body>
@@ -39,8 +41,14 @@
                     <span id="hour"></span>:<span id="minute"></span>:<span id="second"></span>
                 </div>
             </div>
-            <li id="year"><div></div></li>
-            <li id="week"><div></div></li>
+            <div class="progress-item">
+                <span>今年：</span>
+                <li id="year"><div></div></li>
+            </div>
+            <div class="progress-item">
+                <span>本周：</span>
+                <li id="week"><div></div></li>
+            </div>
         </div>
     </ul>
 </body>
@@ -51,7 +59,7 @@
     let _day = now_date.getDay();
     _day = _day ? _day : 7;
     let _week = document.getElementById('week');
-    _week.children[0].innerHTML = `<span>本周: ${_day} / 7</span>`;
+    _week.children[0].innerHTML = `<span>${_day} / 7</span>`;
     _week.children[0].style.width = `${_day*100 / 7}%`;
     // 年
     let now_year = now_date.getFullYear();
@@ -61,7 +69,7 @@
     let days = Math.ceil(_du / (24 * 60 * 60 * 1000));
     let total = now_year % 4 === 0 && now_year % 100 !== 0 ? 366 : 365;
     let _year = document.getElementById('year');
-    _year.children[0].innerHTML = `<span>今年: ${days} / ${total} (${(days*100 / total).toFixed(0)}%)</span>`;
+    _year.children[0].innerHTML = `<span>${days} / ${total} (${(days*100 / total).toFixed(0)}%)</span>`;
     _year.children[0].style.width = `${days*100 / total}%`;
     document.getElementById('left').children[1].innerHTML = `${now_date.getMonth()+1}/${now_date.getDate()}`;
 
