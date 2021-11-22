@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-08-13 11:29:16
- * @LastEditTime: 2021-10-09 11:00:46
+ * @LastEditTime: 2021-11-22 11:03:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /notion/README.md
@@ -31,3 +31,7 @@
   - 可爱英文手写体：仅适用于英文，[DEMO](https://httishere.github.io/notion-widget/quote-EN.html?text=test)
     - 自定义文案内容，url参数：text（文案内容）
   ![](https://gitee.com/httishere/blog-image/raw/master/img/Xnip2021-08-23_14-46-08.jpg)
+
+- 日历
+  - 范围日历：显示所给范围的日历内容，需要给定开始时间和结束时间（**目前仅支持当前月**）。
+  ![](https://gitee.com/httishere/blog-image/raw/master/img/Xnip2021-11-22_10-59-27.jpg)

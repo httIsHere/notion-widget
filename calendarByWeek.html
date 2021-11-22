@@ -1,0 +1,152 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-11-22 09:45:27
+ * @LastEditTime: 2021-11-22 10:56:54
+ * @LastEditors: Please set LastEditors
+ * @Description: 周日历
+ * @FilePath: /notion/calenderByWeek.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar by Week</title>
+    <style>
+      @font-face { font-family: 'Rampart-One'; src: url('./fonts/Rampart_One/RampartOne-Regular.ttf');}
+        @font-face { font-family: 'Klee-One'; src: url('./fonts/Klee_One/KleeOne-Regular.ttf');}
+      .container {
+        width: 280px;
+      }
+      .container .inner {
+      }
+      .week-days {
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .week-days.head {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 5px;
+      }
+      .week-days.week {
+        margin-bottom: 3px;
+      }
+      .week-days span {
+        line-height: 30px;
+        font-size: 14px;
+        width: 40px;
+        display: inline-block;
+        text-align: center;
+      }
+      .start,
+      .active,
+      .end {
+        background-color: rgba(119, 172, 152, 0.2);
+      }
+      .start {
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+      }
+      .end {
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+      }
+      #title {text-align: center;font-family: 'Rampart-One'; font-size: 24px; margin: 0; margin-bottom: 10px;}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="inner" id="calenderByWeek">
+        <h2 id="title"></h2>
+        <div class="week-days head">
+          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span
+          ><span>S</span><span>S</span>
+        </div>
+        <div id="content"></div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    window.onload = function () {
+      let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      const months = [
+        " ",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      let start_p = getQueryString('start'), end_p = getQueryString('end');
+      let _now = new Date(start_p),
+        _end = new Date(end_p);
+      let _year = _now.getFullYear();
+      if (_year % 4 === 0 && _year % 100 != 0) {
+        // 闰年
+        days[2] = 29;
+      }
+      // 需要获取该月第一天在星期几？还是根据当前进行推算
+      let now_weekday = _now.getDay(),
+        now_date = _now.getDate(),
+        now_month = _now.getMonth() + 1;
+      let end_date = _end.getDate();
+      let _arr = [];
+      for (let i = 1; i < now_date; i++) {
+        let __s = (now_date - i) % 7 || 7;
+        let weekday = 7 - __s + now_weekday;
+        _arr.push({ weekday: weekday || 7, date: i });
+      }
+      for (let i = now_date; i <= days[now_month]; i++) {
+        let __s = (i - now_date) % 7;
+        let weekday = __s + now_weekday;
+        let item = { weekday: weekday || 7, date: i };
+        if (i === now_date) {
+          item.status = "start";
+        } else if (i > now_date && i < end_date) {
+          item.status = "active";
+        } else if (i === end_date) {
+          item.status = "end";
+        }
+        _arr.push(item);
+      }
+      // 渲染
+      document.getElementById('title').innerHTML = months[now_month];
+      let _html = "";
+      for (let i = 0; i < _arr.length; i++) {
+        if (_arr[i].weekday % 7 === 1) {
+          _html += '<div class="week-days week">';
+        }
+        if (i === 0) {
+          // 确定第一天所在的位置
+          for (let j = 1; j < _arr[i].weekday; j++) {
+            _html += "<span></span>";
+          }
+        }
+        _html += `<span class="${_arr[i].status || ""}">${_arr[i].date}</span>`;
+        if (_arr[i].weekday % 7 === 0) {
+          _html += "</div>";
+        }
+      }
+      document.getElementById("content").innerHTML = _html;
+    };
+
+    function getQueryString(name) {
+      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      let r = window.location.search.substr(1).match(reg);
+      if (r != null) {
+        return decodeURIComponent(r[2]);
+      }
+      return null;
+    }
+  </script>
+</html>
