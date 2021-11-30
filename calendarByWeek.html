@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-22 09:45:27
- * @LastEditTime: 2021-11-30 15:39:48
+ * @LastEditTime: 2021-11-30 15:45:55
  * @LastEditors: Please set LastEditors
  * @Description: 周日历
  * @FilePath: /notion/calenderByWeek.html
@@ -31,7 +31,6 @@
         display: flex;
       }
       .container .inner {
-        display: inline-block;
         margin-right: 20px;
       }
       .week-days {
@@ -67,13 +66,18 @@
         border-top-right-radius: 15px;
         border-bottom-right-radius: 15px;
       }
-      .gray {color: #999999;}
+      .gray {
+        color: #999999;
+      }
       .title {
         text-align: center;
         font-family: "Rampart-One";
         font-size: 24px;
         margin: 0;
         margin-bottom: 10px;
+      }
+      .dis_none {
+        display: none;
       }
     </style>
   </head>
@@ -87,7 +91,7 @@
         </div>
         <div id="content"></div>
       </div>
-      <div class="inner">
+      <div class="inner dis_none" id="month2">
         <h2 class="title" id="title2"></h2>
         <div class="week-days head">
           <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span
@@ -142,9 +146,10 @@
       // 目标日开始后
       for (let i = now_date; i <= days[now_month]; i++) {
         let __s = (i - now_date) % 7;
-        let weekday = __s + now_weekday, _end_date = end_date;
+        let weekday = __s + now_weekday,
+          _end_date = end_date;
         let item = { weekday: weekday || 7, date: i };
-        if(end_month > now_month) {
+        if (end_month > now_month) {
           _end_date += days[now_month];
         }
         if (i === now_date) {
@@ -210,6 +215,9 @@
         if (item.weekday % 7 === 0) {
           _html_after += "</div>";
         }
+      }
+      if (_arr_after.length) {
+        document.getElementById("month2").classList.remove("dis_none");
       }
       document.getElementById("content").innerHTML = _html;
       document.getElementById("content2").innerHTML = _html_after;
