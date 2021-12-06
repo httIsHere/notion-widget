@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-22 09:45:27
- * @LastEditTime: 2021-11-30 15:45:55
+ * @LastEditTime: 2021-12-06 10:15:51
  * @LastEditors: Please set LastEditors
  * @Description: 周日历
  * @FilePath: /notion/calenderByWeek.html
@@ -195,7 +195,7 @@
           _html += '<div class="week-days week">';
         }
         if (i === 0) {
-          // _html += '<div class="week-days week">';
+          if(_arr[i].weekday % 7 !== 1) _html += '<div class="week-days week">';
           // 确定第一天所在的位置
           for (let j = 1; j < _arr[i].weekday; j++) {
             _html += "<span></span>";
