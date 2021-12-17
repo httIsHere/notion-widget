@@ -35,3 +35,5 @@
 - 日历
   - 范围日历：显示所给范围的日历内容，需要给定开始时间和结束时间（**目前仅支持当前月**）。
   ![](https://gitee.com/httishere/blog-image/raw/master/img/Xnip2021-11-22_10-59-27.jpg)
+
+- 天气组件：目前固定杭州天气，来源weatherwidget.io。
