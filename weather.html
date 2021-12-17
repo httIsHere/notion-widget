@@ -1,0 +1,39 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-12-17 11:59:23
+ * @LastEditTime: 2021-12-17 12:01:37
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: /notion/weather.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>weather</title>
+  </head>
+  <body>
+    <a
+      class="weatherwidget-io"
+      href="https://forecast7.com/en/30d27120d16/hangzhou/"
+      data-label_1="HANGZHOU"
+      data-label_2="WEATHER"
+      data-mode="Current"
+      >HANGZHOU WEATHER</a
+    >
+    <script>
+      !(function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (!d.getElementById(id)) {
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "https://weatherwidget.io/js/widget.min.js";
+          fjs.parentNode.insertBefore(js, fjs);
+        }
+      })(document, "script", "weatherwidget-io-js");
+    </script>
+  </body>
+</html>

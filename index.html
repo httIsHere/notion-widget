@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-08-13 11:46:39
- * @LastEditTime: 2021-11-22 11:06:34
+ * @LastEditTime: 2021-12-15 09:33:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /notion/index.html
@@ -14,14 +14,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>目录</title>
     <style>
-        .container {width: 300px; padding: 20px; margin: 50px auto;border: 1px solid #e9e9e9; border-radius: 20px;}
+        html, body { background: #000000; color: #ffffff; font-family: Helvetica;}
+        .container {width: 500px; padding: 20px; margin: 50px auto;border: 1px solid #e9e9e9; border-radius: 20px;}
     </style>
 </head>
 <body>
     <div class="container">
         <h3>目录</h3>
         <ul>
-            <li><a href="./progress.html">倒计时&进度条</a></li>
+            <li><a href="./progress.html">倒计时&进度条</a>
+                <iframe src="./progress.html" frameborder="0"></iframe>
+            </li>
             <li><a href="./days-matter.html?day=2021/12/31&name=距离今年结束">日期倒计时</a></li>
             <li>引用块
                 <ul>
@@ -36,6 +39,7 @@
                     <li><a href="./calendarByWeek.html?start=2021/11/14&end=2021/11/28">范围日历</a></li>
                 </ul>
             </li>
+            <li><a href="./weather.html">杭州天气组件</a></li>
         </ul>
     </div>
 </body>
