@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 17:54:54
- * @LastEditTime: 2021-12-24 09:35:33
+ * @LastEditTime: 2021-12-24 10:10:14
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/swiper.html
@@ -22,6 +22,7 @@
 
     <!-- Demo styles -->
     <style>
+      @font-face { font-family: 'Klee-One'; src: url('./fonts/Klee_One/KleeOne-Regular.ttf');}
       html,
       body {
         position: relative;
@@ -72,6 +73,8 @@
         -webkit-align-items: center;
         align-items: center;
         color: #fff;
+        font-family: 'Klee-One';
+        font-size: 36px;
       }
     </style>
   </head>
@@ -85,7 +88,7 @@
             class="slide-inner"
             style="background-image: url(https://gitee.com/httishere/blog-image/raw/master/img/R-C.8a6393ab915193fe2f7b33ab79180024.jpeg)"
           >
-            nature-1
+          我有我要去的遠方，風雨兼程披星戴月
           </div>
         </div>
         <div class="swiper-slide">
@@ -93,7 +96,7 @@
             class="slide-inner"
             style="background-image: url(https://gitee.com/httishere/blog-image/raw/master/img/IMG_1618.jpg)"
           >
-            nature-2
+          所有苦難的盡頭，都是行雲流水般的此世光陰
           </div>
         </div>
       </div>
@@ -112,7 +115,7 @@
       var interleaveOffset = 0.5; //视差比值
 
       var swiperOptions = {
-        effect: "coverflow",
+        // effect: "coverflow",
         centeredSlides: true,
         autoplay: {
           delay: 5000,
