@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-08-13 11:29:16
- * @LastEditTime: 2021-11-22 11:03:57
+ * @LastEditTime: 2021-12-24 11:52:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /notion/README.md
@@ -35,5 +35,7 @@
 - 日历
   - 范围日历：显示所给范围的日历内容，需要给定开始时间和结束时间（**目前仅支持当前月**）。
   ![](https://gitee.com/httishere/blog-image/raw/master/img/Xnip2021-11-22_10-59-27.jpg)
+  - 当前日历：显示当前时间的月份日期定位。
+  ![](https://gitee.com/httishere/blog-image/raw/master/img/20211224115238.png)
 
 - 天气组件：目前固定杭州天气，来源weatherwidget.io。
