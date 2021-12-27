@@ -1,0 +1,149 @@
+<!--
+ * @Author: httishere
+ * @Date: 2021-08-19 10:45:40
+ * @LastEditTime: 2021-12-27 18:10:38
+ * @LastEditors: Please set LastEditors
+ * @Description: 简易倒数日组件
+ * @FilePath: /notion/days-matter.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Days Matter</title>
+    <style>
+      body,
+      html {
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 350px;
+        background-color: rgba(188, 214, 203, 0.2);
+        height: 350px;
+        border-radius: 50%;
+        margin: 20px auto;
+        box-sizing: border-box;
+        padding: 25px;
+        box-shadow: 0 0 10px 2px rgba(188, 214, 203, 0.2);
+      }
+      .days-box {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: rgba(188, 214, 203, 0.2);
+        box-sizing: border-box;
+        padding: 40px;
+        box-shadow: 0 0 10px 2px rgba(188, 214, 203, 0.2);
+        position: relative;
+      }
+      .head {
+        width: 220px;
+        height: 50px;
+        text-align: center;
+        color: #ffffff;
+        font-size: 18px;
+        line-height: 50px;
+        position: absolute;
+        background-color:transparent;
+        top: 55px;
+      }
+      .content {
+        width: 220px;
+        height: 220px;
+        font-size: 120px;
+        color: #333333;
+        font-weight: bold;
+        font-family: monospace;
+        text-align: center;
+        line-height: 220px;
+        background: rgba(188, 214, 203, 1);
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 10px 20px rgba(188, 214, 203, 0.2);
+      }
+      .content::after {
+        content: "days";
+        position: absolute;
+        background: transparent;
+        width: 220px;
+        display: block;
+        text-align: center;
+        line-height: 1.5;
+        color: #ffffff;
+        font-size: 20px;
+        top: 170px;
+      }
+      .bottom {
+        background-color: #f9f9f9;
+        color: #999999;
+        text-align: center;
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+      }
+      .content span {
+        /* background-image: linear-gradient(135deg,#ffffff,#ffffff);
+            background-clip:text;
+            -webkit-background-clip:text;
+            color: transparent; */
+        color: transparent;
+        -webkit-text-stroke: 2px #ffffff;
+        text-shadow: 0 0 10px 2px rgb(0 0 0 / 20%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="days-box">
+        <div class="content" id="number"></div>
+        <div class="head" id="title"></div>
+        <!-- <div class="bottom" id="date"></div> -->
+      </div>
+    </div>
+  </body>
+  <script>
+    function getQueryString(name) {
+      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      let r = window.location.search.substr(1).match(reg);
+      if (r != null) {
+        return decodeURIComponent(r[2]);
+      }
+      return null;
+    }
+    var week = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var week_ZN = [
+      "星期日",
+      "星期一",
+      "星期二",
+      "星期三",
+      "星期四",
+      "星期五",
+      "星期六",
+    ];
+    window.onload = function () {
+      let target_day = getQueryString("day"),
+        name = getQueryString("name");
+      let _now = new Date().getTime(),
+        _target = new Date(target_day).getTime();
+      // 设置项目名
+      name = name ? (_target > _now ? `${name}还有` : `${name}已经`) : "";
+      document.getElementById("title").innerHTML = name;
+      // 设置时间
+      let times = Math.abs(_target - _now);
+      let d_days = Math.ceil(times / 1000 / 60 / 60 / 24);
+      document.getElementById("number").innerHTML = `<span>${d_days}</span>`;
+      let _date = new Date(target_day).getDay();
+      target_day = target_day.split("/").join("-");
+      let text = _target > _now ? "目标日" : "起始日";
+      document.getElementById(
+        "date"
+      ).innerHTML = `${text}：${target_day} ${week_ZN[_date]}`;
+    };
+  </script>
+</html>

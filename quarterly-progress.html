@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-24 10:47:11
- * @LastEditTime: 2021-12-24 11:50:51
+ * @LastEditTime: 2021-12-27 18:06:26
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/quarterlyProgress.html
@@ -26,8 +26,8 @@
       .container {
         width: 500px;
         height: 120px;
-        box-shadow: 0 10px 50px 0 rgb(0 0 0 / 10%);
-        margin: 0 auto;
+        box-shadow: 0 0 30px 0 rgb(0 0 0 / 10%);
+        margin: 30px auto;
         padding-top: 57px;
         box-sizing: border-box;
         border-radius: 10px;
@@ -105,7 +105,7 @@
         display: block;
       }
       .quarter-points .point.active p {
-        color: #bcd6cb;
+        color: rgb(188, 214, 203);
       }
     </style>
   </head>
@@ -145,7 +145,7 @@
       return null;
     }
     const query_year = +getQueryString('year');
-    let now_date = new Date();
+    let now_date = new Date('2021/10/23');
     let _time = now_date.getTime();
 
     let now_year = now_date.getFullYear(),
