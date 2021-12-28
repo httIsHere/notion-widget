@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 11:43:48
- * @LastEditTime: 2021-12-24 11:37:22
+ * @LastEditTime: 2021-12-28 10:10:18
  * @LastEditors: Please set LastEditors
  * @Description: 显示当前日历
  * @FilePath: /notion/calender.html
@@ -49,6 +49,7 @@
         line-height: 40px;
         font-size: 14px;
         width: 40px;
+        height: 40px;
         display: inline-block;
         text-align: center;
       }
@@ -107,7 +108,7 @@
       let _html = '<div class="week-days">', _fd = first_day;
       for (let i = 1; i <= days[cur_month]; i++) {
         if (i === 1) {
-          while (_fd--) {
+          while (_fd-- > 1) {
             _html += "<span></span>";
           }
         }
