@@ -1,7 +1,7 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-19 10:45:40
- * @LastEditTime: 2021-12-27 18:10:38
+ * @LastEditTime: 2021-12-28 09:21:42
  * @LastEditors: Please set LastEditors
  * @Description: 简易倒数日组件
  * @FilePath: /notion/days-matter.html
@@ -11,7 +11,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
     <title>Days Matter</title>
     <style>
       body,
@@ -19,48 +19,51 @@
         background-color: #ffffff;
         margin: 0;
         padding: 0;
+        font-size: 37.5px;
       }
       .container {
-        width: 350px;
+        width: 9.333333rem;
         background-color: rgba(188, 214, 203, 0.2);
-        height: 350px;
+        height: 9.333333rem;
         border-radius: 50%;
-        margin: 20px auto;
+        margin: 0 auto;
         box-sizing: border-box;
-        padding: 25px;
+        padding: .666667rem;
         box-shadow: 0 0 10px 2px rgba(188, 214, 203, 0.2);
+        /* transform: scale(.8); */
+        margin: .266667rem auto;
       }
       .days-box {
-        width: 300px;
-        height: 300px;
+        width: 8rem;
+        height: 8rem;
         border-radius: 50%;
         overflow: hidden;
         background-color: rgba(188, 214, 203, 0.2);
         box-sizing: border-box;
-        padding: 40px;
+        padding: 1.066667rem;
         box-shadow: 0 0 10px 2px rgba(188, 214, 203, 0.2);
         position: relative;
       }
       .head {
-        width: 220px;
-        height: 50px;
+        width: 5.866667rem;
+        height: 1.333333rem;
         text-align: center;
         color: #ffffff;
-        font-size: 18px;
-        line-height: 50px;
+        font-size: .48rem;
+        line-height: 1.333333rem;
         position: absolute;
         background-color:transparent;
-        top: 55px;
+        top: 1.47rem;
       }
       .content {
-        width: 220px;
-        height: 220px;
-        font-size: 120px;
+        width: 5.866667rem;
+        height: 5.866667rem;
+        font-size: 3.2rem;
         color: #333333;
         font-weight: bold;
         font-family: monospace;
         text-align: center;
-        line-height: 220px;
+        line-height: 5.866667rem;
         background: rgba(188, 214, 203, 1);
         border-radius: 50%;
         position: relative;
@@ -71,21 +74,21 @@
         content: "days";
         position: absolute;
         background: transparent;
-        width: 220px;
+        width: 5.866667rem;
         display: block;
         text-align: center;
         line-height: 1.5;
         color: #ffffff;
-        font-size: 20px;
-        top: 170px;
+        font-size: .533333rem;
+        top:4.533333rem;
       }
       .bottom {
         background-color: #f9f9f9;
         color: #999999;
         text-align: center;
-        height: 40px;
-        line-height: 40px;
-        font-size: 14px;
+        height: 1.066667rem;
+        line-height: 1.066667rem;
+        font-size: .373333rem;
       }
       .content span {
         /* background-image: linear-gradient(135deg,#ffffff,#ffffff);
