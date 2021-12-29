@@ -1,0 +1,136 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-12-28 17:34:34
+ * @LastEditTime: 2021-12-29 11:04:11
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: /notion/weight-2021.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2021减脂成就</title>
+    <script src="../lib/echarts.min.js"></script>
+  </head>
+  <body>
+    <div id="main" style="width: 600px; height: 400px"></div>
+  </body>
+  <script type="text/javascript">
+    var chartDom = document.getElementById("main");
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+      title: {
+        text: "2021",
+      },
+      tooltip: {
+        trigger: "axis",
+      },
+      legend: {},
+      xAxis: {
+        type: "category",
+        boundaryGap: false,
+        data: [
+          "01/16",
+          "01/23",
+          "02/06",
+          "3/7",
+          "3/20",
+          "3/23",
+          "4/4",
+          "5/2",
+          "5/30",
+          "6/1",
+          "6/27",
+          "7/24",
+          "8/8",
+          "8/21",
+          "9/4",
+          "9/17",
+          "9/25",
+          "10/7",
+          "10/17",
+          "10/31",
+          "12/4",
+        ],
+      },
+      yAxis: [
+        {
+          name: "kg",
+          type: "value",
+          axisLabel: {
+            formatter: "{value}",
+          },
+          min: 20
+        },
+        {
+          type: "value",
+          axisLabel: {
+            formatter: "{value}%",
+          },
+          max: 40,
+        },
+      ],
+      series: [
+        {
+          name: "体重",
+          type: "line",
+          data: [
+            68.4, 68.2, 68.8, 67.8, 68.5, 69.6, 68.2, 67.7, 66.7, 67.5, 65.9,
+            66.2, 65.1, 64.1, 63.9, 65, 64.8, 64.4, 65.4, 64.6, 66,
+          ],
+          markPoint: {
+            data: [
+              { type: "max", name: "Max" },
+              { type: "min", name: "Min" },
+            ],
+          },
+          markLine: {
+            data: [{ type: "average", name: "Avg" }],
+          },
+        },
+        {
+          name: "体脂率",
+          type: "line",
+          data: [
+            35.1, 33.4, 33.5, 35, 33.4, 34.8, 35.5, 34.2, 34, 34.3, 33.5, 32.9,
+            32.5, 31.9, 31.2, 32.7, 31.9, 31.3, 32.2, 31.7, 32.2,
+          ],
+          markPoint: {
+            data: [
+              { type: "max", name: "Max" },
+              { type: "min", name: "Min" },
+            ],
+          },
+          markLine: {
+            data: [
+              { type: "average", name: "Avg" },
+              [
+                {
+                  symbol: "circle",
+                  x: "90%",
+                  yAxis: "max",
+                },
+                {
+                  symbol: "circle",
+                  label: {
+                    position: "start",
+                    formatter: "Max",
+                  },
+                  type: "max",
+                  name: "最高点",
+                },
+              ],
+            ],
+          },
+        },
+      ],
+    };
+    option && myChart.setOption(option);
+  </script>
+</html>
+,
