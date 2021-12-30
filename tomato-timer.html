@@ -1,0 +1,255 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-12-29 16:19:37
+ * @LastEditTime: 2021-12-30 10:35:03
+ * @LastEditors: Please set LastEditors
+ * @Description: 番茄时钟，优先级低一些
+ * @FilePath: /notion/tomato-timer.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Timer</title>
+    <script src="./flexibleMerge.js"></script>
+    <style type="text/css">
+        .container {
+            display: flex;
+            height: 12rem;
+            flex-direction: column;
+            overflow: hidden;
+            background-color: #fff;
+            transition: all .5s;
+            border-radius: 20px;
+        }
+
+        .timer_main {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #ffdada;
+            transition: all .5s;
+            z-index: 1;
+            flex: 2;
+        }
+
+        .timer_logs {
+            position: absolute;
+            top: .133333rem;
+            left: .4rem;
+            color: #ff6a6a;
+        }
+
+        .timer_wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 4rem;
+            height: 4rem;
+            text-align: center;
+            transition: all 0.3s;
+            /* border: .04rem solid transparent; */
+        }
+
+        .timer_progress-mask {
+            /* width: 100%;
+            height: 100%; */
+            border: .04rem solid #ff6a6a;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            opacity: 0.3;
+            border-radius: 50%;
+        }
+
+        .timer_progress {
+            position: absolute;
+            top: 0;
+            width: 2.026667rem;
+            height: 4rem;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .timer_left {
+            left: 0;
+        }
+
+        .timer_right {
+            right: 0;
+        }
+
+        .timer_circle {
+            position: absolute;
+            top: 0;
+            width: 4rem;
+            height: 4rem;
+            border: .04rem solid transparent;
+            transition: all 0.3s;
+            border-radius: 50%;
+        }
+
+        .timer_circle--left {
+            left: 0;
+            border-left: .04rem solid #ff6a6a;
+            border-bottom: .04rem solid #ff6a6a;
+            transform: rotate(45deg);
+        }
+
+        .timer_circle--right {
+            right: 0;
+            border-right: .04rem solid #ff6a6a;
+            border-bottom: .04rem solid rgb(255, 106, 106);
+            transform: rotate(-45deg);
+        }
+
+        .timer_time {
+            font-size: .6rem;
+            color: #ff6a6a;
+            font-weight: lighter;
+            transition: font-size 0.3s;
+        }
+
+        .timer_missionName,
+        .timer_missionTime {
+            display: block;
+            width: 100%;
+            position: absolute;
+            bottom: -1.066667rem;
+            height: 1.066667rem;
+            line-height: 1.066667rem;
+            border-bottom: .013333rem solid #eee;
+        }
+
+        .timer_missionTime {
+            bottom: -2.133333rem;
+        }
+
+        .timer_ctrlSection {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            padding-top: 1.066667rem;
+            transition: all .5s;
+        }
+
+        .timer_ctrl {
+            background: #ff9a9a;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            margin: 0 .266667rem;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .setTime_end {
+            position: absolute;
+            top: 0;
+            right: .4rem;
+        }
+
+        .timer_running .timer_main {
+            flex: 1;
+            transition: all .5s;
+        }
+
+        .timer_running .timer_ctrlSection {
+            flex: 0;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .timer_running .timer_ctrlSection .timer_ctrl {
+            height: 0;
+        }
+
+        .complete-btn {
+            position: absolute;
+            bottom: 1.333333rem;
+            border: .013333rem dashed #fff;
+            height: .933333rem;
+            line-height: .933333rem;
+            border-radius: .466667rem;
+            padding: 0 .666667rem;
+            color: #fff;
+            background: rgba(255, 106, 106, .2);
+            display: flex;
+            align-items: center;
+            font-size: .2rem;
+            transition: all .3s;
+        }
+
+        .timer_showTaskName {
+            position: absolute;
+            top: 2.666667rem;
+            color: #ff9a9a;
+            font-size: .213333rem;
+            transition: all .3s;
+        }
+
+        .timer_running .timer_wrapper,
+        .timer_running .timer_circle {
+            width: 5.333333rem;
+            height: 5.333333rem;
+        }
+
+        .timer_running .timer_progress {
+            width: 2.693333rem;
+            height: 5.333333rem;
+        }
+
+        .log_item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 .4rem;
+        }
+
+        .i-modal-body {
+            max-height: 1000px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='container timer {{isRunning ? "timer_running" : ""}}'>
+        <div class='timer_main'>
+            <span class='timer_logs' bindtap='showLogs'>记录</span>
+            <div class='timer_wrapper'>
+                <div class='timer_progress-mask'></div>
+                <div class='timer_progress timer_left'>
+                    <div class="timer_circle timer_circle--left" style="transform: rotate({{leftDeg}}deg);"></div>
+                </div>
+                <div class='timer_progress timer_right'>
+                    <div class="timer_circle timer_circle--right" style="transform: rotate({{rightDeg}}deg);"></div>
+                </div>
+                <span wx:if="{{!completed}}" class='timer_time'>{{remainTime}}</span>
+                <i wx:if="{{completed}}" type="flag" size='80' color='#ff6a6a' />
+            </div>
+            <input type='text' class='timer_missionName' placeholder='任务名称' bindinput='changeMissionName'
+                value='{{missionName}}'></input>
+            <input type='number' class='timer_missionTime' placeholder='自定义时间' min="1" max="999"
+                bindinput='changeMissionTime' value='{{missionTime}}'>
+            <span class='setTime_end'>分钟</span>
+            </input>
+            <div wx:if="{{isRunning}}" class='complete-btn' bindtap='completeTask'>结束</div>
+            <span wx:if="{{isRunning}}" animation="{{nameAnimation}}"
+                class='timer_showTaskName'>{{missionName+(completed?'完成':'进行中')}}</span>
+        </div>
+    </div>
+</body>
+
+</html>
