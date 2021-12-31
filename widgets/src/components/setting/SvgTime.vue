@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 19:19:23
- * @LastEditTime: 2021-12-30 21:50:05
+ * @LastEditTime: 2021-12-31 15:59:23
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/widgets/src/components/setting/SvgTime.vue
@@ -36,7 +36,7 @@ export default {
     return {
       form: {},
       mode: "w",
-      link: "https://httishere.github.io/notion-widget/colorfulSvgTime_",
+      link: "https://httishere.github.io/notion-widget/colorful-svg-time_",
     };
   },
   methods: {

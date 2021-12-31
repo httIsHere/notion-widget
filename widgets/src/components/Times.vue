@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 14:34:17
- * @LastEditTime: 2021-12-30 22:53:31
+ * @LastEditTime: 2021-12-31 16:06:03
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/widgets/src/components/Times.vue
@@ -9,52 +9,58 @@
 <template>
   <div class="container wrapper">
     <el-row :gutter="20">
-      <el-col :span="8" v-for="(item) in times" :key="item.id">
-        <el-card shadow="hover" style="margin-bottom: 10px;" @click="handleSettingModal(item)">
-          <el-descriptions :column="2">
-            <div slot="title">
-              <img :src="item.cover" alt="" class="image" />
-            </div>
-            <el-descriptions-item label="名称">
-              <el-tag size="small">{{ item.tag }}</el-tag>
-            </el-descriptions-item>
-            <el-descriptions-item label="风格">
-              <el-tag
-                size="small"
-                type="warning"
-                v-for="s in item.style"
-                :key="s"
-                style="margin-right: 5px"
-                >{{ s }}</el-tag
-              >
-            </el-descriptions-item>
-            <el-descriptions-item label="备注">
-              <el-tag size="small" type="danger">{{ item.note }}</el-tag>
-            </el-descriptions-item>
-            <el-descriptions-item label="链接🔗">
-              <template v-if="item.link_type === 'copy'">
-                <el-link
-                  type="primary"
-                  icon="el-icon-document-copy"
-                  v-clipboard:copy="item.link"
-                  v-clipboard:success="handleCopy"
-                  >复制链接</el-link
+      <el-col :span="8" v-for="item in times" :key="item.id">
+        <el-badge value="新" class="item" :hidden="!item.is_new">
+          <el-card
+            shadow="hover"
+            style="margin-bottom: 10px"
+            @click="handleSettingModal(item)"
+          >
+            <el-descriptions :column="2">
+              <div slot="title">
+                <img :src="item.cover" alt="" class="image" />
+              </div>
+              <el-descriptions-item label="名称">
+                <el-tag size="small">{{ item.tag }}</el-tag>
+              </el-descriptions-item>
+              <el-descriptions-item label="风格">
+                <el-tag
+                  size="small"
+                  type="warning"
+                  v-for="s in item.style"
+                  :key="s"
+                  style="margin-right: 5px"
+                  >{{ s }}</el-tag
                 >
-              </template>
-              <template v-else-if="item.link_type === 'setting'">
-                <el-link
-                  type="danger"
-                  icon="el-icon-edit"
-                  @click="handleSettingModal(item)"
-                  >{{ item.link_label }}</el-link
-                >
-              </template>
-            </el-descriptions-item>
-            <el-descriptions-item label="用法">{{
-              item.use
-            }}</el-descriptions-item>
-          </el-descriptions>
-        </el-card>
+              </el-descriptions-item>
+              <el-descriptions-item label="备注">
+                <el-tag size="small" type="danger">{{ item.note }}</el-tag>
+              </el-descriptions-item>
+              <el-descriptions-item label="链接🔗">
+                <template v-if="item.link_type === 'copy'">
+                  <el-link
+                    type="primary"
+                    icon="el-icon-document-copy"
+                    v-clipboard:copy="item.link"
+                    v-clipboard:success="handleCopy"
+                    >复制链接</el-link
+                  >
+                </template>
+                <template v-else-if="item.link_type === 'setting'">
+                  <el-link
+                    type="danger"
+                    icon="el-icon-edit"
+                    @click="handleSettingModal(item)"
+                    >{{ item.link_label }}</el-link
+                  >
+                </template>
+              </el-descriptions-item>
+              <el-descriptions-item label="用法">{{
+                item.use
+              }}</el-descriptions-item>
+            </el-descriptions>
+          </el-card>
+        </el-badge>
       </el-col>
     </el-row>
     <!-- 自定义Dialog -->
@@ -87,13 +93,14 @@ export default {
           id: 6,
           cover:
             "https://gitee.com/httishere/blog-image/raw/master/img/QQ20211230-182424-HD%20(1).gif",
-          style: ['colorful'],
+          style: ["colorful"],
           tag: "动画缤纷时钟",
           note: "可带参数",
           link: "https://httishere.github.io/notion-widget/colorfulSvgTime_w.html",
           link_type: "setting",
           link_label: "自定义模式",
           use: "复制链接直接嵌入Notion",
+          is_new: true,
         },
         {
           id: 1,
@@ -167,8 +174,8 @@ export default {
       });
     },
     handleSettingModal(item) {
-      console.log(item)
-      if(item.link_type !== 'setting') return;
+      console.log(item);
+      if (item.link_type !== "setting") return;
       this.currentItem = item;
       this.currentComponent = item.link;
       this.show_setting_modal = true;

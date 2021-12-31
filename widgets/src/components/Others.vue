@@ -3,6 +3,7 @@
     <el-row :gutter="20">
       <el-col :span="8" v-for="item in times" :key="item.id">
         <div>
+        <el-badge value="新" class="item" :hidden="!item.is_new">
           <el-card shadow="hover" style="margin-bottom: 10px">
             <el-descriptions :column="2">
               <div slot="title">
@@ -48,6 +49,7 @@
               }}</el-descriptions-item>
             </el-descriptions>
           </el-card>
+        </el-badge>
         </div>
       </el-col>
     </el-row>
@@ -92,6 +94,7 @@ export default {
           link_type: "setting",
           link_label: "选择不同样式",
           use: "自定义链接后嵌入Notion",
+          is_new: true,
         },
         {
           id: 2,
@@ -100,9 +103,10 @@ export default {
           style: ["时间轴"],
           tag: "历史上的今天",
           note: "需带参数",
-          link: window.location.origin + "/#/wid/history-today",
+          link: this.$global_path + "/wid/history-today",
           link_type: "copy",
           use: "复制链接后嵌入Notion",
+          is_new: true,
         },
         {
           id: 1,

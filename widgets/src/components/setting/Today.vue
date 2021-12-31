@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 19:19:23
- * @LastEditTime: 2021-12-31 13:50:18
+ * @LastEditTime: 2021-12-31 16:18:28
  * @LastEditors: Please set LastEditors
  * @Description: 引用块
  * @FilePath: /notion/widgets/src/components/setting/SvgTime.vue
@@ -19,11 +19,6 @@
           >
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="预览">
-        <div class="prev">
-          <today :style-mode="mode" />
-        </div>
-      </el-form-item>
       <el-form-item label="链接🔗">
         <el-link
           type="primary"
@@ -32,6 +27,11 @@
           v-clipboard:success="handleCopy"
           >复制链接</el-link
         >
+      </el-form-item>
+      <el-form-item label="预览">
+        <div class="prev">
+          <today :style-mode="mode" />
+        </div>
       </el-form-item>
     </el-form>
   </div>
@@ -57,7 +57,7 @@ export default {
           label: "黑色卡片",
         },
       ],
-      link: window.location.origin + "/#/wid/today",
+      link: this.$global_path + "/wid/today",
     };
   },
   methods: {

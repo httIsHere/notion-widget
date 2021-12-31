@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 15:28:30
- * @LastEditTime: 2021-12-31 14:08:27
+ * @LastEditTime: 2021-12-31 16:11:04
  * @LastEditors: Please set LastEditors
  * @Description: 更新记录
  * @FilePath: /notion/widgets/src/components/UpdateLog.vue
@@ -13,7 +13,7 @@
       <el-timeline-item
         :timestamp="item.date"
         placement="top"
-        v-for="item in logs"
+        v-for="(item, index) in logs"
         :key="item.date"
         :icon="item.icon"
         :type="item.type"
@@ -36,14 +36,14 @@ export default {
         //   type: "warning",
         // },
         {
-          date: "2022/12/31",
+          date: "2021/12/31",
           author: "httishere",
           content: "新增组件“历史上的今天”和“今日诗词”",
           icon: "el-icon-success",
           type: "success",
         },
         {
-          date: "2022/12/30",
+          date: "2021/12/30",
           author: "httishere",
           content: "基本组件汇总，动态时钟实现",
           icon: "el-icon-success",

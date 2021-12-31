@@ -9,6 +9,7 @@ import axios from 'axios';
 
 Vue.use(VueClipboard)
 Vue.prototype.$axios = axios;
+Vue.prototype.$global_path = window.location.origin + '/notion-widget/widgets/dist/index.html'
 
 Vue.config.productionTip = false
 
