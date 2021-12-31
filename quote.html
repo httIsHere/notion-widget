@@ -1,37 +1,79 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-20 22:57:16
- * @LastEditTime: 2021-08-23 10:36:03
+ * @LastEditTime: 2021-12-30 21:55:59
  * @LastEditors: Please set LastEditors
  * @Description: 引用块，白色主题
  * @FilePath: /notion/quote.html
 -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quote</title>
     <style>
-        body, html { background-color: #ffffff; margin: 0; padding: 0; }
-        .quote-box {width: 100%; margin: 0 auto; height: 100vh; background: #ffffff;box-sizing: border-box;}
-        svg {position: absolute;}
-        svg.icon-top {top: -40px; left: -40px;}
-        svg.icon-bottom {transform: rotate(180deg); bottom: -40px; right: -20px;}
-        .quote-box__inner {font-size: 18px;position: relative; line-height: 1.8;}
-        #text {font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;text-shadow: 0 8px 9px #c4b59d, 0px -2px 1px #fff; }
-        #text {font-family: "Arial Rounded MT Bold", "Hiragino Sans GB",  "Helvetica Rounded", Arial, sans-serif; font-size: 48px; margin: 0; box-sizing: border-box; padding: 20px;
-  text-transform: uppercase;
-  display: block;
-  color: #f1ebe5;
-  text-shadow: 0 8px 9px #c4b59d, 0px -2px 1px #fff;
-  font-weight: bold;
-  text-align: center;
-  background: linear-gradient(to bottom, #ece4d9 0%,#e9dfd1 100%);
-  border-radius: 20px;}
+        body,
+        html {
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .quote-box {
+            width: 100%;
+            margin: 0 auto;
+            height: 100vh;
+            background: #ffffff;
+            box-sizing: border-box;
+        }
+
+        svg {
+            position: absolute;
+        }
+
+        svg.icon-top {
+            top: -40px;
+            left: -40px;
+        }
+
+        svg.icon-bottom {
+            transform: rotate(180deg);
+            bottom: -40px;
+            right: -20px;
+        }
+
+        .quote-box__inner {
+            font-size: 18px;
+            position: relative;
+            line-height: 1.8;
+        }
+
+        #text {
+            font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+            text-shadow: 0 8px 9px #c4b59d, 0px -2px 1px #fff;
+        }
+
+        #text {
+            font-family: "Arial Rounded MT Bold", "Hiragino Sans GB", "Helvetica Rounded", Arial, sans-serif;
+            font-size: 48px;
+            margin: 0;
+            box-sizing: border-box;
+            padding: 20px;
+            text-transform: uppercase;
+            display: block;
+            color: #f1ebe5;
+            text-shadow: 0 8px 9px #c4b59d, 0px -2px 1px #fff;
+            font-weight: bold;
+            text-align: center;
+            background: linear-gradient(to bottom, #ece4d9 0%, #e9dfd1 100%);
+            border-radius: 20px;
+        }
     </style>
 </head>
+
 <body>
     <div class="quote-box">
         <div class="quote-box__inner">
@@ -43,16 +85,17 @@
 </body>
 <script>
     function getQueryString(name) {
-      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-      let r = window.location.search.substr(1).match(reg);
-      if (r != null) {
-        return decodeURIComponent(r[2]);
-      }
-      return null;
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURIComponent(r[2]);
+        }
+        return null;
     }
-    window.onload = function() {
+    window.onload = function () {
         let _quote_content = getQueryString('text');
         document.getElementById('text').innerHTML = _quote_content;
     }
 </script>
+
 </html>

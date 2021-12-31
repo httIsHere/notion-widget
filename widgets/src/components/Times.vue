@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 14:34:17
- * @LastEditTime: 2021-12-30 15:16:36
+ * @LastEditTime: 2021-12-30 22:53:31
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/widgets/src/components/Times.vue
@@ -9,86 +9,186 @@
 <template>
   <div class="container wrapper">
     <el-row :gutter="20">
-      <el-col :span="8" v-for="(item, index) in times" :key="item.id">
-        <el-card shadow="hover">
-          <el-descriptions>
+      <el-col :span="8" v-for="(item) in times" :key="item.id">
+        <el-card shadow="hover" style="margin-bottom: 10px;" @click="handleSettingModal(item)">
+          <el-descriptions :column="2">
             <div slot="title">
-              <img
-                :src="item.cover"
-                alt=""
-                class="image"
-              />
+              <img :src="item.cover" alt="" class="image" />
             </div>
-            <el-descriptions-item label="风格">
-              <el-tag size="small" type="warning">{{item.style}}</el-tag>
+            <el-descriptions-item label="名称">
+              <el-tag size="small">{{ item.tag }}</el-tag>
             </el-descriptions-item>
-            <el-descriptions-item label="标签">
-              <el-tag size="small">{{item.tag}}</el-tag>
+            <el-descriptions-item label="风格">
+              <el-tag
+                size="small"
+                type="warning"
+                v-for="s in item.style"
+                :key="s"
+                style="margin-right: 5px"
+                >{{ s }}</el-tag
+              >
             </el-descriptions-item>
             <el-descriptions-item label="备注">
-              <el-tag size="small" type="danger">{{item.note}}</el-tag>
+              <el-tag size="small" type="danger">{{ item.note }}</el-tag>
             </el-descriptions-item>
             <el-descriptions-item label="链接🔗">
-              <el-link type="primary" :href="item.link">复制链接</el-link>
+              <template v-if="item.link_type === 'copy'">
+                <el-link
+                  type="primary"
+                  icon="el-icon-document-copy"
+                  v-clipboard:copy="item.link"
+                  v-clipboard:success="handleCopy"
+                  >复制链接</el-link
+                >
+              </template>
+              <template v-else-if="item.link_type === 'setting'">
+                <el-link
+                  type="danger"
+                  icon="el-icon-edit"
+                  @click="handleSettingModal(item)"
+                  >{{ item.link_label }}</el-link
+                >
+              </template>
             </el-descriptions-item>
-            <el-descriptions-item label="用法"
-              >{{item.use}}</el-descriptions-item
-            >
+            <el-descriptions-item label="用法">{{
+              item.use
+            }}</el-descriptions-item>
           </el-descriptions>
         </el-card>
       </el-col>
     </el-row>
+    <!-- 自定义Dialog -->
+    <el-dialog
+      :title="currentItem && currentItem.tag"
+      :visible.sync="show_setting_modal"
+      width="800px"
+      :before-close="handleModalClose"
+    >
+      <component :is="currentComponent"></component>
+    </el-dialog>
   </div>
 </template>
 <script>
+import Quarterly from "./setting/Quarterly.vue";
+import DayMatter from "./setting/DayMatter.vue";
+import CalendarByWeek from "./setting/CalendarByWeek.vue";
+import SvgTime from "./setting/SvgTime.vue";
 export default {
+  components: {
+    quarterly: Quarterly,
+    dayMatter: DayMatter,
+    calendarByWeek: CalendarByWeek,
+    svgTime: SvgTime,
+  },
   data() {
     return {
       times: [
         {
+          id: 6,
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/QQ20211230-182424-HD%20(1).gif",
+          style: ['colorful'],
+          tag: "动画缤纷时钟",
+          note: "可带参数",
+          link: "https://httishere.github.io/notion-widget/colorfulSvgTime_w.html",
+          link_type: "setting",
+          link_label: "自定义模式",
+          use: "复制链接直接嵌入Notion",
+        },
+        {
           id: 1,
-          cover: 'https://gitee.com/httishere/blog-image/raw/master/img/20211230144940.png',
-          style: "简约",
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/20211230144940.png",
+          style: ["简约", "黑白"],
           tag: "进度时钟",
           note: "无需参数",
           link: "https://httishere.github.io/notion-widget/progress.html",
-          use: "链接直接嵌入Notion",
+          link_type: "copy",
+          use: "复制链接直接嵌入Notion",
+        },
+        {
+          id: 2,
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/20211230151833.png",
+          style: ["简约"],
+          tag: "季度进度条",
+          note: "可带参数",
+          link: "quarterly",
+          link_type: "setting",
+          link_label: "去自定义",
+          use: "自定义链接后嵌入Notion",
+        },
+        {
+          id: 3,
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/20211230170132.png",
+          style: ["简约"],
+          tag: "日历",
+          note: "无需参数",
+          link: "https://httishere.github.io/notion-widget/calendar.html",
+          link_type: "copy",
+          use: "复制链接直接嵌入Notion",
+        },
+        {
+          id: 4,
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/%E6%9C%AA%E5%91%BD%E5%90%8D52.jpg",
+          style: ["渐变", "黑白"],
+          tag: "倒数日",
+          note: "需带参数",
+          link: "dayMatter",
+          link_type: "setting",
+          link_label: "去自定义",
+          use: "自定义链接后嵌入Notion",
+        },
+        {
+          id: 5,
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/20211230174314.png",
+          style: ["简约"],
+          tag: "范围日历",
+          note: "需带参数，小跨度",
+          link: "calendarByWeek",
+          link_type: "setting",
+          link_label: "去自定义",
+          use: "自定义链接后嵌入Notion",
         },
       ],
+      show_setting_modal: false,
+      currentItem: null,
+      currentComponent: "svgTime",
     };
+  },
+  methods: {
+    handleCopy() {
+      this.$message({
+        message: "复制成功，快去Notion体验一下吧",
+        type: "success",
+      });
+    },
+    handleSettingModal(item) {
+      console.log(item)
+      if(item.link_type !== 'setting') return;
+      this.currentItem = item;
+      this.currentComponent = item.link;
+      this.show_setting_modal = true;
+    },
+    handleModalClose() {
+      this.currentItem = null;
+      this.currentComponent = null;
+      this.show_setting_modal = false;
+    },
   },
 };
 </script>
 <style lang="less" scoped>
-.time {
-  font-size: 13px;
-  color: #999;
-}
-
-.bottom {
-  margin-top: 13px;
-  line-height: 12px;
-}
-
-.button {
-  padding: 0;
-  float: right;
-}
-
 .image {
   width: 100%;
   display: block;
   height: 160px;
   object-fit: contain;
 }
-
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-
-.clearfix:after {
-  clear: both;
+.el-descriptions__title {
+  width: 100%;
 }
 </style>

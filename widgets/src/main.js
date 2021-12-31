@@ -3,6 +3,12 @@ import App from './App.vue'
 import './plugins/element.js'
 import router from './router'
 import './less/app.less';
+import VueClipboard from 'vue-clipboard2'
+import 'lib-flexible/flexible'
+import axios from 'axios';
+
+Vue.use(VueClipboard)
+Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false
 

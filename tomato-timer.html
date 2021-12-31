@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-29 16:19:37
- * @LastEditTime: 2021-12-30 10:35:03
+ * @LastEditTime: 2021-12-30 23:10:15
  * @LastEditors: Please set LastEditors
  * @Description: 番茄时钟，优先级低一些
  * @FilePath: /notion/tomato-timer.html
@@ -18,7 +18,7 @@
     <style type="text/css">
         .container {
             display: flex;
-            height: 12rem;
+            height: 60vh;
             flex-direction: column;
             overflow: hidden;
             background-color: #fff;
@@ -50,8 +50,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 4rem;
-            height: 4rem;
+            width: 70vw;
+            height: 70vw;
             text-align: center;
             transition: all 0.3s;
             /* border: .04rem solid transparent; */
@@ -60,7 +60,7 @@
         .timer_progress-mask {
             /* width: 100%;
             height: 100%; */
-            border: .04rem solid #ff6a6a;
+            border: 2vw solid #ff6a6a;
             position: absolute;
             top: 0;
             bottom: 0;
@@ -73,8 +73,8 @@
         .timer_progress {
             position: absolute;
             top: 0;
-            width: 2.026667rem;
-            height: 4rem;
+            width: 70vw;
+            height: 70vw;
             overflow: hidden;
             transition: all 0.3s;
         }
@@ -90,29 +90,30 @@
         .timer_circle {
             position: absolute;
             top: 0;
-            width: 4rem;
-            height: 4rem;
-            border: .04rem solid transparent;
+            width: 70vw;
+            height: 70vw;
+            border: 2vw solid transparent;
             transition: all 0.3s;
             border-radius: 50%;
+            box-sizing: border-box;
         }
 
         .timer_circle--left {
             left: 0;
-            border-left: .04rem solid #ff6a6a;
-            border-bottom: .04rem solid #ff6a6a;
+            border-left: 2vw solid #ff6a6a;
+            border-bottom: 2vw solid #ff6a6a;
             transform: rotate(45deg);
         }
 
         .timer_circle--right {
             right: 0;
-            border-right: .04rem solid #ff6a6a;
-            border-bottom: .04rem solid rgb(255, 106, 106);
+            border-right: 2vw solid #ff6a6a;
+            border-bottom: 2vw solid rgb(255, 106, 106);
             transform: rotate(-45deg);
         }
 
         .timer_time {
-            font-size: .6rem;
+            font-size: 18vw;
             color: #ff6a6a;
             font-weight: lighter;
             transition: font-size 0.3s;
@@ -231,25 +232,17 @@
             <div class='timer_wrapper'>
                 <div class='timer_progress-mask'></div>
                 <div class='timer_progress timer_left'>
-                    <div class="timer_circle timer_circle--left" style="transform: rotate({{leftDeg}}deg);"></div>
+                    <div class="timer_circle timer_circle--left"></div>
                 </div>
                 <div class='timer_progress timer_right'>
-                    <div class="timer_circle timer_circle--right" style="transform: rotate({{rightDeg}}deg);"></div>
+                    <div class="timer_circle timer_circle--right"></div>
                 </div>
-                <span wx:if="{{!completed}}" class='timer_time'>{{remainTime}}</span>
-                <i wx:if="{{completed}}" type="flag" size='80' color='#ff6a6a' />
+                <span class='timer_time'>25:00</span>
             </div>
-            <input type='text' class='timer_missionName' placeholder='任务名称' bindinput='changeMissionName'
-                value='{{missionName}}'></input>
-            <input type='number' class='timer_missionTime' placeholder='自定义时间' min="1" max="999"
-                bindinput='changeMissionTime' value='{{missionTime}}'>
-            <span class='setTime_end'>分钟</span>
-            </input>
-            <div wx:if="{{isRunning}}" class='complete-btn' bindtap='completeTask'>结束</div>
-            <span wx:if="{{isRunning}}" animation="{{nameAnimation}}"
-                class='timer_showTaskName'>{{missionName+(completed?'完成':'进行中')}}</span>
         </div>
     </div>
 </body>
-
+<script>
+    let remaining = 25, transRotate = ;
+</script>
 </html>
