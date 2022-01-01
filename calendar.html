@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 11:43:48
- * @LastEditTime: 2021-12-28 10:10:18
+ * @LastEditTime: 2022-01-01 21:00:02
  * @LastEditors: Please set LastEditors
  * @Description: 显示当前日历
  * @FilePath: /notion/calender.html
@@ -101,7 +101,7 @@
       }
       let cur_month = cur_date.getMonth() + 1,
         cur_d = cur_date.getDate();
-      let month_first_day = new Date(),
+      let month_first_day = cur_date,
         first_day;
       month_first_day.setDate(1);
       first_day = month_first_day.getDay() || 7;
@@ -112,12 +112,11 @@
             _html += "<span></span>";
           }
         }
-        if((i % 7) === (first_day + 3)) {
+        if(((i - 1) % 7) === (8 - first_day)) {
             _html += '<div class="week-days">';
         }
         _html += `<span ${i === cur_d ? ' class="active"' : ""}>${i}</span>`;
-        if((i % 7) === (first_day + 2)) {
-            console.log(i % 7)
+        if((i % 7) === (8 - first_day)) {
             _html += "</div>"
         }
       }

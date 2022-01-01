@@ -9,7 +9,7 @@ import axios from 'axios';
 
 Vue.use(VueClipboard)
 Vue.prototype.$axios = axios;
-Vue.prototype.$global_path = window.location.origin + '/notion-widget/widgets/dist/index.html'
+Vue.prototype.$global_path = process.env.NODE_ENV === "production" ? window.location.origin + '/notion-widgets-site' : window.location.origin;
 
 Vue.config.productionTip = false
 

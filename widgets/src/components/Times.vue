@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 14:34:17
- * @LastEditTime: 2021-12-31 16:06:03
+ * @LastEditTime: 2021-12-31 17:29:02
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/widgets/src/components/Times.vue
@@ -96,7 +96,7 @@ export default {
           style: ["colorful"],
           tag: "动画缤纷时钟",
           note: "可带参数",
-          link: "https://httishere.github.io/notion-widget/colorfulSvgTime_w.html",
+          link: "svgTime",
           link_type: "setting",
           link_label: "自定义模式",
           use: "复制链接直接嵌入Notion",
