@@ -1,7 +1,7 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-13 09:37:29
- * @LastEditTime: 2022-01-04 15:27:16
+ * @LastEditTime: 2022-01-04 17:55:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mobile-frontend-lanqb/Users/httishere/workspace/httishere/notion/progress.html
@@ -31,6 +31,7 @@
             background: #ffffff;
             padding: .266667rem;
             box-sizing: border-box;
+            font-size: .266667rem;
         }
 
         #left {
@@ -43,13 +44,13 @@
 
         li {
             list-style: none;
-            width: 8rem;
+            width: 7.2rem;
             height: .266667rem;
             border-radius: .266667rem;
             background: #f3f3f3;
             color: #ffffff;
             overflow: hidden;
-            margin-left: .2rem;
+            margin: 0 .2rem;
         }
 
         li div {
@@ -147,18 +148,21 @@
                 <li id="year">
                     <div></div>
                 </li>
+                <em></em>
             </div>
             <div class="progress-item" id="month-bar">
                 <span>本月</span>
                 <li id="month">
                     <div></div>
                 </li>
+                <em></em>
             </div>
             <div class="progress-item" id="week-bar">
                 <span>本周</span>
                 <li id="week">
                     <div></div>
                 </li>
+                <em></em>
             </div>
         </div>
     </ul>
@@ -171,6 +175,7 @@
     _day = _day ? _day : 7;
     let _week = document.getElementById('week');
     _week.children[0].style.width = `${_day * 100 / 7}%`;
+    document.getElementById('week-bar').children[2].innerHTML = `${_day}/7`;
 
     // 月
     if (now_year % 4 === 0 && now_year % 100 != 0) {
@@ -178,7 +183,9 @@
         Days[2] = 29;
     }
     let cur_month = now_date.getMonth() + 1, month_day = now_date.getDate();
+
     document.getElementById('month').children[0].style.width = `${month_day * 100 / Days[cur_month]}%`;
+    document.getElementById('month-bar').children[2].innerHTML = `${month_day}/${Days[cur_month]}`;
 
     // 年
     let year_start = new Date(`${now_year}/1/1`).getTime();
@@ -189,7 +196,7 @@
     let year_rate = days * 100 / total;
     let year_text = year_rate <= 15 ? days : year_rate <= 30 ? `${days} / ${total}` : `${days} / ${total} (${(year_rate).toFixed(0)}%)`;
     _year.children[0].style.width = `${days * 100 / total}%`;
-    document.getElementById('left').children[1].innerHTML = `${now_date.getMonth() + 1}/${now_date.getDate()}`;
+    document.getElementById('year-bar').children[2].innerHTML = `${days}/${total}`;
 
     // 倒计时
     // setTime();
