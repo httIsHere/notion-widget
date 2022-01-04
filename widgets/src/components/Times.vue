@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 14:34:17
- * @LastEditTime: 2022-01-04 11:29:19
+ * @LastEditTime: 2022-01-04 16:05:44
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/widgets/src/components/Times.vue
@@ -89,6 +89,28 @@ export default {
   data() {
     return {
       times: [
+        {
+          id: 10,
+          cover: 'https://gitee.com/httishere/blog-image/raw/master/img/Xnip2022-01-04_16-02-47.jpg',
+          style: ["colorful"],
+          tag: "纵向时间进度条",
+          note: "无需参数",
+          link: "https://httishere.github.io/notion-widget/new/progress-vertical.html",
+          link_type: "copy",
+          use: "复制链接直接嵌入Notion",
+          is_new: true,
+        },
+        {
+          id: 9,
+          cover: 'https://gitee.com/httishere/blog-image/raw/master/img/Xnip2022-01-04_16-02-18.jpg',
+          style: ["colorful"],
+          tag: "时间进度条",
+          note: "无需参数",
+          link: "https://httishere.github.io/notion-widget/new/progress.html",
+          link_type: "copy",
+          use: "复制链接直接嵌入Notion",
+          is_new: true,
+        },
         {
           id: 8,
           cover: 'https://gitee.com/httishere/blog-image/raw/master/img/20220104112833.png',

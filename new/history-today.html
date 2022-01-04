@@ -1,0 +1,130 @@
+<!--
+ * @Author: your name
+ * @Date: 2022-01-04 16:11:38
+ * @LastEditTime: 2022-01-04 17:16:12
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: /notion/new/history-today.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>历史今日</title>
+    <script src="../flexibleMerge.js"></script>
+    <style>
+        .container {
+            padding: .666667rem;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 0;
+            margin-bottom: .666667rem;
+            font-family: cursive;
+            font-size: .96rem;
+        }
+
+        h2 em {
+            color: teal;
+            font-size: .96rem;
+            margin: 0 .266667rem;
+        }
+
+        .inner {
+            font-size: .426667rem;
+            color: #303133;
+            position: relative;
+            font-family: 'Avenir', Helvetica, Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+
+        .item {
+            padding-left: 1rem;
+            padding-bottom: .4rem;
+            position: relative;
+            z-index: 1
+        }
+
+        .item p {
+            color: #909399;
+            font-size: .48rem;
+            line-height: .48rem;
+            margin: 0;
+            margin-bottom: .4rem;
+        }
+
+        .item::before {
+            content: "";
+            background-color: teal;
+            position: absolute;
+            width: .32rem;
+            height: .32rem;
+            border-radius: 50%;
+            left: 0;
+            top: .04rem;
+        }
+
+        .item::after {
+            content: "";
+            width: .026667rem;
+            height: 100%;
+            background: #e4e7ed;
+            position: absolute;
+            left: .146667rem;
+            top: 0;
+            z-index: -1;
+        }
+
+        .item:last-child::after {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="root">
+        <h2><em>-</em><span id="date"></span><em>-</em></h2>
+        <ul class="inner" id="list">
+            <div class="item">
+                <p>2022</p>
+                <div class="content">刻度的苦瓜的方式对司空见惯还是哭的结果</div>
+            </div>
+            <div class="item">
+                <p>2022</p>
+                <div class="content">刻度的苦瓜的方式对司空见惯还是哭的结果</div>
+            </div>
+        </ul>
+    </div>
+</body>
+<script src="../lib/vue@2.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    let _today = new Date(),
+        month,
+        day, year = _today.getFullYear();
+    (month = _today.getMonth() + 1), (day = _today.getDate());
+    month = month > 9 ? month : `0${month}`;
+    day = day > 9 ? day : `0${day}`;
+    document.getElementById('date').innerHTML = `${year}/${month}/${day}`;
+
+    new Vue({
+        el: "#root",
+        mounted() {
+            this.getHis();
+        },
+        methods: {
+            getHis() {
+                axios.get(`https://baike.baidu.com/cms/home/eventsOnHistory/${month}.json`).then(res => {
+                    console.log(res)
+                })
+            }
+        }
+    })
+</script>
+
+</html>

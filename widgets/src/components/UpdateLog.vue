@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 15:28:30
- * @LastEditTime: 2021-12-31 17:42:50
+ * @LastEditTime: 2022-01-04 16:08:02
  * @LastEditors: Please set LastEditors
  * @Description: 更新记录
  * @FilePath: /notion/widgets/src/components/UpdateLog.vue
@@ -9,7 +9,6 @@
 <template>
   <div class="block">
     <el-timeline>
-      <router-link :to="{name: 'today'}">hhh</router-link>
       <h4>更新日志：</h4>
       <el-timeline-item
         :timestamp="item.date"
@@ -37,12 +36,18 @@ export default {
         //   type: "warning",
         // },
         {
-          date: "2021/12/31",
+          date: "2022/01/04",
           author: "httishere",
-          content: "新增组件“历史上的今天”和“今日诗词”",
+          content: "新增组件：“时间进度条”和“周进度”",
           icon: "el-icon-success",
           type: "success",
-          link: {name: 'today'}
+        },
+        {
+          date: "2021/12/31",
+          author: "httishere",
+          content: "新增组件：“历史上的今天”和“今日诗词”",
+          icon: "el-icon-success",
+          type: "success",
         },
         {
           date: "2021/12/30",
