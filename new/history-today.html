@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-04 16:11:38
- * @LastEditTime: 2022-01-04 17:16:12
+ * @LastEditTime: 2022-01-04 17:30:03
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/new/history-today.html
@@ -60,7 +60,7 @@
 
         .item::before {
             content: "";
-            background-color: teal;
+            background-color: #d3d3d3;
             position: absolute;
             width: .32rem;
             height: .32rem;
@@ -68,6 +68,7 @@
             left: 0;
             top: .04rem;
         }
+        .item:nth-child(2n+1)::before {background: teal;}
 
         .item::after {
             content: "";
@@ -83,20 +84,18 @@
         .item:last-child::after {
             display: none;
         }
+        .item a {color: unset; text-decoration: none;}
+        [v-cloak] {display: none; }
     </style>
 </head>
 
 <body>
-    <div class="container" id="root">
+    <div class="container" id="root" v-cloak>
         <h2><em>-</em><span id="date"></span><em>-</em></h2>
         <ul class="inner" id="list">
-            <div class="item">
-                <p>2022</p>
-                <div class="content">刻度的苦瓜的方式对司空见惯还是哭的结果</div>
-            </div>
-            <div class="item">
-                <p>2022</p>
-                <div class="content">刻度的苦瓜的方式对司空见惯还是哭的结果</div>
+            <div class="item" v-for="item in list" :key="item.year">
+                <p>{{item.year}}</p>
+                <div class="content" v-html="item.title"></div>
             </div>
         </ul>
     </div>
@@ -114,15 +113,34 @@
 
     new Vue({
         el: "#root",
+        data() {return {
+            list: [],
+        }},
         mounted() {
-            this.getHis();
+            this.getHisToday(month, day);
         },
         methods: {
-            getHis() {
-                axios.get(`https://baike.baidu.com/cms/home/eventsOnHistory/${month}.json`).then(res => {
-                    console.log(res)
-                })
-            }
+            getHisToday(month, day) {
+                let _date = `${month}${day}`;
+                let today_list = localStorage.getItem(`his_${_date}`);
+                if (today_list) {
+                    this.list = JSON.parse(today_list);
+                    return
+                }
+                const _this = this;
+                axios
+                    .get(`https://baike.baidu.com/cms/home/eventsOnHistory/${month}.json`)
+                    .then((res) => {
+                        let data = res.data;
+                        _this.formatData(data[month]);
+                    });
+            },
+            formatData(data) {
+                let _date = `${this.month}${this.day}`;
+                let list = data[_date];
+                this.list = list;
+                localStorage.setItem(`his_${_date}`, JSON.stringify(list));
+            },
         }
     })
 </script>

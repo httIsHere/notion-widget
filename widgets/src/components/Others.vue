@@ -96,18 +96,18 @@ export default {
           use: "自定义链接后嵌入Notion",
           is_new: true,
         },
-        // {
-        //   id: 2,
-        //   cover:
-        //     "https://gitee.com/httishere/blog-image/raw/master/img/20211231103209.png",
-        //   style: ["时间轴"],
-        //   tag: "历史上的今天",
-        //   note: "需带参数",
-        //   link: this.$global_path + "/wid/history-today",
-        //   link_type: "copy",
-        //   use: "复制链接后嵌入Notion",
-        //   is_new: true,
-        // },
+        {
+          id: 2,
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/20211231103209.png",
+          style: ["时间轴"],
+          tag: "历史上的今天",
+          note: "无需参数",
+          link: "https://httishere.github.io/notion-widget/new/history-today.html",
+          link_type: "copy",
+          use: "复制链接后嵌入Notion",
+          is_new: true,
+        },
         {
           id: 1,
           cover:
