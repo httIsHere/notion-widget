@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 14:34:17
- * @LastEditTime: 2021-12-31 17:29:02
+ * @LastEditTime: 2022-01-04 11:29:19
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/widgets/src/components/Times.vue
@@ -90,12 +90,34 @@ export default {
     return {
       times: [
         {
+          id: 8,
+          cover: 'https://gitee.com/httishere/blog-image/raw/master/img/20220104112833.png',
+          style: ["简约"],
+          tag: "周进度",
+          note: "无需参数",
+          link: "https://httishere.github.io/notion-widget/new/week-ceils.html",
+          link_type: "copy",
+          use: "复制链接直接嵌入Notion",
+          is_new: true,
+        },
+        {
+          id: 7,
+          cover: 'https://gitee.com/httishere/blog-image/raw/master/img/20220104111624.png',
+          style: ["黑白"],
+          tag: "年度格子",
+          note: "无需参数",
+          link: "https://httishere.github.io/notion-widget/new/year-block.html",
+          link_type: "copy",
+          use: "复制链接直接嵌入Notion",
+          is_new: true,
+        },
+        {
           id: 6,
           cover:
             "https://gitee.com/httishere/blog-image/raw/master/img/QQ20211230-182424-HD%20(1).gif",
           style: ["colorful"],
           tag: "动画缤纷时钟",
-          note: "可带参数",
+          note: "无需参数",
           link: "svgTime",
           link_type: "setting",
           link_label: "自定义模式",
