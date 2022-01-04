@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 19:19:23
- * @LastEditTime: 2021-12-31 16:18:28
+ * @LastEditTime: 2022-01-04 13:49:58
  * @LastEditors: Please set LastEditors
  * @Description: 引用块
  * @FilePath: /notion/widgets/src/components/setting/SvgTime.vue
@@ -23,7 +23,7 @@
         <el-link
           type="primary"
           icon="el-icon-document-copy"
-          v-clipboard:copy="`${link}/${mode}`"
+          v-clipboard:copy="`${public_link}?mode=${mode}`"
           v-clipboard:success="handleCopy"
           >复制链接</el-link
         >
@@ -58,6 +58,7 @@ export default {
         },
       ],
       link: this.$global_path + "/wid/today",
+      public_link: 'https://httishere.github.io/notion-widget/new/today-shici.html'
     };
   },
   methods: {
