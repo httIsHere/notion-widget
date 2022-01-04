@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-04 13:32:46
- * @LastEditTime: 2022-01-04 13:43:33
+ * @LastEditTime: 2022-01-04 13:48:19
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/new/today-shici.html
@@ -141,11 +141,13 @@
             border-color: #ffffff;
             background-color: #000000;
         }
+
+        [v-cloak] {display: none;}
     </style>
 </head>
 
 <body>
-    <div class="container wrapper" id="root">
+    <div class="container wrapper" id="root" v-cloak>
         <div class="inner" :class="{black: mode === 'b'}">
             <div class="header"><em></em><em></em></div>
             <div class="content">
