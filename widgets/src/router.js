@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-30 11:41:28
- * @LastEditTime: 2022-01-04 11:14:38
+ * @LastEditTime: 2022-01-05 15:13:26
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/widgets/src/router.js
@@ -63,5 +63,15 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "about" */ "./widget/Today.vue"),
     },
+    {
+      path: "/wid/mul-days-matter",
+      name: "mul-days-matter",
+      component: () => import(/* webpackChunkName: "about" */ "./widget/mul-days-matter.vue")
+    },
+    {
+      path: "/about",
+      name: "about",
+      component: () => import(/* webpackChunkName: "about" */ "./views/About.vue")
+    }
   ],
 });

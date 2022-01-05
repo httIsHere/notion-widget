@@ -12,6 +12,7 @@
     "core-js": "^2.6.5",
     "element-ui": "^2.4.5",
     "jinrishici": "^1.0.6",
+    "jquery": "^3.6.0",
     "less-loader": "^6.0.0",
     "lib-flexible": "^0.3.2",
     "vue": "^2.6.10",

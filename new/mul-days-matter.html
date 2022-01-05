@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒数日</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js"></script>
+    <style type="text/css">
+        ul,
+        li {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 9.2rem;
+            margin: 0.4rem auto;
+            box-shadow: 0 0 0.266667rem 0.266667rem rgba(170, 151, 191, 0.2);
+            border-radius: 0.266667rem;
+            overflow: hidden;
+            color: #ffffff;
+            background-image: url(https://gitee.com/httishere/blog-image/raw/master/img/WechatIMG1235.jpeg);
+            background-origin: center;
+            padding: 0.666667rem;
+            box-sizing: border-box;
+        }
+
+        .container .head {
+            font-weight: bold;
+            margin-bottom: 0.266667rem;
+        }
+
+        .container .head span {
+            font-weight: normal;
+            float: right;
+        }
+
+        .container .list .item {
+            margin-top: 0.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .container .list .item .label {
+            width: 1.6rem;
+            text-align: right;
+            display: inline-block;
+        }
+
+        .container .list .item .progress {
+            width: 4.533333rem;
+            height: 0.133333rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 0.133333rem;
+            overflow: hidden;
+        }
+
+        .container .list .item .progress div {
+            background-color: rgba(255, 255, 255, 0.7);
+            width: 0;
+            height: 100%;
+            border-radius: 0.133333rem;
+        }
+
+        .container .list .item .remain {
+            width: 1.333333rem;
+            font-size: 0.32rem;
+        }
+
+        .container .list .item .remain em {
+            font-style: normal;
+            font-size: 0.266667rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="root">
+        <div class="head">
+            我的倒数日<span v-show="list">{{ dues }}/{{ list && list.length }}</span>
+        </div>
+        <ul class="list">
+            <li class="item" v-for="item in list" :key="item.key">
+                <span class="label">{{ item.key }}</span>
+                <div class="progress">
+                    <div :style="{
+              width:
+                item.remain > 0
+                  ? `${((item.total - item.remain) * 100) / item.total}%`
+                  : '100%',
+            }"></div>
+                </div>
+                <span class="remain">{{ Math.abs(item.remain) }}天{{
+                    item.remain > 0 ? "后" : "前"
+                    }}</span>
+            </li>
+        </ul>
+    </div>
+</body>
+<script src="../lib/vue@2.js"></script>
+<script>
+    new Vue({
+        el: '#root',
+        data() {
+            return {
+                msg: getQueryString('msg') || "考研-2022/09/26,生日-2022/01/01,N2-2022/6/19",
+                created: getQueryString('created') || "2021/09/04",
+                // list: [],
+                dues: 0,
+            };
+        },
+        computed: {
+            list() {
+                const _this = this;
+                let _msg = this.msg.split(","),
+                    cur_date = new Date(),
+                    cur_time = cur_date.getTime(),
+                    created = new Date(this.created).getTime(),
+                    list = [];
+                _msg.forEach((item) => {
+                    let _arr = item.split("-");
+                    let _date = new Date(_arr[1]),
+                        _time = _date.getTime();
+                    let ttime = _time - cur_time,
+                        days = Math.floor(ttime / (60 * 24 * 60 * 1000));
+                    let total_time = _time - created,
+                        t_days = Math.floor(total_time / (60 * 24 * 60 * 1000));
+                    if (days <= 0) {
+                        _this.dues += 1;
+                    }
+                    list.push({
+                        key: _arr[0],
+                        value: _arr[1],
+                        remain: days,
+                        total: t_days,
+                    });
+                });
+                return list;
+            },
+        },
+        mounted() { },
+    })
+</script>
+
+</html>

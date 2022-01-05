@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 14:34:17
- * @LastEditTime: 2022-01-04 16:05:44
+ * @LastEditTime: 2022-01-05 11:39:52
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/widgets/src/components/Times.vue
@@ -79,19 +79,35 @@ import Quarterly from "./setting/Quarterly.vue";
 import DayMatter from "./setting/DayMatter.vue";
 import CalendarByWeek from "./setting/CalendarByWeek.vue";
 import SvgTime from "./setting/SvgTime.vue";
+import MulDays from "./setting/mul-days.vue";
 export default {
   components: {
     quarterly: Quarterly,
     dayMatter: DayMatter,
     calendarByWeek: CalendarByWeek,
     svgTime: SvgTime,
+    mulDays: MulDays,
   },
   data() {
     return {
       times: [
         {
+          id: 11,
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/20220105113554.png",
+          style: ["卡片"],
+          tag: "多项倒计时",
+          note: "可设置多项倒计时",
+          link: "mul-days",
+          link_type: "setting",
+          link_label: "去自定义",
+          use: "自定义链接后嵌入Notion",
+          is_new: true,
+        },
+        {
           id: 10,
-          cover: 'https://gitee.com/httishere/blog-image/raw/master/img/Xnip2022-01-04_16-02-47.jpg',
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/Xnip2022-01-04_16-02-47.jpg",
           style: ["colorful"],
           tag: "纵向时间进度条",
           note: "无需参数",
@@ -102,7 +118,8 @@ export default {
         },
         {
           id: 9,
-          cover: 'https://gitee.com/httishere/blog-image/raw/master/img/Xnip2022-01-04_16-02-18.jpg',
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/Xnip2022-01-04_16-02-18.jpg",
           style: ["colorful"],
           tag: "时间进度条",
           note: "无需参数",
@@ -113,7 +130,8 @@ export default {
         },
         {
           id: 8,
-          cover: 'https://gitee.com/httishere/blog-image/raw/master/img/20220104112833.png',
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/20220104112833.png",
           style: ["简约"],
           tag: "周进度",
           note: "无需参数",
@@ -124,7 +142,8 @@ export default {
         },
         {
           id: 7,
-          cover: 'https://gitee.com/httishere/blog-image/raw/master/img/20220104111624.png',
+          cover:
+            "https://gitee.com/httishere/blog-image/raw/master/img/20220104111624.png",
           style: ["黑白"],
           tag: "年度格子",
           note: "无需参数",
@@ -205,9 +224,9 @@ export default {
           use: "自定义链接后嵌入Notion",
         },
       ],
-      show_setting_modal: false,
+      show_setting_modal: true,
       currentItem: null,
-      currentComponent: "svgTime",
+      currentComponent: "mulDays",
     };
   },
   methods: {
