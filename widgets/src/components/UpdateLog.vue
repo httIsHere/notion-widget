@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-30 15:28:30
- * @LastEditTime: 2022-01-04 16:08:02
+ * @LastEditTime: 2022-01-05 16:55:31
  * @LastEditors: Please set LastEditors
  * @Description: 更新记录
  * @FilePath: /notion/widgets/src/components/UpdateLog.vue
@@ -35,6 +35,13 @@ export default {
         //   icon: "el-icon-success",
         //   type: "warning",
         // },
+        {
+          date: "2022/01/05",
+          author: "httishere",
+          content: "新增组件：“多项倒数日”",
+          icon: "el-icon-success",
+          type: "success",
+        },
         {
           date: "2022/01/04",
           author: "httishere",

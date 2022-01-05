@@ -6,6 +6,8 @@ import './less/app.less';
 import VueClipboard from 'vue-clipboard2'
 import 'lib-flexible/flexible'
 import axios from 'axios';
+import 'gitalk/dist/gitalk.css'
+// import Gitalk from 'gitalk'
 
 Vue.use(VueClipboard)
 Vue.prototype.$axios = axios;
