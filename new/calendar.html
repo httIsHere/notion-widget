@@ -1,0 +1,145 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-12-23 11:43:48
+ * @LastEditTime: 2022-01-06 12:36:39
+ * @LastEditors: Please set LastEditors
+ * @Description: 显示当前日历
+ * @FilePath: /notion/calender.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar</title>
+    <script src="../flexibleMerge.js"></script>
+    <style>
+      html,
+      body {
+        background-color: #ffffff;
+        font-family: serif;
+        margin: 0; padding: 0;
+      }
+      .container {
+        width: 9.2rem;
+        margin: 0 auto;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #a77777;
+        color: rgb(240, 224, 203);
+        border-radius: .4rem;
+        box-sizing: border-box;
+        padding: .4rem;
+      }
+      #month {
+        font-weight: bold;
+        font-size: .6rem;
+        text-align: right;
+        margin: 0;
+      }
+      .week-days {
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .week-days.head {
+        font-weight: bold;
+        font-size: .426667rem;
+        margin-bottom: .133333rem;
+      }
+      .week-days.week {
+        margin-bottom: .066667rem;
+      }
+      .week-days span {
+        line-height: .6rem;
+        font-size: .373333rem;
+        width: .6rem;
+        height: .6rem;
+        display: inline-block;
+        text-align: center;
+      }
+      .start,
+      .active,
+      .end {
+        background-color: rgba(240, 224, 203, 0.8);
+        border-radius: 50%;
+        color: #a77777;
+        font-weight: bold;
+      }
+      #d-day {width: 2.666667rem;}
+      #d-day h3 {font-size: .64rem; margin: .266667rem 0 0 0;}
+      #d-day h1 {font-size: 1.92rem; margin: .3rem 0;}
+    </style>
+  </head>
+  <body>
+    <div class="container"> 
+      <div id="d-day"></div>
+      <div class="inner">
+        <h2 id="month"></h2>
+        <!-- <div class="days"></div> -->
+        <div class="week-days head">
+          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span
+          ><span>S</span><span>S</span>
+        </div>
+        <div id="content">
+          <div id="d-content"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const week_day = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const months = [
+      " ",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    window.onload = function () {
+      let cur_date = new Date(),
+        _year;
+      _year = cur_date.getFullYear();
+      if (_year % 4 === 0 && _year % 100 != 0) {
+        // 闰年
+        days[2] = 29;
+      }
+      let cur_month = cur_date.getMonth() + 1,
+        cur_d = cur_date.getDate(), cur_week_d = cur_date.getDay();
+      let month_first_day = cur_date,
+        first_day;
+      month_first_day.setDate(1);
+      first_day = month_first_day.getDay() || 7;
+      let _html = '<div class="week-days">', _fd = first_day;
+      for (let i = 1; i <= days[cur_month]; i++) {
+        if (i === 1) {
+          while (_fd-- > 1) {
+            _html += "<span></span>";
+          }
+        }
+        if(((i - 1) % 7) === (8 - first_day)) {
+            _html += '<div class="week-days">';
+        }
+        _html += `<span ${i === cur_d ? ' class="active"' : ""}>${i}</span>`;
+        if((i % 7) === (8 - first_day)) {
+            _html += "</div>"
+        }
+      }
+      document.getElementById('month').innerHTML = months[cur_month];
+      document.getElementById('d-day').innerHTML = `<h3>${week_day[cur_week_d]}</h3><h1>${cur_d}</h1>`
+      document.getElementById('d-content').innerHTML = _html;
+    };
+  </script>
+</html>
