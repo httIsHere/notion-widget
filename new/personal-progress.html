@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-06 12:59:41
- * @LastEditTime: 2022-01-06 14:27:01
+ * @LastEditTime: 2022-01-06 14:32:27
  * @LastEditors: Please set LastEditors
  * @Description: 人生进度条
  * @FilePath: /notion/new/personal-progress.html
@@ -25,7 +25,13 @@
             font-size: .373333rem;
             color: #333333;
         }
-        h1, h2, p {margin: 0;padding: 0;}
+
+        h1,
+        h2,
+        p {
+            margin: 0;
+            padding: 0;
+        }
 
         .container {
             width: 9.2rem;
@@ -44,7 +50,12 @@
             align-items: center;
             justify-content: space-between;
         }
-        .left {display: inline-flex; align-items: center;}
+
+        .left {
+            display: inline-flex;
+            align-items: center;
+        }
+
         .hi {
             width: 1.333333rem;
             height: 1.333333rem;
@@ -53,14 +64,36 @@
             text-align: center;
             line-height: 1.333333rem;
             font-size: .48rem;
+            border-radius: 1.333333rem;
+            background: #f3f3f3;
+            box-shadow:  .173333rem .173333rem .333333rem #e0e0e0,
+                 -.173333rem -.173333rem .333333rem #ffffff;
         }
+
         .info {
             margin-left: .4rem;
         }
-        .info #name {font-size: .48rem; margin: 0;}
-        .info p {color: #999999; margin: 0;}
-        .right {color: #999999; opacity: .3;}
-        #days {display: inline-block; font-size: .96rem;color: #2377a4;}
+
+        .info #name {
+            font-size: .48rem;
+            margin: 0;
+        }
+
+        .info p {
+            color: #999999;
+            margin: 0;
+        }
+
+        .right {
+            color: #999999;
+            opacity: .3;
+        }
+
+        #days {
+            display: inline-block;
+            font-size: .96rem;
+            color: #2377a4;
+        }
     </style>
 </head>
 
@@ -86,7 +119,6 @@
     let bir_date = new Date(_birthday), cur_date = new Date();
     let s_times = cur_date.getTime() - bir_date.getTime(); //
     let days = Math.floor(s_times / (24 * 60 * 60 * 1000));
-    console.log(days);
     document.getElementById('name').innerHTML = name;
     document.getElementById('days').innerHTML = days;
 </script>

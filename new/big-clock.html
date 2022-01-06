@@ -1,0 +1,62 @@
+<!--
+ * @Author: your name
+ * @Date: 2022-01-06 15:13:35
+ * @LastEditTime: 2022-01-06 15:24:09
+ * @LastEditors: Please set LastEditors
+ * @Description: 桌面时钟
+ * @FilePath: /notion/new/big-clock.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桌面时钟</title>
+    <script src="../flexibleMerge.js"></script>
+    <style>
+        html,
+        body {
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        @font-face {
+            font-family: "led";
+            src: url("../fonts/LED.ttf");
+        }
+
+        #clock {
+            color: #333333;
+            font-size: 2.4rem;
+            font-family: "led";
+            letter-spacing: .2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="clock">22:12:45</div>
+</body>
+<script>
+    window.onload = function () {
+
+        showClock();
+
+        setInterval(showClock, 1000);
+
+        function showClock() {
+            let cur_time = new Date();
+            let hour = cur_time.getHours(), minute = cur_time.getMinutes(), second = cur_time.getSeconds();
+            hour = hour < 10 ? `0${hour}` : hour;
+            minute = minute < 10 ? `0${minute}` : minute;
+            second = second < 10 ? `0${second}` : second;
+            document.getElementById("clock").innerHTML = `${hour}:${minute}:${second}`
+        }
+    }
+</script>
+
+</html>
