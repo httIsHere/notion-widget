@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-06 12:59:41
- * @LastEditTime: 2022-01-06 14:32:27
+ * @LastEditTime: 2022-01-07 10:08:12
  * @LastEditors: Please set LastEditors
  * @Description: 人生进度条
  * @FilePath: /notion/new/personal-progress.html
@@ -104,7 +104,7 @@
                 <div class="hi">Hi</div>
                 <div class="info">
                     <h3 id="name"></h3>
-                    <p>你来到这个世界已经</p>
+                    <p id="msg">你来到这个世界已经</p>
                 </div>
             </div>
             <div class="right">
@@ -115,12 +115,13 @@
     </div>
 </body>
 <script type="text/javascript">
-    const _birthday = getQueryString('b'), name = getQueryString('n');
+    const _birthday = getQueryString('b'), name = getQueryString('n'), m = getQueryString('m');
     let bir_date = new Date(_birthday), cur_date = new Date();
     let s_times = cur_date.getTime() - bir_date.getTime(); //
     let days = Math.floor(s_times / (24 * 60 * 60 * 1000));
     document.getElementById('name').innerHTML = name;
     document.getElementById('days').innerHTML = days;
+    m && (document.getElementById('msg').innerHTML = m);
 </script>
 
 </html>
