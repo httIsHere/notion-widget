@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-06 15:13:35
- * @LastEditTime: 2022-01-06 15:24:09
+ * @LastEditTime: 2022-01-08 15:25:12
  * @LastEditors: Please set LastEditors
  * @Description: 桌面时钟
  * @FilePath: /notion/new/big-clock.html
@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>桌面时钟</title>
     <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js"></script>
     <style>
         html,
         body {
@@ -35,6 +36,13 @@
             letter-spacing: .2rem;
             text-align: center;
         }
+        @media (prefers-color-scheme: dark) {
+            html, body { background: rgb(47 52 55);color: #ffffff;}
+        }
+        html[theme="dark"], html[theme="dark"] body {
+            background: rgb(47 52 55);color: #ffffff;
+        }
+        html[theme="dark"] #clock {color: #ffffff;}
     </style>
 </head>
 
@@ -42,6 +50,12 @@
     <div id="clock">22:12:45</div>
 </body>
 <script>
+
+    let dd = getQueryString('dd');
+    if(dd && dd === '1') {
+        document.getElementsByTagName('html')[0].setAttribute('theme', 'dark')
+    }
+
     window.onload = function () {
 
         showClock();
