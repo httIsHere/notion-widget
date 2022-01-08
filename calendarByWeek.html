@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-22 09:45:27
- * @LastEditTime: 2021-12-23 11:54:21
+ * @LastEditTime: 2022-01-08 16:05:41
  * @LastEditors: Please set LastEditors
  * @Description: 周日历
  * @FilePath: /notion/calenderByWeek.html
@@ -13,6 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calendar by Week</title>
+    <script src="./lib/global.js"></script>
     <style>
       html,
       body {
@@ -79,6 +80,7 @@
       .dis_none {
         display: none;
       }
+        html[theme="dark"], html[theme="dark"] body {background-color:rgb(47 52 55); color:#ffffff;}
     </style>
   </head>
   <body>
@@ -140,7 +142,7 @@
       // 目标日前
       for (let i = 1; i < now_date; i++) {
         let __s = (now_date - i) % 7 || 7;
-        let weekday = 7 - __s + now_weekday;
+        let weekday = (7 - __s + now_weekday) % 7;
         _arr.push({ weekday: weekday || 7, date: i });
       }
       // 目标日开始后
@@ -162,10 +164,11 @@
         _arr.push(item);
       }
       // ****************** v1: 当月内 end ******************
+      console.log(_arr)
       // ****************** v2：可跨月，相邻月分 ******************
       if (end_month > now_month) {
         let start_weekday = _arr[_arr.length - 1].weekday + 1;
-        start_weekday = start_weekday > 7 ? 1 : start_weekday;
+        start_weekday = (start_weekday % 7) || 7;
         for (let i = start_weekday - 1; i >= 1; i--) {
           let _item = JSON.parse(JSON.stringify(_arr[_arr.length - i]));
           _item.status = "gray";
@@ -206,6 +209,8 @@
           _html += "</div>";
         }
       }
+      // 相邻月份
+      console.log(_arr_after);
       for (let i = 0; i < _arr_after.length; i++) {
         let item = _arr_after[i];
         if (item.weekday % 7 === 1) {
@@ -222,14 +227,5 @@
       document.getElementById("content").innerHTML = _html;
       document.getElementById("content2").innerHTML = _html_after;
     };
-
-    function getQueryString(name) {
-      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-      let r = window.location.search.substr(1).match(reg);
-      if (r != null) {
-        return decodeURIComponent(r[2]);
-      }
-      return null;
-    }
   </script>
 </html>

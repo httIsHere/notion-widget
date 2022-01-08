@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 11:43:48
- * @LastEditTime: 2022-01-04 14:58:35
+ * @LastEditTime: 2022-01-08 15:57:55
  * @LastEditors: Please set LastEditors
  * @Description: 显示当前日历
  * @FilePath: /notion/calender.html
@@ -13,6 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calendar</title>
+    <script src="./lib/global.js"></script>
     <style>
       @font-face {
         font-family: "Klee-One";
@@ -59,6 +60,8 @@
         background-color: rgba(119, 172, 152, 0.2);
         border-radius: 50%;
       }
+        html[theme="dark"], html[theme="dark"] body {background-color:rgb(47 52 55); color:#ffffff;}
+        html[theme="dark"] .active {background-color:rgba(35, 119, 164, .5);}
     </style>
   </head>
   <body>
