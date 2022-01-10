@@ -1,0 +1,143 @@
+<!--
+ * @Author: your name
+ * @Date: 2022-01-08 19:38:11
+ * @LastEditTime: 2022-01-09 12:06:35
+ * @LastEditors: Please set LastEditors
+ * @Description: 蓝色周进度
+ * @FilePath: /notion/new/blue-week.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Week</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js"></script>
+    <style>
+        html,
+        body {
+            background-color: #ffffff;
+        }
+
+        .wrapper {
+            width: 100%;
+            border-radius: .2rem;
+            background: rgb(0, 47, 167);
+            color: #ffffff;
+            padding: .2667rem .6667rem;
+            box-sizing: border-box;
+            font-size: .4267rem;
+            font-family: fantasy, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .month-p {
+            padding-bottom: .2667rem;
+            border-bottom: 1px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #month {
+            font-size: .48rem;
+        }
+
+        .main {
+            padding-top: .2667rem;
+        }
+
+        .week-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .week-label span {
+            display: inline-block;
+            text-align: center;
+            width: .8rem;
+            font-size: .3733rem;
+        }
+        #week-date {margin-top: .1333rem;}
+        #week-date span {
+            font-size: .48rem;
+            height: .8rem;
+            border-radius: 50%;
+            line-height: .8rem;
+            font-family: 'Franklin Gothic Medium';
+        }
+
+        #week-date span.active {
+            background-color: rgba(255, 255, 255, .2);
+        }
+      html[theme="dark"], html[theme="dark"] body {background-color:rgb(47 52 55);}
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="inner">
+            <div class="month-p">
+                <span id="month"></span>
+                <span>YEAR: <em id="rate"></em></span>
+            </div>
+            <div class="main">
+                <div class="week-label">
+                    <span>MON</span>
+                    <span>TUE</span>
+                    <span>WED</span>
+                    <span>THU</span>
+                    <span>FRI</span>
+                    <span>SAT</span>
+                    <span>SUN</span>
+                </div>
+                <div class="week-label" id="week-date"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const week_day = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const months = [
+        " ",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+    window.onload = function () {
+        let cur_date = new Date(), cur_day = cur_date.getDay() || 7, cur_month = cur_date.getMonth() + 1;
+        let now_year = cur_date.getFullYear(), _time = cur_date.getTime();
+        let year_start = new Date(`${now_year}/1/1`).getTime();
+        let _du = _time - year_start;
+        let days = Math.ceil(_du / (24 * 60 * 60 * 1000));
+        let total = now_year % 4 === 0 && now_year % 100 !== 0 ? 366 : 365;
+        let rate = (days * 100 / total).toFixed(1);
+        document.getElementById('rate').innerHTML = rate + '%';
+        document.getElementById('month').innerHTML = months[cur_month];
+
+        let _html = '';
+        for (let i = 1; i <= 7; i++) {
+            let s = cur_day - i;
+            let this_day = _time - s * 60 * 60 * 24 * 1000;
+            let _date = new Date(this_day).getDate();
+            _html += `<span class="${s === 0 ? 'active' : ''}">${_date}</span>`
+        }
+        document.getElementById('week-date').innerHTML = _html;
+    }
+</script>
+
+</html>
