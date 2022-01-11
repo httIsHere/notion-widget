@@ -1,0 +1,138 @@
+<!--
+ * @Author: your name
+ * @Date: 2022-01-11 09:39:22
+ * @LastEditTime: 2022-01-11 11:28:40
+ * @LastEditors: Please set LastEditors
+ * @Description: 选择周
+ * @FilePath: /notion/new/highlight-week.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择周</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js"></script>
+    <style type="text/css">
+        h4,
+        p,
+        h3 {
+            margin: 0;
+            padding: 0;
+        }
+
+        h3 {
+            text-align: center;
+            color: rgba(86, 61, 98, 0.5);
+            font-size: .64rem;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        .inner {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            width: 8rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(170, 151, 191, 0.7);
+            border-radius: 1.1733rem;
+            height: 1.1733rem;
+            color: #ffffff;
+            padding: 0 0.2667rem;
+            box-sizing: border-box;
+            margin: .1333rem auto 0;
+        }
+
+        .inner .ceil {
+            width: 0.8rem;
+            text-align: center;
+        }
+
+        .inner h4 {
+            line-height: 1.2;
+            font-size: 0.4267rem;
+        }
+
+        .inner p {
+            font-size: 0.2667rem;
+            line-height: 1.2;
+        }
+        html[theme="dark"],
+        html[theme="dark"] body {
+            background-color: rgb(47 52 55);
+        }
+        html[theme="dark"] h3 {color: rgba(170, 151, 191, 1);}
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <h3 id="month"></h3>
+        <div class="inner">
+            <div class="ceil">
+                <h4 id="day-1"></h4>
+                <p>MON</p>
+            </div>
+            <div class="ceil">
+                <h4 id="day-2"></h4>
+                <p>TUE</p>
+            </div>
+            <div class="ceil">
+                <h4 id="day-3"></h4>
+                <p>WED</p>
+            </div>
+            <div class="ceil">
+                <h4 id="day-4"></h4>
+                <p>THU</p>
+            </div>
+            <div class="ceil">
+                <h4 id="day-5"></h4>
+                <p>FRI</p>
+            </div>
+            <div class="ceil">
+                <h4 id="day-6"></h4>
+                <p>SAT</p>
+            </div>
+            <div class="ceil">
+                <h4 id="day-7"></h4>
+                <p>SUN</p>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    const months = [
+        " ",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+    window.onload = function () {
+        let s = getQueryString('s');
+        let start_date = s ? new Date(s) : new Date(),
+            _time = start_date.getTime(), s_m = start_date.getMonth() + 1, s_day = start_date.getDay() || 7;
+        let real_s = _time - (s_day - 1) * 24 * 60 * 60 * 1000, real_s_m = (new Date(real_s)).getMonth() + 1;
+        let end_date = new Date(_time + (7 - s_day) * 24 * 60 * 60 * 1000), e_m = end_date.getMonth() + 1;
+        document.getElementById('month').innerHTML = (real_s_m !== e_m ? `${months[real_s_m]} - ${months[e_m]}` : months[real_s_m]);
+        document.getElementById(`day-${s_day}`).innerHTML = (start_date.getDate());
+        for (let i = 0; i < 7; i++) {
+            let _day = _time + (i - s_day + 1) * 24 * 60 * 60 * 1000;
+            document.getElementById(`day-${i + 1}`).innerHTML = (new Date(_day).getDate());
+        }
+    }
+</script>
+
+</html>

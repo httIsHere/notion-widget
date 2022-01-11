@@ -1,7 +1,7 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-13 09:37:29
- * @LastEditTime: 2022-01-10 18:42:37
+ * @LastEditTime: 2022-01-11 09:19:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mobile-frontend-lanqb/Users/httishere/workspace/httishere/notion/progress.html
@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>年进度</title>
+    <title>年进度渐变</title>
     <script src="../flexibleMerge.js"></script>
     <script src="../lib/global.js"></script>
     <style>
@@ -44,23 +44,24 @@
 
         li {
             list-style: none;
-            width: 7.2rem;
-            height: .266667rem;
+            width: 6.6667rem;
             border-radius: .266667rem;
-            background: #f3f3f3;
             color: #ffffff;
             overflow: hidden;
-            margin: 0 .2rem;
+            padding: .04rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            clear: both;
+            font-size: 0;
         }
 
         li div {
             background: #333333;
-            height: 100%;
-            width: 0;
+            height: .266667rem;
+            width: .6rem;
             border-radius: .266667rem;
-            font-size: 12px;
-            text-align: right;
-            line-height: 20px;
+            float: left;
         }
 
         /* li div span {display: inline-block; box-sizing: border-box; text-align: right; font-size: .426667rem;} */
@@ -96,48 +97,63 @@
             display: flex;
             align-items: center;
             margin-bottom: 10px;
+            justify-content: space-between;
+        }
+
+        .progress-item>li {
+            border: .0133rem solid #ffffff;
         }
 
         .progress-item>span {
-            font-size: .373333rem;
+            font-size: .32rem;
+            font-family: cursive;
+        }
+
+        .progress-item>em {
+            font-style: normal;
+            font-family: cursive;
         }
 
         #year-bar {
-            color: rgba(167, 119, 119, 1);
+            color: rgb(150, 91, 188);
         }
 
         #year {
-            background-color: rgba(167, 119, 119, .2);
+            border-color: rgb(150, 91, 188);
         }
 
         #year div {
-            background-color: rgba(167, 119, 119, 1);
+            background-color: rgb(150, 91, 188);
         }
 
         #month-bar {
-            color: rgba(165, 169, 187, 1);
+            color: rgba(200, 165, 212, 1);
         }
 
         #month {
-            background-color: rgba(165, 169, 187, .2);
+            border-color: rgba(200, 165, 212, 1);
         }
 
         #month div {
-            background-color: rgba(165, 169, 187, 1);
+            background-color: rgba(200, 165, 212, 1);
         }
 
         #week-bar {
-            color: rgba(213, 182, 176, 1);
+            color: rgb(166, 107, 149);
         }
 
         #week {
-            background-color: rgba(213, 182, 176, .2);
+            border-color: rgb(166, 107, 149);;
         }
 
         #week div {
-            background-color: rgba(213, 182, 176, 1);
+            background-color: rgb(166, 107, 149);
         }
-      html[theme="dark"], html[theme="dark"] body {background-color:rgb(47 52 55);}
+
+        html[theme="dark"],
+        html[theme="dark"] body {
+            background-color: rgb(47 52 55);
+        }
     </style>
 </head>
 
@@ -145,24 +161,42 @@
     <ul class="progress-group">
         <div id="right">
             <div class="progress-item" id="year-bar">
-                <span>今年</span>
                 <li id="year">
-                    <div></div>
+                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
                 </li>
+                <span>YEAR: </span>
                 <em></em>
             </div>
             <div class="progress-item" id="month-bar">
-                <span>本月</span>
                 <li id="month">
                     <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </li>
+                <span>MONTH: </span>
                 <em></em>
             </div>
             <div class="progress-item" id="week-bar">
-                <span>本周</span>
                 <li id="week">
                     <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </li>
+                <span>WEEK: </span>
                 <em></em>
             </div>
         </div>
@@ -170,12 +204,13 @@
 </body>
 <script>
     let Days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    let now_date = new Date(), _time = now_date.getTime(), now_year = now_date.getFullYear();
+    let now_date = new Date('2022/11/23'), _time = now_date.getTime(), now_year = now_date.getFullYear();
     // 周
     let _day = now_date.getDay();
     _day = _day ? _day : 7;
     let _week = document.getElementById('week');
-    _week.children[0].style.width = `${_day * 100 / 7}%`;
+    let week_rate = Math.ceil(_day * 10 / 7);
+    formatCeils(_week, week_rate);
     document.getElementById('week-bar').children[2].innerHTML = `${_day}/7`;
 
     // 月
@@ -184,8 +219,8 @@
         Days[2] = 29;
     }
     let cur_month = now_date.getMonth() + 1, month_day = now_date.getDate();
-
-    document.getElementById('month').children[0].style.width = `${month_day * 100 / Days[cur_month]}%`;
+    let month_rate = Math.ceil(month_day * 10 / Days[cur_month]);
+    formatCeils(document.getElementById('month'), month_rate);
     document.getElementById('month-bar').children[2].innerHTML = `${month_day}/${Days[cur_month]}`;
 
     // 年
@@ -194,22 +229,14 @@
     let days = Math.ceil(_du / (24 * 60 * 60 * 1000));
     let total = now_year % 4 === 0 && now_year % 100 !== 0 ? 366 : 365;
     let _year = document.getElementById('year');
-    let year_rate = days * 100 / total;
-    let year_text = year_rate <= 15 ? days : year_rate <= 30 ? `${days} / ${total}` : `${days} / ${total} (${(year_rate).toFixed(0)}%)`;
-    _year.children[0].style.width = `${days * 100 / total}%`;
+    let year_rate = Math.ceil(days * 10 / total);
+    formatCeils(_year, year_rate);
     document.getElementById('year-bar').children[2].innerHTML = `${days}/${total}`;
 
-    // 倒计时
-    // setTime();
-    // setInterval(setTime, 1000);
-    function setTime() {
-        let _now = new Date();
-        let hour = _now.getHours();
-        let minutes = _now.getMinutes();
-        let seconds = _now.getSeconds();
-        document.getElementById('hour').innerHTML = hour < 10 ? `0${hour}` : hour;
-        document.getElementById('minute').innerHTML = minutes < 10 ? `0${minutes}` : minutes;
-        document.getElementById('second').innerHTML = seconds < 10 ? `0${seconds}` : seconds;
+    function formatCeils(dom, num) {
+        for (let i = 0; i < 10; i++) {
+            dom.children[i].style.opacity = i < num ? `${(i+1)/10}` : 0;
+        }
     }
 </script>
 
