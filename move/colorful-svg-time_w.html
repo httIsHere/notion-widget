@@ -1,0 +1,155 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-12-29 15:22:56
+ * @LastEditTime: 2021-12-29 16:08:49
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: /notion/colorfulSvgTime.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG TIME</title>
+    <style type="text/css">
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      html {
+        height: 100%;
+      }
+      body {
+        background-color: #ffffff;
+        height: 100%;
+      }
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+      .words {
+        /* 设置文字大小,使得可以去掉内部填充色 */
+        font-size: 22vw;
+        font-weight: bold;
+        /* 设置无填充色,使文字中心透明 */
+        fill: none;
+        stroke-width: 6px;
+        /* 设置字体边框为虚线 */
+        stroke-dasharray: 90, 310;
+
+        animation: drawing 8s linear infinite;
+        width: 200vw;
+      }
+
+      .words-1 {
+        stroke: rgb(254, 67, 101);
+        /* 设置阴影实现光晕效果 */
+        text-shadow: 0 0 50px rgb(254, 67, 101);
+        /* 在动画开始2s后的位置开始 */
+        animation-delay: -2s;
+      }
+
+      .words-2 {
+        stroke: rgb(200, 200, 169);
+        /* 设置阴影实现光晕效果 */
+        text-shadow: 0 0 50px rgb(200, 200, 169);
+        /* 在动画开始4s后的位置开始 */
+        animation-delay: -4s;
+      }
+
+      .words-3 {
+        stroke: rgb(249, 205, 173);
+        /* 设置阴影实现光晕效果 */
+        text-shadow: 0 0 50px rgba(249, 205, 173);
+        /* 在动画开始6s后的位置开始 */
+        animation-delay: -6s;
+      }
+
+      .words-4 {
+        stroke: rgb(131, 175, 155);
+        /* 设置阴影实现光晕效果 */
+        text-shadow: 0 0 50px rgb(131, 175, 155);
+        /* 在动画开始8s后的位置开始 */
+        animation-delay: -8s;
+      }
+
+      @keyframes drawing {
+        from {
+        }
+        to {
+          /* 一组虚线和边框加起来400，表示每组整体运动400*/
+          stroke-dashoffset: -400;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <text
+        id="time"
+        text-anchor="middle"
+        x="50%"
+        y="80%"
+        class="words words-1"
+      ></text>
+
+      <text
+        id="time"
+        text-anchor="middle"
+        x="50%"
+        y="80%"
+        class="words words-2"
+      ></text>
+
+      <text
+        id="time"
+        text-anchor="middle"
+        x="50%"
+        y="80%"
+        class="words words-3"
+      ></text>
+
+      <text
+        id="time"
+        text-anchor="middle"
+        x="50%"
+        y="80%"
+        class="words words-4"
+      ></text>
+    </svg>
+  </body>
+  <script type="text/javascript">
+    (function () {
+      function showtime() {
+        var nowtime = new Date();
+        var h = nowtime.getHours();
+        var m = nowtime.getMinutes();
+        var s = nowtime.getSeconds();
+
+        h = checktime(h);
+        m = checktime(m);
+        s = checktime(s);
+
+        return h + ":" + m + ":" + s;
+      }
+
+      function checktime(x) {
+        if (x < 10) {
+          x = "0" + x;
+        }
+        return x;
+      }
+
+      var divlist = document.querySelectorAll("text");
+      setInterval(() => {
+        let timestr = showtime();
+
+        divlist.forEach((item, index) => {
+          item.innerHTML = timestr;
+        });
+      }, 1000);
+    })();
+  </script>
+</html>
