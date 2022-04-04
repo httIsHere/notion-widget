@@ -1,0 +1,41 @@
+<!--
+ * @Author: your name
+ * @Date: 2022-03-05 22:29:00
+ * @LastEditTime: 2022-03-05 22:32:38
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: /notion/neu/animate.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div, span {width: 100px; height: 100px; position: absolute;}
+        div {background: pink;}
+        span {background: lightblue; display: block; top: 150px;;}
+    </style>
+</head>
+<body>
+    <div></div>
+    <span></span>
+    <script type="text/javascript">
+        function animate(obj, target) {
+            let time = setInterval(() => {
+                if(obj.offsetLeft >= target) {
+                    clearInterval(time)
+                }
+                obj.style.left = obj.offsetLeft + 2 + "px";
+            }, 30)
+        }
+        let div = document.querySelector("div");
+        let span = document.querySelector("span");
+
+        animate(div, 200)
+        animate(span, 300)
+    </script>
+</body>
+</html>
