@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-08 19:38:11
- * @LastEditTime: 2022-01-09 12:06:35
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-05 10:42:24
+ * @LastEditors: TinaHuang0183 Tina.Huang@splashtop.com
  * @Description: 蓝色周进度
  * @FilePath: /notion/new/blue-week.html
 -->
@@ -59,15 +59,15 @@
         .week-label span {
             display: inline-block;
             text-align: center;
-            width: .8rem;
+            width: 1rem;
             font-size: .3733rem;
         }
         #week-date {margin-top: .1333rem;}
         #week-date span {
             font-size: .48rem;
-            height: .8rem;
+            height: 1rem;
             border-radius: 50%;
-            line-height: .8rem;
+            line-height: 1rem;
             font-family: 'Franklin Gothic Medium';
         }
 
@@ -86,7 +86,7 @@
                 <span>YEAR: <em id="rate"></em></span>
             </div>
             <div class="main">
-                <div class="week-label">
+                <div class="week-label" id="week-label">
                     <span>MON</span>
                     <span>TUE</span>
                     <span>WED</span>
@@ -118,6 +118,7 @@
         "November",
         "December",
     ];
+    let start = getQueryString('sw') || null; // 是否从周日开始
     window.onload = function () {
         let cur_date = new Date(), cur_day = cur_date.getDay() || 7, cur_month = cur_date.getMonth() + 1;
         let now_year = cur_date.getFullYear(), _time = cur_date.getTime();
@@ -129,8 +130,14 @@
         document.getElementById('rate').innerHTML = rate + '%';
         document.getElementById('month').innerHTML = months[cur_month];
 
-        let _html = '';
-        for (let i = 1; i <= 7; i++) {
+        let _html = '', label_html = "", _start = start ? 0 : 1;
+        if(start) {
+            week_day.map(item => {
+                label_html += `<span>${item}</span>`;
+            });
+            document.getElementById('week-label').innerHTML = label_html;
+        }
+        for (let i = _start; i <= 6 + _start; i++) {
             let s = cur_day - i;
             let this_day = _time - s * 60 * 60 * 24 * 1000;
             let _date = new Date(this_day).getDate();
