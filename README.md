@@ -1,29 +1,52 @@
 <!--
- * @Author: your name
+ * @Author: httishere
  * @Date: 2021-08-13 11:29:16
- * @LastEditTime: 2022-01-07 10:21:04
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-08-05 10:43:21
+ * @LastEditors: TinaHuang0183 Tina.Huang@splashtop.com
  * @Description: In User Settings Edit
  * @FilePath: /notion/README.md
 -->
-# notion-widget
+# [notion-widget](http://httishere.gitee.io/notion/)
 
-- 倒计时&进度条：[DEMO](https://httishere.github.io/notion-widget/progress.html)
+## Features
 
-- 简易日期倒计时：[DEMO](https://httishere.github.io/notion-widget/days-matter.html)
+-- 2022/08 v1.2.1 --
+
+- [ ] 个性名片
+
+-- 2022/04/03 v1.2.0 --
+
+- [ ] 周开始选择（周一/周日）
+  - [x] blue week
+  - [x] calendar
+  - [x] 选择周
+- [ ] 参数加密（便于参数解密以及中文支持）
+- [ ] 时钟样式
+- [ ] 中文转译拼接
+- [ ] 自定义颜色 / 自定义背景
+- [ ] 自适应暗黑模式
+- [ ] 加载速度
+- [x] 图床问题 （临时放在github上）
+- [x] 官方调整暗黑颜色
+
+## Demos
+
+- 倒计时&进度条：[DEMO](http://httishere.gitee.io/notion/progress.html)
+
+- 简易日期倒计时：[DEMO](http://httishere.gitee.io/notion/days-matter.html)
   - 自定义目标日期和目标日名称，url参数：day（目标日期），name（目标日名称）
 
 - 引用块（多风格）：
-  - 乳白色字体：适合短分案，大字体，标题等，[DEMO](https://httishere.github.io/notion-widget/quote.html?text=test)
+  - 乳白色字体：适合短分案，大字体，标题等，[DEMO](http://httishere.gitee.io/notion/quote.html?text=test)
     - 自定义文案内容，url参数：text（文案内容）
 
-  - 边框阴影文案：适合繁体和英文文案，中等字体，该字体无法识别部分简体字，[DEMO](https://httishere.github.io/notion-widget/quote2.html?text=test)
+  - 边框阴影文案：适合繁体和英文文案，中等字体，该字体无法识别部分简体字，[DEMO](http://httishere.gitee.io/notion/quote2.html?text=test)
     - 自定义文案内容，url参数：text（文案内容）
 
-  - 细文字：适合繁体和英文文案，中等字体，该字体无法识别部分简体字，[DEMO](https://httishere.github.io/notion-widget/quote3.html?text=test)
+  - 细文字：适合繁体和英文文案，中等字体，该字体无法识别部分简体字，[DEMO](http://httishere.gitee.io/notion/quote3.html?text=test)
     - 自定义文案内容，url参数：text（文案内容）
 
-  - 可爱英文手写体：仅适用于英文，[DEMO](https://httishere.github.io/notion-widget/quote-EN.html?text=test)
+  - 可爱英文手写体：仅适用于英文，[DEMO](http://httishere.gitee.io/notion/quote-EN.html?text=test)
     - 自定义文案内容，url参数：text（文案内容）
 
 - 日历
