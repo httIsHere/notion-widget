@@ -1,0 +1,93 @@
+<!--
+ * @Author: TinaHuang0183 Tina.Huang@splashtop.com
+ * @Date: 2022-08-13 13:08:30
+ * @LastEditors: TinaHuang0183 Tina.Huang@splashtop.com
+ * @LastEditTime: 2022-08-13 14:00:34
+ * @FilePath: /notion/new/countdown.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>倒计时</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js"></script>
+    <style>
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+      }
+      .wrap {
+        width: 100%;
+      }
+      p {
+        margin: 0;
+      }
+      .countdown {
+        font-size: 1rem;
+        text-align: center;
+        font-family: serif;
+      }
+      .countdown span {
+        font-weight: bold;
+        display: inline-block;
+      }
+      #days {
+        font-size: 3rem;
+      }
+      #down {
+        font-size: 0.8rem;
+        margin-bottom: 0.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="countdown">
+        <p><span id="title"></span></p>
+        <div class="days"><span id="days"></span></div>
+        <p id="down">12小时45分23秒</p>
+        <div id="date"></div>
+      </div>
+    </div>
+  </body>
+  <script>
+    let target_day = getQueryString("day"),
+      name = getQueryString("name");
+    let _date = new Date(target_day).getDay();
+    let _target = new Date(target_day).getTime();
+    const week_ZN = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+    function calcCountdown() {
+      let _now = new Date().getTime();
+      // 设置时间
+      let times = Math.abs(_target - _now);
+      let d_days = Math.floor(times / 1000 / 60 / 60 / 24);
+      let is_today =
+        d_days === 0 && new Date(target_day).getDate() === new Date().getDate();
+      target_day = target_day.split("/").join("-");
+      times = times % (1000 * 24 * 60 * 60);
+      let hour = Math.floor(times / 1000 / 60 / 60);
+      times = times % (1000 * 60 * 60);
+      let minute = Math.floor(times / 1000 / 60);
+      times = times % (1000 * 60);
+      let sec = Math.floor(times / 1000);
+      document.getElementById("days").innerHTML = `<span>D${
+        d_days >= 0 ? "-" : "+"
+      }${is_today ? "Day" : d_days}</span>`;
+      document.getElementById("down").innerHTML = `${hour}小时 ${minute}分 ${sec}秒`
+    }
+    window.onload = function () {
+      // 设置项目名
+      document.getElementById("title").innerHTML = name;
+      document.getElementById(
+        "date"
+      ).innerHTML = `${target_day} ${week_ZN[_date]}`;
+      calcCountdown();
+        setInterval(calcCountdown, 1000);
+    };
+  </script>
+</html>
