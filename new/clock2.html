@@ -1,0 +1,157 @@
+<!--
+ * @Author: TinaHuang0183 Tina.Huang@splashtop.com
+ * @Date: 2022-08-13 12:06:20
+ * @LastEditors: TinaHuang0183 Tina.Huang@splashtop.com
+ * @LastEditTime: 2022-08-13 12:35:03
+ * @FilePath: /notion-widget/new/clock2.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clock</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js"></script>
+    <style>
+      .wrap {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        position: relative;
+      }
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        position: relative;
+      }
+      #list li {
+        width: 2px;
+        height: 8px;
+        background-color: #333333;
+        position: absolute;
+        left: 99px;
+        top: 0;
+        transform-origin: center 100px;
+      }
+      #list li:nth-child(5n + 1) {
+        height: 16px;
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        background-color: #333333;
+        border-radius: 50%;
+        position: absolute;
+        left: 97px;
+        top: 97px;
+      }
+      .hand {
+        width: 4px;
+        position: absolute;
+        left: 98px;
+        border-radius: 20px;
+        transform-origin: bottom;
+      }
+      .hour-hand {
+        height: 30px;
+        top: 70px;
+        background-color: #333333;
+      }
+      .min-hand {
+        height: 45px;
+        top: 55px;
+        background-color: #333333;
+      }
+      .sec-hand {
+        width: 2px;
+        height: 65px;
+        left: 99px;
+        top: 35px;
+        background-color: #333333;
+      }
+      #nub li {
+        position: absolute;
+        left: 96px;
+        top: 16px;
+        transform-origin: center 84px;
+      }
+      #nub li span {
+        display: block;
+        transform-origin: center center;
+      }
+
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
+      html[theme="dark"] .hand, html[theme="dark"].dot, html[theme="dark"] #list li {
+          background-color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <ul id="list"></ul>
+      <!-- 刻度容器 -->
+      <ul id="nub"></ul>
+      <!-- 数字容器 -->
+      <div class="dot"></div>
+      <!-- 中心圆点 -->
+      <div class="hour-hand hand"></div>
+      <!-- 时针 -->
+      <div class="min-hand hand"></div>
+      <!-- 分针 -->
+      <div class="sec-hand hand"></div>
+      <!-- 秒针 -->
+    </div>
+  </body>
+  <script>
+    // 生成刻度结构
+    (function () {
+      let list = document.querySelector("#list");
+      let html = "";
+      for (let i = 0; i < 60; i++) {
+        html += `<li style="transform:rotate(${i * 6}deg)"><li>`;
+      }
+
+      list.innerHTML = html;
+    })();
+    (function () {
+      let nub = document.querySelector("#nub");
+      let addNub = "";
+      for (let i = 0; i < 12; i++) {
+        addNub += `<li style="transform:rotate(${i * 30}deg)">
+	                  <span style="transform:rotate(${-i * 30}deg)">
+	                  	${i ? i : 12} 
+	                  </span>
+             	  </li>`;
+      }
+      nub.innerHTML = addNub;
+    })();
+    (function () {
+      let hourHand = document.querySelector(".hour-hand");
+      let minHand = document.querySelector(".min-hand");
+      let secHand = document.querySelector(".sec-hand");
+
+      run();
+
+      setInterval(run, 1000);
+
+      function run() {
+        let date = new Date();
+        let seconds = date.getSeconds();
+        let minutes = date.getMinutes() + seconds / 60;
+        let hours = date.getHours() + minutes / 60;
+
+        secHand.style.transform = `rotate(${seconds * 6}deg)`;
+        minHand.style.transform = `rotate(${minutes * 6}deg)`;
+        hourHand.style.transform = `rotate(${hours * 30}deg)`;
+      }
+    })();
+  </script>
+</html>
