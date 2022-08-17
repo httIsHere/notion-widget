@@ -1,0 +1,117 @@
+<!--
+ * @Author: TinaHuang0183
+ * @Date: 2022-08-17 15:16:24
+ * @LastEditors: TinaHuang0183
+ * @LastEditTime: 2022-08-17 15:49:18
+ * @FilePath: /notion/v3/day.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js"></script>
+    <style>
+      html,
+      body,
+      p {
+        padding: 0;
+        margin: 0;
+      }
+      .container {
+        width: 100%;
+        min-width: 100px;
+        box-sizing: border-box;
+        padding: 0 0.5rem;
+      }
+      p {
+        font-size: 1.2rem;
+      }
+      #time {
+        text-align: center;
+        font-size: 2.2rem;
+        margin: 0.3rem 0;
+      }
+      .bar {
+        width: 100%;
+        height: 0.4rem;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 0.4rem;
+        overflow: hidden;
+        margin-bottom: .5rem;
+      }
+      #inner-bar {
+        height: 0.4rem;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 0.4rem;
+      }
+      #date {
+          font-size: .7rem;
+      }
+
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
+      html[theme="dark"] .bar {
+        background: rgba(255, 255, 255, 0.3);
+      }
+      html[theme="dark"] #inner-bar {
+        background: rgba(255, 255, 255, 0.8);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p>𝕋𝕚𝕞𝕖 𝕚𝕤</p>
+      <h1 id="time"></h1>
+      <div class="bar">
+        <div id="inner-bar"></div>
+      </div>
+      <p id="date"></p>
+    </div>
+  </body>
+  <script>
+    const week = [
+      "𝕊𝕦𝕟𝕕𝕒𝕪",
+      "𝕄𝕠𝕟𝕕𝕒𝕪",
+      "𝕋𝕦𝕖𝕤𝕕𝕒𝕪",
+      "𝕎𝕖𝕕𝕟𝕖𝕤𝕕𝕒𝕪",
+      "𝕋𝕙𝕦𝕣𝕤𝕕𝕒𝕪",
+      "𝔽𝕣𝕚𝕕𝕒𝕪",
+      "𝕊𝕒𝕥𝕦𝕣𝕕𝕒𝕪",
+    ];
+
+    const nums = ["𝟘", "𝟙", "𝟚", "𝟛", "𝟜", "𝟝", "𝟞", "𝟟", "𝟠", "𝟡"];
+    const day_secs = 24 * 60 * 60;
+    let cur_date = new Date();
+    let hours = cur_date.getHours(),
+      mins = cur_date.getMinutes(),
+      secs = cur_date.getSeconds();
+    let total = hours * 60 * 60 + mins * 60 + secs;
+    let date = `${getNum(cur_date.getFullYear())}-${getNum(cur_date.getMonth()+1)}-${getNum(cur_date.getDate())}`;
+    let day = cur_date.getDay();
+    document.getElementById("time").innerHTML = `${getNum(hours)} ${getNum(
+      mins
+    )}`;
+    document.getElementById("inner-bar").style.width = `${total * 100 / day_secs}%`;
+    document.getElementById("date").innerHTML = `${date} ${week[day]}`;
+    function getNum(num) {
+      let num1,
+        num2 = [];
+      while (num) {
+        num1 = num % 10;
+        num2.push(nums[num1]);
+        num = parseInt(num / 10);
+      }
+      if(num2.length === 1) num2.push(nums[0]);
+      num2.reverse();
+      return num2.join("");
+    }
+  </script>
+</html>
