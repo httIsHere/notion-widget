@@ -2,7 +2,7 @@
  * @Author: httishere
  * @Date: 2021-08-13 11:29:16
  * @LastEditTime: 2022-08-17 19:05:41
- * @LastEditors: TinaHuang0183 Tina.Huang@splashtop.com
+ * @LastEditors: TinaHuang0183
  * @Description: In User Settings Edit
  * @FilePath: /notion/README.md
 -->

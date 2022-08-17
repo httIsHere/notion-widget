@@ -2,7 +2,7 @@
  * @Author: TinaHuang0183
  * @Date: 2022-08-17 15:52:35
  * @LastEditors: TinaHuang0183 Tina.Huang@splashtop.com
- * @LastEditTime: 2022-08-17 19:04:52
+ * @LastEditTime: 2022-08-17 19:28:39
  * @FilePath: /notion/v3/tomato.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -42,6 +42,7 @@
         border-radius: 1.2rem;
         outline: none;
         max-width: 8.5rem;
+        font-size: 0.5rem;
       }
       #start {
         font-size: 1rem;
@@ -55,8 +56,8 @@
         color: #ffffff;
       }
       html[theme="dark"] #mins {
-          background-color: unset;
-          border-color: #ffffff;
+        background-color: unset;
+        border-color: #ffffff;
       }
       html[theme="dark"] #inner-bar {
         background: rgba(255, 255, 255, 0.8);
@@ -74,9 +75,18 @@
     const nums = ["𝟘", "𝟙", "𝟚", "𝟛", "𝟜", "𝟝", "𝟞", "𝟟", "𝟠", "𝟡"];
     let remain = 25 * 60,
       minsInterval;
+    const _start = "𝕊𝕥𝕒𝕣𝕥",
+      _pause = "𝕊𝕥𝕠𝕡";
+    let status = 0;
 
     document.getElementById("start").addEventListener("click", function () {
+      if (status === 1) {
+        // pause
+        return stopRemain();
+      }
+      status = 1;
       clearInterval(minsInterval);
+      document.getElementById("start").innerHTML = _pause;
       let mins = document.getElementById("mins").value;
       if (mins) {
         remain = mins * 60;
@@ -91,8 +101,7 @@
     function setRemain() {
       if (remain === 0) {
         document.getElementById("remain").innerHTML = "✅";
-        clearInterval(minsInterval);
-        remain = 25 * 60;
+        stopRemain();
         return;
       }
       let secs = remain % 60,
@@ -101,6 +110,15 @@
         secs
       )}`;
       remain--;
+    }
+
+    function stopRemain() {
+      status = 0;
+      clearInterval(minsInterval);
+      document.getElementById("start").innerHTML = _start;
+      document.getElementById("mins").value = null;
+      remain = 25 * 60;
+      setRemain();
     }
 
     function getNum(num) {
