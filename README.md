@@ -1,7 +1,7 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-13 11:29:16
- * @LastEditTime: 2022-08-05 10:43:21
+ * @LastEditTime: 2022-08-17 19:05:41
  * @LastEditors: TinaHuang0183 Tina.Huang@splashtop.com
  * @Description: In User Settings Edit
  * @FilePath: /notion/README.md
@@ -13,6 +13,8 @@
 -- 2022/08 v1.2.1 --
 
 - [ ] 个性名片
+- [x] 日历（多样式
+- [x] 番茄钟
 
 -- 2022/04/03 v1.2.0 --
 
@@ -21,7 +23,7 @@
   - [x] calendar
   - [x] 选择周
 - [ ] 参数加密（便于参数解密以及中文支持）
-- [ ] 时钟样式
+- [x] 时钟样式
 - [ ] 中文转译拼接
 - [ ] 自定义颜色 / 自定义背景
 - [ ] 自适应暗黑模式
