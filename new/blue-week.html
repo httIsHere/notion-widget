@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-08 19:38:11
- * @LastEditTime: 2022-08-05 10:42:24
- * @LastEditors: TinaHuang0183
+ * @LastEditTime: 2022-08-26 15:38:44
+ * @LastEditors: TinaHuang0183 Tina.Huang@splashtop.com
  * @Description: 蓝色周进度
  * @FilePath: /notion/new/blue-week.html
 -->
@@ -16,6 +16,7 @@
     <title>Blue Week</title>
     <script src="../flexibleMerge.js"></script>
     <script src="../lib/global.js"></script>
+    <script src='../lib/crypto-js.min.js'></script>
     <style>
         html,
         body {
@@ -101,6 +102,8 @@
     </div>
 </body>
 <script>
+    const params = getAllParams(CryptoJS);
+    handleDarkMode(params);
     let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const week_day = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const months = [
@@ -118,7 +121,7 @@
         "November",
         "December",
     ];
-    let start = getQueryString('sw') || null; // 是否从周日开始
+    let start = getQueryString('sw') || params.monday === 0; // 是否从周日开始
     window.onload = function () {
         let cur_date = new Date(), cur_day = cur_date.getDay() || 7, cur_month = cur_date.getMonth() + 1;
         let now_year = cur_date.getFullYear(), _time = cur_date.getTime();
