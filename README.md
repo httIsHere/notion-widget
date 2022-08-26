@@ -1,8 +1,8 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-13 11:29:16
- * @LastEditTime: 2022-08-17 19:05:41
- * @LastEditors: TinaHuang0183
+ * @LastEditTime: 2022-08-26 15:38:30
+ * @LastEditors: TinaHuang0183 Tina.Huang@splashtop.com
  * @Description: In User Settings Edit
  * @FilePath: /notion/README.md
 -->
@@ -15,10 +15,11 @@
 - [ ] 个性名片
 - [x] 日历（多样式
 - [x] 番茄钟
+- [x] 圆盘时钟
 
 -- 2022/04/03 v1.2.0 --
 
-- [ ] 周开始选择（周一/周日）
+- [x] 周开始选择（周一/周日）
   - [x] blue week
   - [x] calendar
   - [x] 选择周
