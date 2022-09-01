@@ -1,8 +1,8 @@
 <!--
  * @Author: TinaHuang0183
  * @Date: 2022-08-17 14:27:25
- * @LastEditors: TinaHuang0183
- * @LastEditTime: 2022-08-17 16:19:51
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-09-01 20:37:53
  * @FilePath: /notion/v3/month.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -15,10 +15,6 @@
     <title>Seek Month</title>
     <script src="../lib/global.js"></script>
     <style>
-      @font-face {
-        font-family: "Klee-One";
-        src: url("./fonts/Klee_One/KleeOne-Regular.ttf");
-      }
       html,
       body {
         background-color: #ffffff;
@@ -65,7 +61,7 @@
         display: inline-block;
         text-align: center;
       }
-      .pass {
+      .pass, .active {
         background-color: rgba(0, 0, 0, 0.7);
         border-radius: 50%;
         color: #ffffff;
@@ -79,7 +75,7 @@
         background-color: #191919;
         color: #ffffff;
       }
-      html[theme="dark"] .pass {
+      html[theme="dark"] .pass, html[theme="dark"] .active {
         background-color: rgba(255,255,255, 1);
         border-radius: 50%;
         color: #333333;
@@ -133,6 +129,7 @@
   </body>
 
   <script type="text/javascript">
+    handleDarkMode();
     let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const week_day_en = ["𝕊", "𝕄", "𝕋", "𝕎", "𝕋", "𝔽", "𝕊"];
     const nums = ["𝟘", "𝟙", "𝟚", "𝟛", "𝟜", "𝟝", "𝟞", "𝟟", "𝟠", "𝟡"];
