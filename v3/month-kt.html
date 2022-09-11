@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Seek Month</title>
     <script src="../lib/global.js?v=20220901"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style>
       @font-face {
         font-family: "Klee-One";
@@ -139,8 +140,10 @@
       "November",
       "December",
     ];
-    let start_param = getQueryString("sw") || null;
     window.onload = function () {
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+      let start_param = getQueryString("sw") || !params.monday;
       let cur_date = new Date(),
         _year;
       _year = cur_date.getFullYear();
@@ -187,11 +190,5 @@
       // document.getElementById('content').innerHTML = _html;
     };
 
-    function getNum(num) {
-      let num1, num2;
-      num1 = num % 10;
-      num2 = (num - num1) / 10;
-      return `${nums[num2]}${nums[num1]}`;
-    }
   </script>
 </html>
