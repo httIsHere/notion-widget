@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-08 19:38:11
- * @LastEditTime: 2022-08-26 18:12:36
- * @LastEditors: TinaHuang0183 
+ * @LastEditTime: 2022-09-11 16:50:52
+ * @LastEditors: Tina Huang
  * @Description: 蓝色周进度
  * @FilePath: /notion/new/blue-week.html
 -->
@@ -85,7 +85,7 @@
   </head>
 
   <body>
-    <div class="wrapper">
+    <div class="wrapper" id="wrapper">
       <div class="inner">
         <div class="month-p">
           <span id="month"></span>
@@ -126,8 +126,11 @@
     ];
     window.onload = function () {
       const params = getAllParams(CryptoJS);
+      document.body.style.color = params.font_color;
+      document.getElementById("wrapper").style.backgroundColor = params.bg_color;
+      document.getElementById("wrapper").style.color = params.font_color;
       handleDarkMode(params);
-      let start = getQueryString("sw") || params.monday === 0; // 是否从周日开始
+      let start = getStartSunday(params);
       let cur_date = new Date(),
         cur_day = cur_date.getDay() || 7,
         cur_month = cur_date.getMonth() + 1;

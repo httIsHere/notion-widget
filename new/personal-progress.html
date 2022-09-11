@@ -1,131 +1,143 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-06 12:59:41
- * @LastEditTime: 2022-01-08 15:45:26
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-09-11 17:44:35
+ * @LastEditors: Tina Huang
  * @Description: 人生进度条
  * @FilePath: /notion/new/personal-progress.html
 -->
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>人生进度条</title>
     <script src="../flexibleMerge.js"></script>
     <script src="../lib/global.js?v=20220911.1"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style type="text/css">
-        html,
-        body {
-            background-color: #ffffff;
-            margin: 0;
-            padding: 0;
-            font-size: .373333rem;
-            color: #333333;
-        }
+      html,
+      body {
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+        font-size: 0.373333rem;
+        color: #333333;
+      }
 
-        h1,
-        h2,
-        p {
-            margin: 0;
-            padding: 0;
-        }
+      h1,
+      h2,
+      p {
+        margin: 0;
+        padding: 0;
+      }
 
-        .container {
-            width: 9.2rem;
-            height: 1.866667rem;
-            margin: .4rem auto;
-            border-radius: 1.866667rem;
-            background: #f3f3f3;
-            box-shadow: .173333rem .173333rem .333333rem #e0e0e0,
-                -.173333rem -.173333rem .333333rem #ffffff;
-            box-sizing: border-box;
-            padding: .266667rem;
-        }
+      .container {
+        width: 9.2rem;
+        height: 1.866667rem;
+        margin: 0.4rem auto;
+        border-radius: 1.866667rem;
+        background: #f3f3f3;
+        box-shadow: 0.173333rem 0.173333rem 0.333333rem #e0e0e0,
+          -0.173333rem -0.173333rem 0.333333rem #ffffff;
+        box-sizing: border-box;
+        padding: 0.266667rem;
+      }
 
-        .inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+      .inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
 
-        .left {
-            display: inline-flex;
-            align-items: center;
-        }
+      .left {
+        display: inline-flex;
+        align-items: center;
+      }
 
-        .hi {
-            color: #333333;
-            width: 1.333333rem;
-            height: 1.333333rem;
-            border-radius: 50%;
-            background-color: #ffffff;
-            text-align: center;
-            line-height: 1.333333rem;
-            font-size: .48rem;
-            border-radius: 1.333333rem;
-            background: #f3f3f3;
-            box-shadow:  .173333rem .173333rem .333333rem #e0e0e0,
-                 -.173333rem -.173333rem .333333rem #ffffff;
-        }
+      .hi {
+        color: #333333;
+        width: 1.333333rem;
+        height: 1.333333rem;
+        border-radius: 50%;
+        background-color: #ffffff;
+        text-align: center;
+        line-height: 1.333333rem;
+        font-size: 0.48rem;
+        border-radius: 1.333333rem;
+        background: #f3f3f3;
+        box-shadow: 0.173333rem 0.173333rem 0.333333rem #e0e0e0,
+          -0.173333rem -0.173333rem 0.333333rem #ffffff;
+      }
 
-        .info {
-            margin-left: .4rem;
-        }
+      .info {
+        margin-left: 0.4rem;
+      }
 
-        .info #name {
-            font-size: .48rem;
-            margin: 0;
-            color: #333333;
-        }
+      .info #name {
+        font-size: 0.48rem;
+        margin: 0;
+        color: #333333;
+      }
 
-        .info p {
-            color: #999999;
-            margin: 0;
-        }
+      .info p {
+        color: #999999;
+        margin: 0;
+      }
 
-        .right {
-            color: #999999;
-            opacity: .3;
-        }
+      .right {
+        color: #999999;
+        opacity: 0.3;
+      }
 
-        #days {
-            display: inline-block;
-            font-size: .96rem;
-            color: #2377a4;
-        }
-      html[theme="dark"], html[theme="dark"] body {background-color:#191919;color: #ffffff;}
-      html[theme="dark"] .container {box-shadow: unset;}
+      #days {
+        display: inline-block;
+        font-size: 0.96rem;
+        color: #2377a4;
+      }
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
+      html[theme="dark"] .container {
+        box-shadow: unset;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <div class="inner">
-            <div class="left">
-                <div class="hi">Hi</div>
-                <div class="info">
-                    <h3 id="name"></h3>
-                    <p id="msg">你来到这个世界已经</p>
-                </div>
-            </div>
-            <div class="right">
-                <h1 id="days"></h1>
-                <span>天</span>
-            </div>
+      <div class="inner">
+        <div class="left">
+          <div class="hi">Hi</div>
+          <div class="info">
+            <h3 id="name"></h3>
+            <p id="msg">你来到这个世界已经</p>
+          </div>
         </div>
+        <div class="right">
+          <h1 id="days"></h1>
+          <span>天</span>
+        </div>
+      </div>
     </div>
-</body>
-<script type="text/javascript">
-    const _birthday = getQueryString('b'), name = getQueryString('n'), m = getQueryString('m');
-    let bir_date = new Date(_birthday), cur_date = new Date();
-    let s_times = cur_date.getTime() - bir_date.getTime(); //
-    let days = Math.floor(s_times / (24 * 60 * 60 * 1000));
-    document.getElementById('name').innerHTML = name;
-    document.getElementById('days').innerHTML = days;
-    m && (document.getElementById('msg').innerHTML = m);
-</script>
-
+  </body>
+  <script type="text/javascript">
+    window.onload = function () {
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+      const _birthday = getQueryString("b") || params.day,
+        name = getQueryString("n") || params.name,
+        m = getQueryString("m") || params.msg;
+      let bir_date = new Date(_birthday),
+        cur_date = new Date();
+      let s_times = cur_date.getTime() - bir_date.getTime(); //
+      let days = Math.floor(s_times / (24 * 60 * 60 * 1000));
+      document.getElementById("name").innerHTML = name;
+      document.getElementById("days").innerHTML = days;
+      m && (document.getElementById("msg").innerHTML = m);
+    };
+  </script>
 </html>

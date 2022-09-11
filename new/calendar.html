@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 11:43:48
- * @LastEditTime: 2022-08-05 10:38:34
- * @LastEditors: TinaHuang0183
+ * @LastEditTime: 2022-09-11 17:44:23
+ * @LastEditors: Tina Huang
  * @Description: 显示当前日历
  * @FilePath: /notion/calender.html
 -->
@@ -15,6 +15,7 @@
     <title>Calendar</title>
     <script src="../flexibleMerge.js"></script>
     <script src="../lib/global.js?v=20220911.1"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style>
       html,
       body {
@@ -151,8 +152,10 @@
       "November",
       "December",
     ];
-    let start_param = getQueryString("sw") || null;
     window.onload = function () {
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+      let start_param = getStartSunday(params);
       let cur_date = new Date(),
         _year;
       _year = cur_date.getFullYear();
