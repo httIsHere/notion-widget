@@ -1,0 +1,221 @@
+<!--
+ * @Author: TinaHuang0183
+ * @Date: 2022-08-17 14:27:25
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-09-11 08:33:34
+ * @FilePath: /notion/v3/month.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seek Month</title>
+    <script src="../lib/global.js?v=20220901"></script>
+    <script src="../lib/lunar.js?v=20220910"></script>
+    <style>
+      @font-face {
+        font-family: "Klee-One";
+        src: url("../fonts/Klee_One/KleeOne-Regular.ttf");
+      }
+      @font-face {
+        font-family: "Rampart-One";
+        src: url("./fonts/Rampart_One/RampartOne-Regular.ttf");
+      }
+      html,
+      body {
+        background-color: #ffffff;
+        font-family: "Rampart-One";
+        padding: 0;
+        margin: 0;
+      }
+      .container {
+        width: 250px;
+        padding: 0 20px;
+        margin: 0 auto;
+        text-align: center;
+        /* border: 1px solid #333333; */
+        border-radius: 10px;
+      }
+      .inner {
+        width: 250px;
+      }
+      #month {
+        font-family: "Klee-One";
+        font-weight: bold;
+        font-size: 28px;
+      }
+      .week-days {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+      .week-days.head {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 5px;
+      }
+      .week-days.week {
+        margin-bottom: 3px;
+      }
+      .week-days span {
+        line-height: 30px;
+        font-size: 14px;
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        text-align: center;
+      }
+      /* .pass, */
+      .active {
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 50%;
+        color: #ffffff;
+      }
+      .week-days .pass {
+        font-size: 20px;
+      }
+      .weekend {
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+      }
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
+      html[theme="dark"] .pass,
+      html[theme="dark"] .active {
+        background-color: rgba(255, 255, 255, 1);
+        border-radius: 50%;
+        color: #333333;
+      }
+      html[theme="dark"] .weekend {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="inner">
+        <h2 id="month"></h2>
+        <div class="days"></div>
+        <div class="week-days head" id="week-head"></div>
+        <div id="content">
+          <div class="week-days" id="week-days_1">
+            <span id="d-0"></span><span id="d-1"></span><span id="d-2"></span
+            ><span id="d-3"></span><span id="d-4"></span><span id="d-5"></span
+            ><span id="d-6"></span>
+          </div>
+          <div class="week-days" id="week-days_2">
+            <span id="d-7"></span><span id="d-8"></span><span id="d-9"></span
+            ><span id="d-10"></span><span id="d-11"></span
+            ><span id="d-12"></span><span id="d-13"></span>
+          </div>
+          <div class="week-days" id="week-days_3">
+            <span id="d-14"></span><span id="d-15"></span><span id="d-16"></span
+            ><span id="d-17"></span><span id="d-18"></span
+            ><span id="d-19"></span><span id="d-20"></span>
+          </div>
+          <div class="week-days" id="week-days_4">
+            <span id="d-21"></span><span id="d-22"></span><span id="d-23"></span
+            ><span id="d-24"></span><span id="d-25"></span
+            ><span id="d-26"></span><span id="d-27"></span>
+          </div>
+          <div class="week-days" id="week-days_5">
+            <span id="d-28"></span><span id="d-29"></span><span id="d-30"></span
+            ><span id="d-31"></span><span id="d-32"></span
+            ><span id="d-33"></span><span id="d-34"></span>
+          </div>
+          <div class="week-days" id="week-days_6">
+            <span id="d-35"></span><span id="d-36"></span><span id="d-37"></span
+            ><span id="d-38"></span><span id="d-39"></span
+            ><span id="d-40"></span><span id="d-41"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    handleDarkMode();
+    let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const week_day_en = ["S", "M", "T", "W", "T", "F", "S"];
+    const months = [
+      " ",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    let start_param = getQueryString("sw") || null;
+    window.onload = function () {
+      let cur_date = new Date(),
+        _year;
+      _year = cur_date.getFullYear();
+      if (_year % 4 === 0 && _year % 100 != 0) {
+        // 闰年
+        days[2] = 29;
+      }
+      let cur_month = cur_date.getMonth() + 1,
+        cur_d = cur_date.getDate(),
+        cur_week_d = cur_date.getDay();
+      let month_first_day = cur_date,
+        first_day;
+      month_first_day.setDate(1);
+      first_day = month_first_day.getDay() || 7;
+      first_day = start_param
+        ? month_first_day.getDay() + 1
+        : month_first_day.getDay() || 7;
+      let _html = '<div class="week-days">',
+        _fd = first_day,
+        label_html = "";
+      let start_type = start_param ? 0 : 1; // 周几开始
+      for (let i = start_type; i <= 6 + start_type; i++) {
+        let _label = i === 7 ? week_day_en[0] : week_day_en[i];
+        label_html += `<span>${_label}</span>`;
+      }
+      // main
+      for (let i = 1; i <= days[cur_month]; i++) {
+        let date_num = i + first_day - 2;
+        let j = calendar.solar2lunar(_year, cur_month, i);
+        let lunar_day = j.lDay; // 农历日期
+        document.getElementById(`d-${date_num}`).innerHTML = i;
+        // weekend?? -> 0 & 7
+        let cur_week = (i + first_day - 2 + start_type) % 7;
+        if (cur_week === 0 || cur_week === 6) {
+          document.getElementById(`d-${date_num}`).className = "weekend";
+        }
+        if (i === cur_d) {
+          document.getElementById(`d-${date_num}`).className = "active";
+        } else if (i <= cur_d) {
+          document.getElementById(`d-${date_num}`).innerHTML = calendar.getMoon(lunar_day);
+          document.getElementById(`d-${date_num}`).className = "pass";
+        }
+      }
+      document.getElementById("week-head").innerHTML = label_html;
+      document.getElementById("month").innerHTML = months[cur_month];
+      // document.getElementById('content').innerHTML = _html;
+    };
+
+    function getNum(num) {
+      let num1, num2;
+      num1 = num % 10;
+      num2 = (num - num1) / 10;
+      return `${nums[num2]}${nums[num1]}`;
+    }
+  </script>
+</html>
