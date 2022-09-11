@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-06 15:13:35
- * @LastEditTime: 2022-04-04 13:13:41
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-09-11 17:03:43
+ * @LastEditors: Tina Huang
  * @Description: 桌面时钟
  * @FilePath: /notion/new/big-clock.html
 -->
@@ -16,6 +16,7 @@
     <title>桌面时钟</title>
     <script src="../flexibleMerge.js"></script>
     <script src="../lib/global.js?v=20220911.1"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style>
         html,
         body {
@@ -52,6 +53,8 @@
 </body>
 <script>
     window.onload = function () {
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
 
         showClock();
 
