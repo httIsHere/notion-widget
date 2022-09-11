@@ -2,7 +2,7 @@
  * @Author: TinaHuang0183
  * @Date: 2022-08-17 14:27:25
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-09-11 08:33:34
+ * @LastEditTime: 2022-09-11 16:16:25
  * @FilePath: /notion/v3/month.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,9 +12,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Seek Month</title>
-    <script src="../lib/global.js?v=20220911"></script>
+    <title>Lunar Month</title>
+    <script src="../lib/global.js?v=20220911.1"></script>
     <script src="../lib/lunar.js?v=20220910"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style>
       @font-face {
         font-family: "Klee-One";
@@ -36,7 +37,6 @@
         padding: 0 20px;
         margin: 0 auto;
         text-align: center;
-        /* border: 1px solid #333333; */
         border-radius: 10px;
       }
       .inner {
@@ -88,7 +88,7 @@
         background-color: #191919;
         color: #ffffff;
       }
-      html[theme="dark"] .pass,
+      /* html[theme="dark"] .pass, */
       html[theme="dark"] .active {
         background-color: rgba(255, 255, 255, 1);
         border-radius: 50%;
@@ -161,8 +161,11 @@
       "November",
       "December",
     ];
-    let start_param = getQueryString("sw") || null;
     window.onload = function () {
+      const params = getAllParams(CryptoJS);
+      document.body.style.color = params.font_color;
+      handleDarkMode(params);
+      let start_param = getStartSunday(params);
       let cur_date = new Date(),
         _year;
       _year = cur_date.getFullYear();

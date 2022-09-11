@@ -1,8 +1,8 @@
 <!--
  * @Author: TinaHuang0183
  * @Date: 2022-08-13 12:06:20
- * @LastEditors: TinaHuang0183
- * @LastEditTime: 2022-08-13 12:35:03
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-09-11 16:41:11
  * @FilePath: /notion-widget/new/clock2.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -14,7 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clock</title>
     <script src="../flexibleMerge.js"></script>
-    <script src="../lib/global.js?v=20220911"></script>
+    <script src="../lib/global.js?v=20220911.1"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style>
       .wrap {
         width: 200px;
@@ -89,8 +90,10 @@
         background-color: #191919;
         color: #ffffff;
       }
-      html[theme="dark"] .hand, html[theme="dark"].dot, html[theme="dark"] #list li {
-          background-color: #ffffff;
+      html[theme="dark"] .hand,
+      html[theme="dark"].dot,
+      html[theme="dark"] #list li {
+        background-color: #ffffff;
       }
     </style>
   </head>
@@ -111,6 +114,11 @@
     </div>
   </body>
   <script>
+    window.onload = function () {
+      const params = getAllParams(CryptoJS);
+      document.body.style.color = params.font_color;
+      handleDarkMode(params);
+    };
     // 生成刻度结构
     (function () {
       let list = document.querySelector("#list");
