@@ -2,7 +2,7 @@
  * @Author: TinaHuang0183
  * @Date: 2022-08-13 13:08:30
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-09-11 17:44:10
+ * @LastEditTime: 2022-09-25 20:08:14
  * @FilePath: /notion/new/countdown.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -61,10 +61,9 @@
 
     window.onload = function () {
       const params = getAllParams(CryptoJS);
-      console.log(params);
+      handleDarkMode(params);
       let target_day = getQueryString("day") || params.day || "2022/12/31",
         name = getQueryString("name") || params.name || "今年结束";
-      console.log(target_day, name);
       let _date = new Date(target_day).getDay();
       let _target = new Date(target_day).getTime();
       // 设置项目名

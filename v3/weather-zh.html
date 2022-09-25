@@ -1,0 +1,47 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2022-09-23 11:29:31
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-09-23 11:30:46
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="../lib/jquery-3.6.0.min.js"></script>
+    <script>
+      function weather(cityName) {
+        $.ajax({
+          type: "GET",
+          url: "http://wthrcdn.etouch.cn/weather_mini?city=" + cityName,
+          dataType: "JSON",
+          error: function () {
+            console.log("数据错误");
+          },
+          success: function (res) {
+              return console.log(res)
+            if (res.status == 1000) {
+              $("#目标容器#").append(
+                "<span>今天的天气" + res.data.forecast[0].type + "，</span>"
+              );
+              $("#目标容器#").append(
+                "<span>最低气温:" +
+                  res.data.forecast[0].low.substring(2, 5) +
+                  "℃，最高气温:" +
+                  res.data.forecast[0].high.substring(2, 5) +
+                  "</span>"
+              );
+            }
+          },
+        });
+      }
+      weather("乐清")
+    </script>
+  </body>
+</html>

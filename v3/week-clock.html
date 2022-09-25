@@ -1,0 +1,62 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2022-09-16 16:18:42
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-09-16 16:49:42
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>复古周日历</title>
+    <style>
+      body,
+      html {
+        padding: 0;
+        margin: 0;
+      }
+      .container {
+        width: 100vw;
+        overflow: hidden;
+        position: relative;
+        box-sizing: border-box;
+      }
+      .week {
+        background-color: #ab9b81;
+        width: 99vw;
+        height: 40vw;
+        border-radius: 15px;
+        border: 0.5vw solid #603830;
+        position: relative;
+        overflow: hidden;
+      }
+      .clock-box,
+      .clock-bg {
+        border: 0.5vw solid #603830;
+        background-color: #ffffff;
+        width: 100%;
+        height: 50vw;
+        border-radius: 25vw;
+        position: absolute;
+        right: -50vw;
+        bottom: -25vw;
+      }
+      .clock-bg {
+        border-color: #ffffff;
+        right: -51vw;;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="week">
+        <div class="clock-box"></div>
+      </div>
+      <div class="clock-bg"></div>
+      <div class="clock-circle"></div>
+    </div>
+  </body>
+</html>
