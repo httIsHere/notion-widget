@@ -1,0 +1,155 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2022-10-18 19:31:36
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-10-18 21:24:03
+ * @Description: 复古日历
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retro calendar</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js?v=20221017"></script>
+    <style>
+      :root {
+        --bg: #4e909e;
+        --font-color: #9a3734;
+        --focus: #e2d2b5;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 100vw;
+        padding: 5vw 3vw;
+        box-sizing: border-box;
+        background-color: var(--bg);
+        color: var(--focus);
+        border-radius: 2vw;
+        position: relative;
+      }
+      .container span {
+        display: inline-block;
+        width: 8vw;
+        height: 8vw;
+        border: 1vw solid var(--bg);
+        border-radius: 50%;
+        margin-left: 2vw;
+        background-color: var(--font-color);
+        line-height: 8vw;
+        text-align: center;
+        font-size: 0.3rem;
+      }
+      .container span.focus {
+        border-color: var(--focus);
+      }
+      .container > div {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-left: -2vw;
+      }
+      #days {
+        margin-top: 5vw;
+        margin-bottom: 5vw;
+      }
+      #days > span {
+        font-size: 0.45rem;
+      }
+      .mark {
+        position: absolute;
+        bottom: 5vw;
+        right: 3vw;
+        opacity: 0.2;
+        margin: 0;
+      }
+      .container[theme="2"] {
+        --bg: #8a9e90;
+        --font-color: rgba(88, 116, 97, 1);
+        --focus: #eeeada;
+      }
+      .container[theme="3"] {
+        --bg: #03391c;
+        --font-color: #722321;
+        --focus: #e2882e;
+      }
+      .container[theme="4"] {
+        --bg: #b6cce2;
+        --font-color: #6c98c6;
+        --focus: #f3f0e2;
+      }
+      .container[theme="5"] {
+        --bg: #e4bfcb;
+        --font-color: #9c88b3;
+        --focus: #ffffff;
+      }
+      .container[theme="6"] {
+        --bg: #e799a0;
+        --font-color: #5f7355;
+        --focus: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="container" theme="5">
+      <div class="weekday">
+        <span id="w-0"></span><span id="w-1"></span><span id="w-2"></span
+        ><span id="w-3"></span><span id="w-4"></span><span id="w-5"></span
+        ><span id="w-6"></span>
+      </div>
+      <div id="days"></div>
+      <div id="months"></div>
+      <p class="mark">@httishere</p>
+    </div>
+    <script>
+      const theme = getQueryString("t");
+      document.getElementById("container").setAttribute("theme", theme);
+      const week_day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const months_list = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "June",
+        "July",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      let days = "",
+        months = "";
+      let today = new Date();
+      let _day = today.getDay(),
+        _date = today.getDate(),
+        _month = today.getMonth() + 1;
+      for (let i = 0; i < week_day.length; i++) {
+        document.getElementById(`w-${i}`).innerHTML = week_day[i];
+        if (_day === i) {
+          document.getElementById(`w-${i}`).classList.add("focus");
+        }
+      }
+      for (let i = 1; i <= 31; i++) {
+        days += `<span id="d-${i}" class="${
+          i === _date ? "focus" : ""
+        }">${i}</span>`;
+      }
+      document.getElementById("days").innerHTML = days;
+
+      for (let i = 0; i < months_list.length; i++) {
+        months += `<span id="m-${i}" class="${i === _month ? "focus" : ""}">${
+          months_list[i]
+        }</span>`;
+      }
+      document.getElementById("months").innerHTML = months;
+    </script>
+  </body>
+</html>
