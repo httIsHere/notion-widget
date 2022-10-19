@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-10-18 19:31:36
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-10-18 21:24:03
+ * @LastEditTime: 2022-10-18 21:41:36
  * @Description: 复古日历
 -->
 <!DOCTYPE html>
@@ -19,6 +19,7 @@
         --bg: #4e909e;
         --font-color: #9a3734;
         --focus: #e2d2b5;
+        --font: var(--focus);
       }
       html,
       body {
@@ -30,7 +31,7 @@
         padding: 5vw 3vw;
         box-sizing: border-box;
         background-color: var(--bg);
-        color: var(--focus);
+        color: var(--font);
         border-radius: 2vw;
         position: relative;
       }
@@ -70,9 +71,10 @@
         margin: 0;
       }
       .container[theme="2"] {
-        --bg: #8a9e90;
+        --bg: #b7c2b7;
         --font-color: rgba(88, 116, 97, 1);
-        --focus: #eeeada;
+        --focus: #ca6924;
+        --font: #eeeada
       }
       .container[theme="3"] {
         --bg: #03391c;
@@ -80,11 +82,12 @@
         --focus: #e2882e;
       }
       .container[theme="4"] {
-        --bg: #b6cce2;
+        --bg: #6c98c6;
         --font-color: #6c98c6;
         --focus: #f3f0e2;
+        --font: #ffffff;
       }
-      .container[theme="5"] {
+      .container[theme="8"] {
         --bg: #e4bfcb;
         --font-color: #9c88b3;
         --focus: #ffffff;
