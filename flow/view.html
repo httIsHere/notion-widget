@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-10-17 17:08:08
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-10-19 16:59:12
+ * @LastEditTime: 2022-10-19 17:42:06
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -13,15 +13,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Site views</title>
     <link rel="stylesheet" href="../css/font-awesome.min.css" />
-    <script
-      async
-      src="../lib/busuanzi.pure.mini.js"
-    ></script>
+    <!-- <script async src="../lib/busuanzi.pure.mini.js"></script> -->
+    <style>
+      .container {
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+      }
+      .item {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px 2px rgba(188, 214, 203, 0.2);
+      }
+      .item > img {
+        display: block;
+        margin-right: 10px;
+        width: 30px;
+      }
+      .item span {
+        display: block;
+        text-align: center;
+        font-size: 30px;
+        /* width: 125px; */
+      }
+
+      .item span i {
+        font-size: 16px;
+      }
+
+      .item span.label {
+        font-size: 12px;
+        color: #999;
+      }
+    </style>
   </head>
   <body>
-    <span id="busuanzi_value_page_pv"
-      ><i class="fa fa-spinner fa-spin"></i
-    ></span>
-    Hits
+    <div class="container">
+      <div class="item">
+        <img src="../assets/flowus/slice_1.png" alt="">
+        <div>
+          <span class="label">浏览量</span>
+          <!-- <i class="fa fa-spinner fa-spin"></i> -->
+          <span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span>
+        </div>
+      </div>
+      <div class="item">
+        <img src="../assets/flowus/slice_2.png" alt="">
+        <div>
+          <span class="label">访客数</span>
+          <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
