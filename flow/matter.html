@@ -1,0 +1,140 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2022-10-19 21:01:45
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-10-20 20:13:47
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matter</title>
+    <style>
+      h2,
+      p {
+        margin: 0;
+      }
+      .container {
+        width: 200px;
+        border-radius: 20px;
+        background-color: #f3cd8a;
+        padding: 10px;
+        position: relative;
+        /* overflow: hidden; */
+      }
+      .matter {
+        text-align: center;
+        width: 100%;
+        background-color: #835231;
+        color: #f3cd8a;
+        border-radius: 20px;
+        padding: 10px 0;
+        position: relative;
+      }
+      #days {
+        font-size: 30px;
+      }
+      .time {
+        padding: 10px 20px;
+        color: #835231;
+        text-align: center;
+      }
+      .container img {
+        display: block;
+        width: 40px;
+        position: absolute;
+      }
+      #co {
+        /* transform: rotate(60deg); */
+        right: -4px;
+        bottom: -6px;
+      }
+      #co-1 {
+        transform: rotate(30deg);
+        /* right: 50px; */
+        /* left: unset; */
+        bottom: 22px;
+      }
+      #co-2 {
+        /* transform: rotate(45deg); */
+        /* right: 10px; */
+        /* left: unset; */
+        bottom: -8px;
+      }
+      #co-3 {
+        transform: rotate(0);
+        right: 10px;
+        left: unset;
+        bottom: 0px;
+      }
+      #co-4 {
+        transform: rotate(0);
+        right: 40px;
+        left: unset;
+        bottom: -8px;
+      }
+      #co-5 {
+        transform: rotate(-30deg);
+        right: -10px;
+        left: unset;
+        bottom: 0px;
+      }
+      #cur-time {
+        font-size: 40px;
+        display: block;
+      }
+      .mark {
+          position: absolute;
+          bottom: 10px;
+          font-size: 12px;
+          opacity: 0.05;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="matter">
+        <p>今年还剩</p>
+        <h2 id="days">-天</h2>
+        <p id="other">-时-分-秒</p>
+        <img src="../assets/flowus/slice_2_0.png" id="co-2" />
+      </div>
+      <div class="time">
+        <span id="cur-time">-:-</span>
+        <p id="date"></p>
+      </div>
+      <p class="mark">by httishere</p>
+      <img src="../assets/flowus/slice_0_0.png" id="co" />
+    </div>
+    <script>
+      function run() {
+        let cur_date = new Date();
+        let _year = cur_date.getFullYear(),
+          _hour = cur_date.getHours(),
+          _min = cur_date.getMinutes();
+        _hour = _hour > 10 ? _hour : `0${_hour}`;
+        _min = _min > 10 ? _min : `0${_min}`;
+        let end_year = new Date(`${_year}/12/31`);
+        let remain = (end_year.getTime() - cur_date.getTime()) / 1000;
+        let days = Math.floor(remain / 24 / 60 / 60);
+        let hours = Math.floor((remain % (24 * 60 * 60)) / (60 * 60));
+        let mins = Math.floor((remain % (60 * 60)) / 60);
+        let secs = Math.floor(remain % 60);
+        hours = hours > 10 ? hours : `0${hours}`;
+        mins = mins > 10 ? mins : `0${mins}`;
+        secs = secs > 10 ? secs : `0${secs}`;
+        document.getElementById("days").innerHTML = `${days}天`;
+        document.getElementById(
+          "other"
+        ).innerHTML = `${hours}时${mins}分${secs}秒`;
+        document.getElementById("cur-time").innerHTML = `${_hour}:${_min}`;
+        document.getElementById("date").innerHTML = `${cur_date.getFullYear()}/${cur_date.getMonth() + 1}/${cur_date.getDate()}`;
+      }
+      run()
+      setInterval(run, 1000);
+    </script>
+  </body>
+</html>

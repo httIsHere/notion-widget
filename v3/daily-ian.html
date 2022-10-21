@@ -1,0 +1,35 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2022-10-21 09:01:05
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-10-21 09:01:06
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // extra 每日一言
+      function ian() {
+        $.ajax({
+          type: "GET",
+          url: "https://api.vvhan.com/api/ian?type=json",
+          dataType: "JSON",
+          error: function () {
+            console.log("数据错误");
+          },
+          success: function (res) {
+            return console.log(res);
+          },
+        });
+      }
+      ian();
+    </script>
+  </body>
+</html>

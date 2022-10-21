@@ -7,30 +7,48 @@
     <title>Hightlight Month</title>
     <script src="../lib/global.js?v=20221017"></script>
     <script src="../lib/crypto-js.min.js"></script>
-    <script async src="../lib/busuanzi.pure.mini.js"></script>
+    <script src="../lib/font.js"></script>
+    <script src="../lib/lunar.js?v=20220910"></script>
     <style>
       html,
       body {
         background-color: #ffffff;
-        font-family: "Klee-One";
         padding: 0;
         margin: 0;
       }
       .container {
+        position: relative;
         width: 250px;
-        padding: 0 20px;
+        padding: 10px 20px;
         margin: 0 auto;
         text-align: center;
         /* border: 1px solid #333333; */
         border-radius: 10px;
+        background-color: rgba(238, 225, 202, 0.3);
       }
       .inner {
         width: 250px;
       }
       #month {
-        font-family: "Klee-One";
         font-weight: bold;
         font-size: 28px;
+        color: #333;
+        text-align: right;
+        margin: 0;
+        /* display: flex;
+        align-items: center;
+        justify-content: space-between; */
+      }
+      #month span {
+        display: inline-block;
+        background-color: #333;
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        text-align: center;
+        line-height: 30px;
+        font-size: 22px;
+        margin-left: 20px;
       }
       .week-days {
         width: 100%;
@@ -55,38 +73,96 @@
         display: inline-block;
         text-align: center;
       }
-      .pass, .active {
+      .pass {
+        /* background-color: rgba(0, 0, 0, 0.7); */
+        border-radius: 50%;
+        color: #ffffff;
+      }
+      .pass.pass-1 {
+        background: url(../assets/flowus/slice_1_0.png);
+        background-size: 100% 100%;
+      }
+      .pass.pass-2 {
+        background: url(../assets/flowus/slice_2_0.png);
+        background-size: 100% 100%;
+      }
+      .pass.pass-0 {
+        background: url(../assets/flowus/slice_0_0.png);
+        background-size: 100% 100%;
+      }
+      .active {
         background-color: rgba(0, 0, 0, 0.7);
         border-radius: 50%;
-        color: #ffffff;
+        color: #fec404;
+        /* background: url(../assets/flowus/pink.png); */
+        background-size: 100% 100%;
       }
+
+      .week-days .active {
+        font-size: 18px;
+      }
+
       .weekend {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(238, 225, 202, 1);
         border-radius: 50%;
       }
-      html[theme="dark"],
-      html[theme="dark"] body {
-        background-color: #191919;
-        color: #ffffff;
+      .weekend.pass {
+        background-color: unset;
       }
-      html[theme="dark"] .pass, html[theme="dark"] .active {
-        background-color: rgba(255,255,255, 1);
-        border-radius: 50%;
-        color: #333333;
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 5px;
       }
-      html[theme="dark"] .weekend {
-        background-color: rgba(255,255,255, 0.2);
-        border-radius: 50%;
+      #lunar {
+        margin: 0;
+        border-radius: 2px;
+        background-color: rgba(238, 225, 202, 1);
+        padding: 0 6px;
+        border-radius: 30px;
+      }
+      #year {
+        font-weight: bold;
+        font-size: 22px;
+        color: #fec404;
+        margin-left: 10px;
+      }
+      #year > span {
+        display: inline-block;
+        background-color: #333;
+        width: 30px;
+        height: 30px;
+        border-radius: 30px;
+        list-style: 30px;
+        margin-left: -10px;
+      }
+      .extra {
+        margin: 0;
+        font-size: 14px;
+      }
+      .extra #term {
+        margin-right: 10px;
+      }
+      .mark {
+        position: absolute;
+        opacity: 0.05;
+        bottom: 0;
+        right: 10px;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
-      <span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span>
-      <span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span>
       <div class="inner">
-        <h2 id="month"></h2>
+        <div class="header">
+          <div id="year"></div>
+          <div>
+            <h2 id="month"></h2>
+            <p class="extra"><span id="term"></span><span id="lunar"></span></p>
+          </div>
+        </div>
         <div class="days"></div>
         <div class="week-days head" id="week-head"></div>
         <div id="content">
@@ -122,34 +198,21 @@
           </div>
         </div>
       </div>
+      <p class="mark">@httishere</p>
     </div>
   </body>
 
   <script type="text/javascript">
     let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    const week_day_en = ["𝕊", "𝕄", "𝕋", "𝕎", "𝕋", "𝔽", "𝕊"];
-    const nums = ["𝟘", "𝟙", "𝟚", "𝟛", "𝟜", "𝟝", "𝟞", "𝟟", "𝟠", "𝟡"];
-    const months = [
-      " ",
-      "𝕁𝕒𝕟𝕦𝕒𝕣𝕪",
-      "𝔽𝕖𝕓𝕣𝕦𝕒𝕣𝕪",
-      "𝕄𝕒𝕣𝕔𝕙",
-      "𝔸𝕡𝕣𝕚𝕝",
-      "𝕄𝕒𝕪",
-      "𝕁𝕦𝕟𝕖",
-      "𝕁𝕦𝕝𝕪",
-      "𝔸𝕦𝕘𝕦𝕤𝕥",
-      "𝕊𝕖𝕡𝕥𝕖𝕞𝕓𝕖𝕣",
-      "𝕆𝕔𝕥𝕠𝕓𝕖𝕣",
-      "ℕ𝕠𝕧𝕖𝕞𝕓𝕖𝕣",
-      "𝔻𝕖𝕔𝕖𝕞𝕓𝕖𝕣",
-    ];
+    const week_day_en = WEEKS_F.s_10;
+    const nums = NUMBERS.s_6;
+    const months = [" ", ...MONTHS.s_10];
     window.onload = function () {
       const params = getAllParams(CryptoJS);
       document.body.style.color = params.font_color;
       handleDarkMode(params);
       let start_param = getStartSunday(params);
-      let cur_date = new Date(),
+      let cur_date = new Date("2022/10/23"),
         _year;
       _year = cur_date.getFullYear();
       if (_year % 4 === 0 && _year % 100 != 0) {
@@ -159,6 +222,8 @@
       let cur_month = cur_date.getMonth() + 1,
         cur_d = cur_date.getDate(),
         cur_week_d = cur_date.getDay();
+      let lunar_date = calendar.solar2lunar(_year, cur_month, cur_d);
+      console.log(lunar_date);
       let month_first_day = cur_date,
         first_day;
       month_first_day.setDate(1);
@@ -179,27 +244,58 @@
         let date_num = i + first_day - 2;
         // weekend?? -> 0 & 7
         let cur_week = (i + first_day - 2 + start_type) % 7;
+
+        document.getElementById(`d-${date_num}`).innerHTML = getNum(i);
         if (cur_week === 0 || cur_week === 6) {
           document.getElementById(`d-${date_num}`).className = "weekend";
         }
         if (i === cur_d) {
           document.getElementById(`d-${date_num}`).className = "active";
+          // document.getElementById(`d-${date_num}`).innerHTML = "";
         } else if (i <= cur_d) {
-          document.getElementById(`d-${date_num}`).className = "pass";
-        }
+          let r = getRandNum(0, 2);
+          document.getElementById(`d-${date_num}`).classList.add(`pass`);
+          document.getElementById(`d-${date_num}`).classList.add(`pass-${r}`);
 
-        document.getElementById(`d-${date_num}`).innerHTML = getNum(i);
+          document.getElementById(`d-${date_num}`).innerHTML = "";
+        }
       }
       document.getElementById("week-head").innerHTML = label_html;
-      document.getElementById("month").innerHTML = months[cur_month];
-      // document.getElementById('content').innerHTML = _html;
+      document.getElementById("month").innerHTML = `${months[cur_month]}`; // <span>${getNum(cur_d)}</span>
+      let year_arr = _year.toString().split(""),
+        year_html = "",
+        year_dom = document.getElementById("year");
+      for (let i = 0; i < year_arr.length; i++) {
+        year_html += `<span>${getNum(year_arr[i], false)}</span>`;
+      }
+      year_dom.innerHTML = year_html;
+      document.getElementById(
+        "lunar"
+      ).innerHTML = `${lunar_date.gzYear}${lunar_date.IMonthCn}${lunar_date.IDayCn}`;
+      if (lunar_date.isTerm) {
+        document.getElementById("term").innerHTML = lunar_date.Term;
+      }
     };
 
-    function getNum(num) {
-      let num1, num2;
-      num1 = num % 10;
-      num2 = (num - num1) / 10;
-      return `${nums[num2]}${nums[num1]}`;
+    function getNum(num, format = true) {
+      num = parseInt(num);
+      let num1,
+        num2 = [];
+      if (num === 0) {
+        num2.push(0);
+      }
+      while (num) {
+        num1 = num % 10;
+        num2.push(nums[num1]);
+        num = parseInt(num / 10);
+      }
+      if (format && num2.length === 1) num2.push(nums[0]);
+      num2.reverse();
+      return num2.join("");
+    }
+
+    function getRandNum(n, m) {
+      return Math.floor(Math.random() * (m - n + 1)) + n;
     }
   </script>
 </html>

@@ -1,0 +1,181 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2022-10-20 19:46:53
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-10-21 09:01:56
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week</title>
+    <script src="../lib/font.js"></script>
+    <style>
+      html,
+      body,
+      h2,
+      p {
+        margin: 0;
+      }
+      .container {
+        width: 300px;
+        padding: 20px;
+        border-radius: 20px;
+        border: 2px solid #333;
+        margin: 10px;
+      }
+      .info {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+      }
+      #date {
+        background-color: #ffca22;
+        padding: 0 5px;
+        border-radius: 30px;
+      }
+      .week {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 50px;
+      }
+      .week-item {
+        width: 30px;
+        text-align: center;
+      }
+      .week-item > div {
+        background-color: #333;
+        color: #fff;
+        border-radius: 30px;
+        padding: 5px 0;
+        position: relative;
+      }
+      .week-item > div.active {
+        background-color: #ffca22;
+        color: #333;
+      }
+      .passed::after {
+        content: "";
+        position: absolute;
+        width: 30px;
+        height: 25px;
+        left: 0;
+        top: -25px;
+      }
+      .passed#week-1::after {
+        background-image: url(../assets/flowus/white.png);
+        background-size: 100% 100%;
+      }
+      .passed#week-2::after {
+        background-image: url(../assets/flowus/slice_1_0.png);
+        background-size: 100% 100%;
+      }
+      .passed#week-3::after {
+        background-image: url(../assets/flowus/pink.png);
+        background-size: 100% 100%;
+      }
+      .passed#week-4::after {
+        background-image: url(../assets/flowus/slice_2_0.png);
+        background-size: 100% 100%;
+        width: 25px;
+        left: 2px;
+      }
+      .passed#week-5::after {
+        background-image: url(../assets/flowus/green.png);
+        background-size: 100% 100%;
+      }
+      .passed#week-6::after,
+      .passed#week-7::after {
+        background-image: url(../assets/flowus/slice_0_0.png);
+        background-size: 100% 100%;
+        width: 25px;
+        left: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="info">
+        <h2 id="msg"></h2>
+        <p id="date"></p>
+      </div>
+      <div class="week">
+        <div class="week-item">
+          <div id="week-1"></div>
+        </div>
+        <div class="week-item">
+          <div id="week-2"></div>
+        </div>
+        <div class="week-item">
+          <div id="week-3"></div>
+        </div>
+        <div class="week-item">
+          <div id="week-4"></div>
+        </div>
+        <div class="week-item">
+          <div id="week-5"></div>
+        </div>
+        <div class="week-item">
+          <div id="week-6"></div>
+        </div>
+        <div class="week-item">
+          <div id="week-7"></div>
+        </div>
+      </div>
+      <div class="extra">
+
+      </div>
+    </div>
+    <script>
+      const week_day_en = WEEKS_F.s_10;
+      let start_param = false;
+      let start_date = new Date("2022/10/23"),
+        _time = start_date.getTime(),
+        s_m = start_date.getMonth() + 1,
+        s_day = start_param
+          ? start_date.getDay() + 1
+          : start_date.getDay() || 7;
+      let real_s = _time - (s_day - 1) * 24 * 60 * 60 * 1000,
+        real_s_m = new Date(real_s).getMonth() + 1;
+      let end_date = new Date(_time + (7 - s_day) * 24 * 60 * 60 * 1000),
+        e_m = end_date.getMonth() + 1;
+      for (let i = 0; i < 7; i++) {
+        let step = start_param ? i - s_day : i - s_day + 1;
+        let _day = _time + (i - s_day + 1) * 24 * 60 * 60 * 1000;
+        let week_label = start_param
+          ? week_day_en[i]
+          : week_day_en[i + 1 >= 7 ? 0 : i + 1];
+        let __d = new Date(_day).getDate();
+        document.getElementById(
+          `week-${i + 1}`
+        ).innerHTML = `${__d}${week_label}`;
+        // console.log(s_day)
+        if (i < s_day) {
+          document.getElementById(`week-${i + 1}`).className = "passed";
+        }
+        if (i == s_day - 1) {
+          document.getElementById(`week-${i + 1}`).classList.add("active");
+        }
+      }
+      let msg = document.getElementById("msg");
+      if (s_day === 1) {
+        msg.innerHTML = "不想上班";
+      } else if (s_day > 1 && s_day < 6) {
+        msg.innerHTML = `距离周末还有${6 - s_day}天`;
+      } else {
+        msg.innerHTML = `~ 快乐周末 ~`;
+      }
+      document.getElementById(
+        "date"
+      ).innerHTML = `${start_date.getFullYear()}/${
+        start_date.getMonth() + 1
+      }/${start_date.getDate()}`;
+
+
+    </script>
+  </body>
+</html>

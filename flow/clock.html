@@ -1,0 +1,228 @@
+<!--
+ * @Author: TinaHuang0183
+ * @Date: 2022-08-13 12:06:20
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-10-19 20:57:51
+ * @FilePath: /notion-widget/new/clock2.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clock</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js?v=20221017"></script>
+    <script src="../lib/crypto-js.min.js"></script>
+    <style>
+      .wrap {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        position: relative;
+        border-radius: 120px;
+        background-color: rgba(238, 225, 202, 0.3);
+        padding: 20px;
+      }
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        position: relative;
+      }
+      .mark {
+        position: absolute;
+        opacity: 0.05;
+      }
+      #list li {
+        width: 2px;
+        height: 8px;
+        /* border: 1px solid #333; */
+        background-color: #333333;
+        position: absolute;
+        left: 99px;
+        top: 0;
+        transform-origin: center 100px;
+      }
+      #list li:nth-child(3n + 1),
+      #list li:nth-child(3n + 1) div {
+        height: 24px;
+        width: 28px;
+        background-color: transparent;
+        border: 1px solid transparent;
+      }
+      #list li:nth-child(3n + 1) {
+        top: -8px;
+        left: 85px;
+      }
+      #list li:nth-child(3n + 1) div {
+        background: url(../assets/flowus/slice_1_0.png) no-repeat;
+        background-size: 100% 100%;
+        /* background-position: 0 -8px; */
+      }
+      #list li:nth-child(1) div {
+        /* background: url(../assets/flowus/pink.png);
+        background-size: 100% 100%; */
+      }
+      #list li:nth-child(4) {
+        top: 0;
+        left: 93px;
+      }
+      #list li:nth-child(4) div {
+        /* background: url(../assets/flowus/green.png);
+        background-size: 100% 100%; */
+        transform: rotate(-90deg);
+      }
+      #list li:nth-child(7) {
+        top: 8px;
+      }
+      #list li:nth-child(7) div {
+        /* background: url(../assets/flowus/slice_1_0.png);
+        background-size: 100% 100%; */
+        transform: rotate(-180deg);
+      }
+      #list li:nth-child(10) {
+        top: 0;
+        left: 77px;
+      }
+      #list li:nth-child(10) div {
+        /* background: url(../assets/flowus/white.png);
+        background-size: 100% 100%; */
+        transform: rotate(-270deg);
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        background-color: #333333;
+        border-radius: 50%;
+        position: absolute;
+        left: 117px;
+        top: 117px;
+      }
+      .hand {
+        width: 4px;
+        position: absolute;
+        left: 118px;
+        border-radius: 20px;
+        transform-origin: bottom;
+      }
+      .hour-hand {
+        height: 30px;
+        top: 90px;
+        background-color: #333333;
+      }
+      .min-hand {
+        height: 45px;
+        top: 75px;
+        background-color: #333333;
+      }
+      .sec-hand {
+        width: 2px;
+        height: 65px;
+        left: 99px;
+        top: 35px;
+        background-color: #333333;
+        position: relative;
+      }
+      .sec-hand::after {
+        content: "";
+        width: 16px;
+        height: 16px;
+        background: url(../assets/flowus/pink.png);
+        background-size: 100% 100%;
+        display: block;
+        position: absolute;
+        left: -7px;
+      }
+      #nub li {
+        position: absolute;
+        left: 96px;
+        top: 16px;
+        transform-origin: center 84px;
+      }
+      #nub li span {
+        display: block;
+        transform-origin: center center;
+      }
+
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
+      html[theme="dark"] .hand,
+      html[theme="dark"].dot,
+      html[theme="dark"] #list li {
+        background-color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <p class="mark">@httishere</p>
+      <ul id="list"></ul>
+      <!-- 刻度容器 -->
+      <ul id="nub"></ul>
+      <!-- 数字容器 -->
+      <div class="dot"></div>
+      <!-- 中心圆点 -->
+      <div class="hour-hand hand"></div>
+      <!-- 时针 -->
+      <div class="min-hand hand"></div>
+      <!-- 分针 -->
+      <div class="sec-hand hand"></div>
+      <!-- 秒针 -->
+    </div>
+  </body>
+  <script>
+    window.onload = function () {
+      const params = getAllParams(CryptoJS);
+      document.body.style.color = params.font_color;
+      handleDarkMode(params);
+    };
+    // 生成刻度结构
+    (function () {
+      let list = document.querySelector("#list");
+      let html = "";
+      for (let i = 0; i < 12; i++) {
+        html += `<li style="transform:rotate(${i * 30}deg)"><div></div></li>`;
+      }
+
+      list.innerHTML = html;
+    })();
+    // (function () {
+    //   let nub = document.querySelector("#nub");
+    //   let addNub = "";
+    //   for (let i = 0; i < 12; i++) {
+    //     addNub += `<li style="transform:rotate(${i * 30}deg)">
+    //                 <span style="transform:rotate(${-i * 30}deg)">
+    //                 	${i ? i : 12}
+    //                 </span>
+    //          	  </li>`;
+    //   }
+    //   nub.innerHTML = addNub;
+    // })();
+    (function () {
+      let hourHand = document.querySelector(".hour-hand");
+      let minHand = document.querySelector(".min-hand");
+      let secHand = document.querySelector(".sec-hand");
+
+      run();
+
+      setInterval(run, 1000);
+
+      function run() {
+        let date = new Date();
+        let seconds = date.getSeconds();
+        let minutes = date.getMinutes() + seconds / 60;
+        let hours = date.getHours() + minutes / 60;
+
+        secHand.style.transform = `rotate(${seconds * 6}deg)`;
+        minHand.style.transform = `rotate(${minutes * 6}deg)`;
+        hourHand.style.transform = `rotate(${hours * 30}deg)`;
+      }
+    })();
+  </script>
+</html>
