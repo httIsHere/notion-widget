@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-10-19 21:01:45
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-10-20 20:47:06
+ * @LastEditTime: 2022-10-21 11:49:10
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -13,6 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Matter</title>
     <style>
+      html,
+      body,
       h2,
       p {
         margin: 0;
@@ -20,15 +22,16 @@
       .container {
         width: 200px;
         border-radius: 20px;
-        background-color: rgba(232, 107, 236, .1);
+        background-color: rgba(232, 107, 236, 0.1);
         padding: 10px;
         position: relative;
         overflow: hidden;
+        margin: 10px auto;
       }
       .matter {
         text-align: center;
         width: 100%;
-        background-color: rgba(232, 107, 236, .5);
+        background-color: rgba(232, 107, 236, 0.5);
         color: #fff;
         border-radius: 20px;
         padding: 10px 0;
@@ -40,7 +43,7 @@
       }
       .time {
         padding: 10px 20px;
-        color: rgba(232, 107, 236, .8);
+        color: rgba(232, 107, 236, 0.8);
         text-align: center;
       }
       .container img {
@@ -88,10 +91,10 @@
         display: block;
       }
       .mark {
-          position: absolute;
-          bottom: 10px;
-          font-size: 12px;
-          opacity: 0.05;
+        position: absolute;
+        bottom: 10px;
+        font-size: 12px;
+        opacity: 0.05;
       }
     </style>
   </head>
@@ -132,9 +135,13 @@
           "other"
         ).innerHTML = `${hours}时${mins}分${secs}秒`;
         document.getElementById("cur-time").innerHTML = `${_hour}:${_min}`;
-        document.getElementById("date").innerHTML = `${cur_date.getFullYear()}/${cur_date.getMonth() + 1}/${cur_date.getDate()}`;
+        document.getElementById(
+          "date"
+        ).innerHTML = `${cur_date.getFullYear()}/${
+          cur_date.getMonth() + 1
+        }/${cur_date.getDate()}`;
       }
-      run()
+      run();
       setInterval(run, 1000);
     </script>
   </body>

@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-10-19 21:01:45
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-10-20 20:13:47
+ * @LastEditTime: 2022-10-21 11:50:20
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -13,6 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Matter</title>
     <style>
+      html,
+      body,
       h2,
       p {
         margin: 0;
@@ -24,6 +26,7 @@
         padding: 10px;
         position: relative;
         /* overflow: hidden; */
+        margin: 10px auto;
       }
       .matter {
         text-align: center;
@@ -87,10 +90,10 @@
         display: block;
       }
       .mark {
-          position: absolute;
-          bottom: 10px;
-          font-size: 12px;
-          opacity: 0.05;
+        position: absolute;
+        bottom: 10px;
+        font-size: 12px;
+        opacity: 0.05;
       }
     </style>
   </head>
@@ -131,9 +134,13 @@
           "other"
         ).innerHTML = `${hours}时${mins}分${secs}秒`;
         document.getElementById("cur-time").innerHTML = `${_hour}:${_min}`;
-        document.getElementById("date").innerHTML = `${cur_date.getFullYear()}/${cur_date.getMonth() + 1}/${cur_date.getDate()}`;
+        document.getElementById(
+          "date"
+        ).innerHTML = `${cur_date.getFullYear()}/${
+          cur_date.getMonth() + 1
+        }/${cur_date.getDate()}`;
       }
-      run()
+      run();
       setInterval(run, 1000);
     </script>
   </body>
