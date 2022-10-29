@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-10-18 19:31:36
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-10-21 10:04:38
+ * @LastEditTime: 2022-10-29 09:41:06
  * @Description: 复古日历
 -->
 <!DOCTYPE html>
@@ -151,7 +151,7 @@
       document.getElementById("days").innerHTML = days;
 
       for (let i = 0; i < months_list.length; i++) {
-        months += `<span id="m-${i}" class="${i === _month ? "focus" : ""}">${
+        months += `<span id="m-${i}" class="${i === _month - 1 ? "focus" : ""}">${
           months_list[i]
         }</span>`;
       }
