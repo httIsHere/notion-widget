@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-09-28 11:16:05
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-09-28 15:47:00
+ * @LastEditTime: 2022-11-04 09:11:41
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -231,7 +231,7 @@
           s = Math.round(s);
           let m = Math.floor(s / 60);
           s = s % 60;
-          return `${m > 10 ? m : "0" + m}:${s > 10 ? s : "0" + s}`;
+          return `${m >= 10 ? m : "0" + m}:${s >= 10 ? s : "0" + s}`;
         },
       },
       mounted() {

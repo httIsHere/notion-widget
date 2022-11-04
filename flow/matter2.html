@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-10-19 21:01:45
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-10-21 14:09:22
+ * @LastEditTime: 2022-11-04 09:11:27
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -134,8 +134,8 @@
         let _year = cur_date.getFullYear(),
           _hour = cur_date.getHours(),
           _min = cur_date.getMinutes();
-        _hour = _hour > 10 ? _hour : `0${_hour}`;
-        _min = _min > 10 ? _min : `0${_min}`;
+        _hour = _hour >= 10 ? _hour : `0${_hour}`;
+        _min = _min >= 10 ? _min : `0${_min}`;
         let end_year = new Date(t || `${_year}/12/31`);
         let remain = (end_year.getTime() - cur_date.getTime()) / 1000;
         let r_remain = remain;
