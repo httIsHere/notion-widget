@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-10-20 19:46:53
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-10-21 11:59:32
+ * @LastEditTime: 2022-11-06 18:05:50
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -62,16 +62,16 @@
         content: "";
         position: absolute;
         width: 30px;
-        height: 25px;
+        height: 30px;
         left: 0;
-        top: -25px;
+        top: -28px;
       }
       .passed#week-1::after {
         background-image: url(../assets/flowus/white.png);
         background-size: 100% 100%;
       }
       .passed#week-2::after {
-        background-image: url(../assets/flowus/slice_1_0.png);
+        background-image: url(../assets/flowus/yellow/y-2.PNG);
         background-size: 100% 100%;
       }
       .passed#week-3::after {
@@ -79,10 +79,8 @@
         background-size: 100% 100%;
       }
       .passed#week-4::after {
-        background-image: url(../assets/flowus/slice_2_0.png);
+        background-image: url(../assets/flowus/yellow/y-1.PNG);
         background-size: 100% 100%;
-        width: 25px;
-        left: 2px;
       }
       .passed#week-5::after {
         background-image: url(../assets/flowus/green.png);
@@ -92,8 +90,6 @@
       .passed#week-7::after {
         background-image: url(../assets/flowus/slice_0_0.png);
         background-size: 100% 100%;
-        width: 25px;
-        left: 2px;
       }
     </style>
   </head>
@@ -152,7 +148,7 @@
         let __d = new Date(_day).getDate();
         document.getElementById(
           `week-${i + 1}`
-        ).innerHTML = `${__d}${week_label}`;
+        ).innerHTML = `${__d}<br>${week_label}`;
         // console.log(s_day)
         if (i < s_day) {
           document.getElementById(`week-${i + 1}`).className = "passed";

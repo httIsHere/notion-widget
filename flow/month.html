@@ -91,13 +91,45 @@
         background-size: 100% 100%;
       }
       .pass.pass-4 {
-        background: url(../assets/flowus/biaoqing/06.png) no-repeat center;
+        background: url(../assets/flowus/biaoqing/04.png) no-repeat center;
         background-size: 100% 100%;
       }
       .pass.pass-5 {
+        background: url(../assets/flowus/biaoqing/05.png) no-repeat center;
+        background-size: 100% 100%;
+      }
+      .pass.pass-6 {
+        background: url(../assets/flowus/biaoqing/06.png) no-repeat center;
+        background-size: 100% 100%;
+      }
+      .pass.pass-7 {
+        background: url(../assets/flowus/biaoqing/07.png) no-repeat center;
+        background-size: 100% 100%;
+      }
+      .pass.pass-8 {
         background: url(../assets/flowus/biaoqing/08.png) no-repeat center;
         background-size: 100% 100%;
       }
+      /* .pass.pass-6 {
+        background: url(../assets/flowus/yellow/y-1.PNG) no-repeat center;
+        background-size: 100% 100%;
+      }
+      .pass.pass-7 {
+        background: url(../assets/flowus/yellow/y-2.PNG) no-repeat center;
+        background-size: 100% 100%;
+      }
+      .pass.pass-8 {
+        background: url(../assets/flowus/yellow/y-3.PNG) no-repeat center;
+        background-size: 100% 100%;
+      }
+      .pass.pass-9 {
+        background: url(../assets/flowus/yellow/y-4.PNG) no-repeat center;
+        background-size: 100% 100%;
+      }
+      .pass.pass-10 {
+        background: url(../assets/flowus/yellow/y-5.PNG) no-repeat center;
+        background-size: 100% 100%;
+      } */
       .active {
         background-color: rgba(0, 0, 0, 0.7);
         border-radius: 50%;
@@ -262,7 +294,7 @@
           document.getElementById(`d-${date_num}`).className = "active";
           // document.getElementById(`d-${date_num}`).innerHTML = "";
         } else if (i <= cur_d) {
-          let r = getRandNum(1, 5);
+          let r = getRandNum(1, 8);
           document.getElementById(`d-${date_num}`).classList.add(`pass`);
           document.getElementById(`d-${date_num}`).classList.add(`pass-${r}`);
 
