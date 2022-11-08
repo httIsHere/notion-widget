@@ -89,12 +89,12 @@ gsap.timeline({
   duration: 0.6,
   ease: 'power3.out'
 });
-gsap.to(group.rotation, {
-  y: Math.PI * 2,
-  duration: 12,
-  ease: 'none',
-  repeat: -1
-});
+// gsap.to(group.rotation, {
+//   y: Math.PI * 2,
+//   duration: 12,
+//   ease: 'none',
+//   repeat: -1
+// });
 
 function render(a) {
   positions = [];
