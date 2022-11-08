@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-11-06 23:32:23
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-11-08 10:27:44
+ * @LastEditTime: 2022-11-08 10:09:53
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -33,13 +33,8 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        margin-top: -20px;
-        font-size: 46px;
+        font-size: 48px;
         color: #ea80b0;
-        /* animation: anim 1.5s ease-in-out infinite;
-        -webkit-animation: anim 1.5s ease-in-out infinite;
-        -o-animation: anim 1.5s ease-in-out infinite;
-        -moz-animation: anim 1.5s ease-in-out infinite; */
       }
       @keyframes anim {
         0% {
@@ -113,14 +108,22 @@
   </head>
   <body>
     <canvas id="pinkboard"></canvas>
-    <!-- 加名字的时候请替换xxx部分 -->
-    <!-- <div id="name">xxx</div> -->
+    <div id="name">xxx 💗 zzz</div>
+
+
+
+
+
+
+    <div class="show">
+      <div id="start"></div>
+    </div>
 
     <script>
       /*
        * Settings
        */
-      var settings = {
+      let settings = {
         particles: {
           length: 500, // maximum amount of particles
           duration: 2, // particle duration in sec
@@ -134,9 +137,9 @@
        * RequestAnimationFrame polyfill by Erik M?ller
        */
       (function () {
-        var b = 0;
-        var c = ["ms", "moz", "webkit", "o"];
-        for (var a = 0; a < c.length && !window.requestAnimationFrame; ++a) {
+        let b = 0;
+        let c = ["ms", "moz", "webkit", "o"];
+        for (let a = 0; a < c.length && !window.requestAnimationFrame; ++a) {
           window.requestAnimationFrame = window[c[a] + "RequestAnimationFrame"];
           window.cancelAnimationFrame =
             window[c[a] + "CancelAnimationFrame"] ||
@@ -144,9 +147,9 @@
         }
         if (!window.requestAnimationFrame) {
           window.requestAnimationFrame = function (h, e) {
-            var d = new Date().getTime();
-            var f = Math.max(0, 16 - (d - b));
-            var g = window.setTimeout(function () {
+            let d = new Date().getTime();
+            let f = Math.max(0, 16 - (d - b));
+            let g = window.setTimeout(function () {
               h(d + f);
             }, f);
             b = d + f;
@@ -163,7 +166,7 @@
       /*
        * Point class
        */
-      var Point = (function () {
+      let Point = (function () {
         function Point(x, y) {
           this.x = typeof x !== "undefined" ? x : 0;
           this.y = typeof y !== "undefined" ? y : 0;
@@ -180,7 +183,7 @@
           return this;
         };
         Point.prototype.normalize = function () {
-          var length = this.length();
+          let length = this.length();
           this.x /= length;
           this.y /= length;
           return this;
@@ -192,7 +195,7 @@
        * Particle class
        */
 
-      var Particle = (function () {
+      let Particle = (function () {
         function Particle() {
           this.position = new Point();
           this.velocity = new Point();
@@ -219,7 +222,7 @@
           function ease(t) {
             return --t * t * t + 1;
           }
-          var size = image.width * ease(this.age / settings.particles.duration);
+          let size = image.width * ease(this.age / settings.particles.duration);
           context.globalAlpha = 1 - this.age / settings.particles.duration;
           context.drawImage(
             image,
@@ -235,8 +238,8 @@
       /*
        * ParticlePool class
        */
-      var ParticlePool = (function () {
-        var particles,
+      let ParticlePool = (function () {
+        let particles,
           firstActive = 0,
           firstFree = 0,
           duration = settings.particles.duration;
@@ -244,7 +247,7 @@
         function ParticlePool(length) {
           // create and populate particle pool
           particles = new Array(length);
-          for (var i = 0; i < particles.length; i++)
+          for (let i = 0; i < particles.length; i++)
             particles[i] = new Particle();
         }
         ParticlePool.prototype.add = function (x, y, dx, dy) {
@@ -257,7 +260,7 @@
           if (firstActive == particles.length) firstActive = 0;
         };
         ParticlePool.prototype.update = function (deltaTime) {
-          var i;
+          let i;
 
           // update active particles
           if (firstActive < firstFree) {
@@ -298,7 +301,7 @@
        * Putting it all together
        */
       (function (canvas) {
-        var context = canvas.getContext("2d"),
+        let context = canvas.getContext("2d"),
           particles = new ParticlePool(settings.particles.length),
           particleRate =
             settings.particles.length / settings.particles.duration, // particles/sec
@@ -317,14 +320,14 @@
         }
 
         // creating the particle image using a dummy canvas
-        var image = (function () {
-          var canvas = document.createElement("canvas"),
+        let image = (function () {
+          let canvas = document.createElement("canvas"),
             context = canvas.getContext("2d");
           canvas.width = settings.particles.size;
           canvas.height = settings.particles.size;
           // helper function to create the path
           function to(t) {
-            var point = pointOnHeart(t);
+            let point = pointOnHeart(t);
             point.x =
               settings.particles.size / 2 +
               (point.x * settings.particles.size) / 350;
@@ -335,8 +338,8 @@
           }
           // create the path
           context.beginPath();
-          var t = -Math.PI;
-          var point = to(t);
+          let t = -Math.PI;
+          let point = to(t);
           context.moveTo(point.x, point.y);
           while (t < Math.PI) {
             t += 0.01; // baby steps!
@@ -348,7 +351,7 @@
           context.fillStyle = "#ea80b0";
           context.fill();
           // create the image
-          var image = new Image();
+          let image = new Image();
           image.src = canvas.toDataURL();
           return image;
         })();
@@ -359,7 +362,7 @@
           requestAnimationFrame(render);
 
           // update time
-          var newTime = new Date().getTime() / 1000,
+          let newTime = new Date().getTime() / 1000,
             deltaTime = newTime - (time || newTime);
           time = newTime;
 
@@ -367,10 +370,10 @@
           context.clearRect(0, 0, canvas.width, canvas.height);
 
           // create new particles
-          var amount = particleRate * deltaTime;
-          for (var i = 0; i < amount; i++) {
-            var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
-            var dir = pos.clone().length(settings.particles.velocity);
+          let amount = particleRate * deltaTime;
+          for (let i = 0; i < amount; i++) {
+            let pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+            let dir = pos.clone().length(settings.particles.velocity);
             particles.add(
               canvas.width / 2 + pos.x,
               canvas.height / 2 - pos.y,
@@ -399,6 +402,65 @@
       })(document.getElementById("pinkboard"));
 
       // 参考：https://blog.csdn.net/weixin_57038822/article/details/121644240
+    </script>
+    <script src="../lib/jquery-3.6.0.min.js"></script>
+    <script>
+      let count = 0;
+      function create() {
+        let heart = document.createElement("b"); //创建b元素
+        heart.onselectstart = new Function("event.returnValue=false"); //防止拖动
+
+        document.body.appendChild(heart).innerHTML = "httishere"; //将b元素添加到页面上
+        a_idx = (a_idx + 1) % a.length;
+        heart.style.cssText = "position: fixed;left:-100%;"; //给p元素设置样式
+
+        let f = 16, // 字体大小
+          x = event.clientX - f / 2, // 横坐标
+          y = event.clientY - f, // 纵坐标
+          c = randomColor(), // 随机颜色
+          a = 1, // 透明度
+          s = 1.2; // 放大缩小
+
+        let timer = setInterval(function () {
+          //添加定时器
+          if (a <= 0) {
+            document.body.removeChild(heart);
+            clearInterval(timer);
+          } else {
+            heart.style.cssText =
+              "font-size:16px;cursor: default;position: fixed;color:" +
+              c +
+              ";left:" +
+              x +
+              "px;top:" +
+              y +
+              "px;opacity:" +
+              a +
+              ";transform:scale(" +
+              s +
+              ");";
+
+            y--;
+            a -= 0.016;
+            s += 0.002;
+          }
+        }, 15);
+      }
+
+      // 随机颜色
+      function randomColor() {
+        return (
+          "rgb(" +
+          ~~(Math.random() * 255) +
+          "," +
+          ~~(Math.random() * 255) +
+          "," +
+          ~~(Math.random() * 255) +
+          ")"
+        );
+      }
+
+      create()
     </script>
   </body>
 </html>
