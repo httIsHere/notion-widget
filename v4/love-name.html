@@ -1,40 +1,24 @@
-<!--
- * @Author: Tina Huang
- * @Date: 2022-11-06 23:32:23
- * @LastEditors: Tina Huang
- * @LastEditTime: 2022-11-08 10:09:53
- * @Description: 
--->
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>💗 Love u 💗</title>
-
-    <style>
-      html,
+    <title>满屏幕红心</title>
+    <style type="text/css">
       body {
-        height: 100%;
-        padding: 0;
         margin: 0;
+        overflow: hidden;
         background: #000;
       }
       canvas {
         position: absolute;
         width: 100%;
         height: 100%;
+      }
+      #pinkboard {
         animation: anim 1.5s ease-in-out infinite;
         -webkit-animation: anim 1.5s ease-in-out infinite;
         -o-animation: anim 1.5s ease-in-out infinite;
         -moz-animation: anim 1.5s ease-in-out infinite;
-      }
-      #name {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 48px;
-        color: #ea80b0;
       }
       @keyframes anim {
         0% {
@@ -107,23 +91,129 @@
     </style>
   </head>
   <body>
+    <canvas id="canvas"></canvas>
     <canvas id="pinkboard"></canvas>
-    <div id="name">xxx 💗 zzz</div>
 
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      charset="utf-8"
+    ></script>
+    <script type="text/javascript">
+      const colors = [
+        "#eec996",
+        "#8fb7d3",
+        "#b7d4c6",
+        "#c3bedd",
+        "#f1d5e4",
+        "#cae1d3",
+        "#f3c89d",
+        "#d0b0c3",
+        "#819d53",
+        "#c99294",
+        "#cec884",
+        "#ff8e70",
+        "#e0a111",
+        "#fffdf6",
+        "#cbd7ac",
+        "#e8c6c0",
+        "#dc9898",
+        "#ecc8ba",
+      ]; //用来设置的颜色
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      let count = 1;
 
+      var ww = window.innerWidth;
+      var wh = window.innerHeight;
 
+      var hearts = [];
 
+      function init() {
+        requestAnimationFrame(render);
+        canvas.width = ww;
+        canvas.height = wh;
+        for (var i = 0; i < 100; i++) {
+          hearts.push(new Heart());
+        }
+      }
 
+      function Heart() {
+        this.x = Math.random() * ww;
+        this.y = Math.random() * wh;
+        this.opacity = Math.random() * 0.5 + 0.5;
+        this.vel = {
+          x: (Math.random() - 0.5) * 4,
+          y: (Math.random() - 0.5) * 4,
+        };
+        this.targetScale = Math.random() * 0.15 + 0.02;
+        this.scale = this.targetScale * Math.random();
+      }
 
-    <div class="show">
-      <div id="start"></div>
-    </div>
+      Heart.prototype.update = function (i) {
+        this.x += this.vel.x;
+        this.y += this.vel.y;
 
+        this.scale += (this.targetScale - this.scale) * 0.01;
+        if (this.x - this.width > ww || this.x + this.width < 0) {
+          this.scale = 0;
+          this.x = Math.random() * ww;
+        }
+        if (this.y - this.height > wh || this.y + this.height < 0) {
+          this.scale = 0;
+          this.y = Math.random() * wh;
+        }
+        this.width = 473.8;
+        this.height = 408.6;
+      };
+      Heart.prototype.draw = function (i) {
+        ctx.globalAlpha = this.opacity;
+        ctx.font = `${180 * this.scale}px "微软雅黑"`;
+        // ctx.font="20px";
+        ctx.fillStyle = colors[i % 18];
+        ctx.fillText(
+          "肥汪卷",
+          this.x - this.width * 0.5,
+          this.y - this.height * 0.5,
+          this.width,
+          this.height
+        );
+        // ctx.drawImage(
+        //   heartImage,
+        //   this.x - this.width * 0.5,
+        //   this.y - this.height * 0.5,
+        //   this.width,
+        //   this.height
+        // );
+      };
+
+      function render() {
+        ctx.clearRect(0, 0, ww, wh);
+        // ctx.globalAlpha = 1;
+        // ctx.fillStyle = "rgba(255,255,255,0.3)";
+        // ctx.fillRect(0, 0, ww, wh);
+        for (var i = 0; i < 100; i++) {
+          hearts[i].update(i);
+          hearts[i].draw(i);
+        }
+        requestAnimationFrame(render);
+      }
+      init();
+
+      // var heartImage = new Image();
+      // heartImage.onload = init();
+      // heartImage.src =
+      //   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NzMuOHB4IiBoZWlnaHQ9IjQwOC42cHgiIHZpZXdCb3g9IjAgMCA0NzMuOCA0MDguNiI+PHBhdGggZmlsbD0iI2QzMjkzMiIgZD0iTTQwNC42LDE2LjZDMzg1LjQsNi4xLDM2My41LDAsMzQwLDBjLTQxLjUsMC03OC41LDE4LjktMTAzLDQ4LjVDMjEyLjMsMTguOSwxNzUuMywwLDEzMy44LDAgYy0yMy4zLDAtNDUuMyw2LjEtNjQuNSwxNi42QzI3LjksMzkuNSwwLDgzLjQsMCwxMzMuOWMwLDE0LjQsMi40LDI4LjMsNi42LDQxLjJDMjkuNiwyNzguNCwyMzcsNDA4LjYsMjM3LDQwOC42IHMyMDcuMi0xMzAuMiwyMzAuMi0yMzMuNWM0LjMtMTIuOSw2LjYtMjYuOCw2LjYtNDEuMkM0NzMuOCw4My40LDQ0NS45LDM5LjYsNDA0LjYsMTYuNnoiLz48L3N2Zz4=";
+
+      window.addEventListener("resize", function () {
+        ww = window.innerWidth;
+        wh = window.innerHeight;
+      });
+    </script>
     <script>
       /*
        * Settings
        */
-      let settings = {
+      var settings = {
         particles: {
           length: 500, // maximum amount of particles
           duration: 2, // particle duration in sec
@@ -137,9 +227,9 @@
        * RequestAnimationFrame polyfill by Erik M?ller
        */
       (function () {
-        let b = 0;
-        let c = ["ms", "moz", "webkit", "o"];
-        for (let a = 0; a < c.length && !window.requestAnimationFrame; ++a) {
+        var b = 0;
+        var c = ["ms", "moz", "webkit", "o"];
+        for (var a = 0; a < c.length && !window.requestAnimationFrame; ++a) {
           window.requestAnimationFrame = window[c[a] + "RequestAnimationFrame"];
           window.cancelAnimationFrame =
             window[c[a] + "CancelAnimationFrame"] ||
@@ -147,9 +237,9 @@
         }
         if (!window.requestAnimationFrame) {
           window.requestAnimationFrame = function (h, e) {
-            let d = new Date().getTime();
-            let f = Math.max(0, 16 - (d - b));
-            let g = window.setTimeout(function () {
+            var d = new Date().getTime();
+            var f = Math.max(0, 16 - (d - b));
+            var g = window.setTimeout(function () {
               h(d + f);
             }, f);
             b = d + f;
@@ -166,7 +256,7 @@
       /*
        * Point class
        */
-      let Point = (function () {
+      var Point = (function () {
         function Point(x, y) {
           this.x = typeof x !== "undefined" ? x : 0;
           this.y = typeof y !== "undefined" ? y : 0;
@@ -183,7 +273,7 @@
           return this;
         };
         Point.prototype.normalize = function () {
-          let length = this.length();
+          var length = this.length();
           this.x /= length;
           this.y /= length;
           return this;
@@ -195,7 +285,7 @@
        * Particle class
        */
 
-      let Particle = (function () {
+      var Particle = (function () {
         function Particle() {
           this.position = new Point();
           this.velocity = new Point();
@@ -222,7 +312,7 @@
           function ease(t) {
             return --t * t * t + 1;
           }
-          let size = image.width * ease(this.age / settings.particles.duration);
+          var size = image.width * ease(this.age / settings.particles.duration);
           context.globalAlpha = 1 - this.age / settings.particles.duration;
           context.drawImage(
             image,
@@ -238,8 +328,8 @@
       /*
        * ParticlePool class
        */
-      let ParticlePool = (function () {
-        let particles,
+      var ParticlePool = (function () {
+        var particles,
           firstActive = 0,
           firstFree = 0,
           duration = settings.particles.duration;
@@ -247,7 +337,7 @@
         function ParticlePool(length) {
           // create and populate particle pool
           particles = new Array(length);
-          for (let i = 0; i < particles.length; i++)
+          for (var i = 0; i < particles.length; i++)
             particles[i] = new Particle();
         }
         ParticlePool.prototype.add = function (x, y, dx, dy) {
@@ -260,7 +350,7 @@
           if (firstActive == particles.length) firstActive = 0;
         };
         ParticlePool.prototype.update = function (deltaTime) {
-          let i;
+          var i;
 
           // update active particles
           if (firstActive < firstFree) {
@@ -301,7 +391,7 @@
        * Putting it all together
        */
       (function (canvas) {
-        let context = canvas.getContext("2d"),
+        var context = canvas.getContext("2d"),
           particles = new ParticlePool(settings.particles.length),
           particleRate =
             settings.particles.length / settings.particles.duration, // particles/sec
@@ -320,14 +410,14 @@
         }
 
         // creating the particle image using a dummy canvas
-        let image = (function () {
-          let canvas = document.createElement("canvas"),
+        var image = (function () {
+          var canvas = document.createElement("canvas"),
             context = canvas.getContext("2d");
           canvas.width = settings.particles.size;
           canvas.height = settings.particles.size;
           // helper function to create the path
           function to(t) {
-            let point = pointOnHeart(t);
+            var point = pointOnHeart(t);
             point.x =
               settings.particles.size / 2 +
               (point.x * settings.particles.size) / 350;
@@ -338,8 +428,8 @@
           }
           // create the path
           context.beginPath();
-          let t = -Math.PI;
-          let point = to(t);
+          var t = -Math.PI;
+          var point = to(t);
           context.moveTo(point.x, point.y);
           while (t < Math.PI) {
             t += 0.01; // baby steps!
@@ -351,7 +441,7 @@
           context.fillStyle = "#ea80b0";
           context.fill();
           // create the image
-          let image = new Image();
+          var image = new Image();
           image.src = canvas.toDataURL();
           return image;
         })();
@@ -362,7 +452,7 @@
           requestAnimationFrame(render);
 
           // update time
-          let newTime = new Date().getTime() / 1000,
+          var newTime = new Date().getTime() / 1000,
             deltaTime = newTime - (time || newTime);
           time = newTime;
 
@@ -370,10 +460,10 @@
           context.clearRect(0, 0, canvas.width, canvas.height);
 
           // create new particles
-          let amount = particleRate * deltaTime;
-          for (let i = 0; i < amount; i++) {
-            let pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
-            let dir = pos.clone().length(settings.particles.velocity);
+          var amount = particleRate * deltaTime;
+          for (var i = 0; i < amount; i++) {
+            var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+            var dir = pos.clone().length(settings.particles.velocity);
             particles.add(
               canvas.width / 2 + pos.x,
               canvas.height / 2 - pos.y,
@@ -402,65 +492,6 @@
       })(document.getElementById("pinkboard"));
 
       // 参考：https://blog.csdn.net/weixin_57038822/article/details/121644240
-    </script>
-    <script src="../lib/jquery-3.6.0.min.js"></script>
-    <script>
-      let count = 0;
-      function create() {
-        let heart = document.createElement("b"); //创建b元素
-        heart.onselectstart = new Function("event.returnValue=false"); //防止拖动
-
-        document.body.appendChild(heart).innerHTML = "httishere"; //将b元素添加到页面上
-        a_idx = (a_idx + 1) % a.length;
-        heart.style.cssText = "position: fixed;left:-100%;"; //给p元素设置样式
-
-        let f = 16, // 字体大小
-          x = event.clientX - f / 2, // 横坐标
-          y = event.clientY - f, // 纵坐标
-          c = randomColor(), // 随机颜色
-          a = 1, // 透明度
-          s = 1.2; // 放大缩小
-
-        let timer = setInterval(function () {
-          //添加定时器
-          if (a <= 0) {
-            document.body.removeChild(heart);
-            clearInterval(timer);
-          } else {
-            heart.style.cssText =
-              "font-size:16px;cursor: default;position: fixed;color:" +
-              c +
-              ";left:" +
-              x +
-              "px;top:" +
-              y +
-              "px;opacity:" +
-              a +
-              ";transform:scale(" +
-              s +
-              ");";
-
-            y--;
-            a -= 0.016;
-            s += 0.002;
-          }
-        }, 15);
-      }
-
-      // 随机颜色
-      function randomColor() {
-        return (
-          "rgb(" +
-          ~~(Math.random() * 255) +
-          "," +
-          ~~(Math.random() * 255) +
-          "," +
-          ~~(Math.random() * 255) +
-          ")"
-        );
-      }
-
-      create()
     </script>
   </body>
 </html>
