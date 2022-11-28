@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-11-06 23:32:23
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-11-09 21:34:36
+ * @LastEditTime: 2022-11-19 12:56:17
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -46,7 +46,7 @@
         position: absolute;
         top: 70%;
         text-align: center;
-        color: rgba(234, 128, 176, .5);
+        color: rgba(234, 128, 176, 0.5);
         font-size: 3vw;
       }
       @keyframes anim {
@@ -128,6 +128,15 @@
       源码修改添加个人名字教程请看⬇️⬇️<br />
       小红书：肥汪卷｜b站：阿汪同学｜抖音：httishere0728
     </div>
+    <script>
+      let audio = document.createElement("audio");
+      audio.src = "http://music.163.com/song/media/outer/url?id=28828078.mp3";
+      audio.loop = true;
+      audio.volume = 0.6;
+      window.onclick = function() {
+        audio.play();
+      }
+    </script>
 
     <script>
       /*
