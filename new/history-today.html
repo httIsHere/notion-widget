@@ -8,145 +8,167 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>历史今日</title>
     <script src="../flexibleMerge.js"></script>
     <script src="../lib/global.js?v=20221106"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style>
-        html, body { background-color: #ffffff;}
-        .container {
-            padding: .666667rem;
-        }
+      html,
+      body {
+        background-color: #ffffff;
+      }
+      .container {
+        padding: 0.666667rem;
+      }
 
-        h2 {
-            text-align: center;
-            margin: 0;
-            margin-bottom: .666667rem;
-            font-family: cursive;
-            font-size: .96rem;
-        }
+      h2 {
+        text-align: center;
+        margin: 0;
+        margin-bottom: 0.666667rem;
+        font-family: cursive;
+        font-size: 0.96rem;
+      }
 
-        h2 em {
-            color: teal;
-            font-size: .96rem;
-            margin: 0 .266667rem;
-        }
+      h2 em {
+        color: teal;
+        font-size: 0.96rem;
+        margin: 0 0.266667rem;
+      }
 
-        .inner {
-            font-size: .426667rem;
-            color: #303133;
-            position: relative;
-            font-family: 'Avenir', Helvetica, Arial, sans-serif;
-            padding: 0;
-            margin: 0;
-        }
+      .inner {
+        font-size: 0.426667rem;
+        color: #303133;
+        position: relative;
+        font-family: "Avenir", Helvetica, Arial, sans-serif;
+        padding: 0;
+        margin: 0;
+      }
 
-        .item {
-            padding-left: 1rem;
-            padding-bottom: .4rem;
-            position: relative;
-            z-index: 1
-        }
+      .item {
+        padding-left: 1rem;
+        padding-bottom: 0.4rem;
+        position: relative;
+        z-index: 1;
+      }
 
-        .item p {
-            color: #909399;
-            font-size: .48rem;
-            line-height: .48rem;
-            margin: 0;
-            margin-bottom: .4rem;
-        }
+      .item p {
+        color: #909399;
+        font-size: 0.48rem;
+        line-height: 0.48rem;
+        margin: 0;
+        margin-bottom: 0.4rem;
+      }
 
-        .item::before {
-            content: "";
-            background-color: #d3d3d3;
-            position: absolute;
-            width: .32rem;
-            height: .32rem;
-            border-radius: 50%;
-            left: 0;
-            top: .04rem;
-        }
-        .item:nth-child(2n+1)::before {background: teal;}
+      .item::before {
+        content: "";
+        background-color: #d3d3d3;
+        position: absolute;
+        width: 0.32rem;
+        height: 0.32rem;
+        border-radius: 50%;
+        left: 0;
+        top: 0.04rem;
+      }
+      .item:nth-child(2n + 1)::before {
+        background: teal;
+      }
 
-        .item::after {
-            content: "";
-            width: .026667rem;
-            height: 100%;
-            background: #e4e7ed;
-            position: absolute;
-            left: .146667rem;
-            top: 0;
-            z-index: -1;
-        }
+      .item::after {
+        content: "";
+        width: 0.026667rem;
+        height: 100%;
+        background: #e4e7ed;
+        position: absolute;
+        left: 0.146667rem;
+        top: 0;
+        z-index: -1;
+      }
 
-        .item:last-child::after {
-            display: none;
-        }
-        .item a {color: unset; text-decoration: none;}
-      html[theme="dark"], html[theme="dark"] body {background-color:#191919;color: #ffffff;}
-      html[theme="dark"] .inner {color: #ffffff;}
-        [v-cloak] {display: none; }
+      .item:last-child::after {
+        display: none;
+      }
+      .item a {
+        color: unset;
+        text-decoration: none;
+      }
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
+      html[theme="dark"] .inner {
+        color: #ffffff;
+      }
+      [v-cloak] {
+        display: none;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container" id="root" v-cloak>
-        <h2><em>-</em><span id="date"></span><em>-</em></h2>
-        <ul class="inner" id="list">
-            <div class="item" v-for="item in list" :key="item.year">
-                <p>{{item.year}}</p>
-                <div class="content" v-html="item.title"></div>
-            </div>
-        </ul>
+      <h2><em>-</em><span id="date"></span><em>-</em></h2>
+      <ul class="inner" id="list">
+        <div class="item" v-for="item in list" :key="item.year">
+          <p>{{item.year}}</p>
+          <div class="content" v-html="item.title"></div>
+        </div>
+      </ul>
     </div>
-</body>
-<script src="../lib/vue@2.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
+  </body>
+  <script src="../lib/vue@2.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    const params = getAllParams(CryptoJS);
+    handleDarkMode(params);
     let _today = new Date(),
-        month,
-        day, year = _today.getFullYear();
+      month,
+      day,
+      year = _today.getFullYear();
     (month = _today.getMonth() + 1), (day = _today.getDate());
     month = month > 9 ? month : `0${month}`;
     day = day > 9 ? day : `0${day}`;
-    document.getElementById('date').innerHTML = `${year}/${month}/${day}`;
+    document.getElementById("date").innerHTML = `${year}/${month}/${day}`;
 
     new Vue({
-        el: "#root",
-        data() {return {
-            list: [],
-        }},
-        mounted() {
-            this.getHisToday(month, day);
+      el: "#root",
+      data() {
+        return {
+          list: [],
+        };
+      },
+      mounted() {
+        this.getHisToday(month, day);
+      },
+      methods: {
+        getHisToday(month, day) {
+          let _date = `${month}${day}`;
+          let today_list = localStorage.getItem(`his_${_date}`);
+          if (today_list) {
+            this.list = JSON.parse(today_list);
+            return;
+          }
+          const _this = this;
+          axios
+            .get(
+              `https://baike.baidu.com/cms/home/eventsOnHistory/${month}.json`
+            )
+            .then((res) => {
+              let data = res.data;
+              _this.formatData(data[month]);
+            });
         },
-        methods: {
-            getHisToday(month, day) {
-                let _date = `${month}${day}`;
-                let today_list = localStorage.getItem(`his_${_date}`);
-                if (today_list) {
-                    this.list = JSON.parse(today_list);
-                    return
-                }
-                const _this = this;
-                axios
-                    .get(`https://baike.baidu.com/cms/home/eventsOnHistory/${month}.json`)
-                    .then((res) => {
-                        let data = res.data;
-                        _this.formatData(data[month]);
-                    });
-            },
-            formatData(data) {
-                let _date = `${month}${day}`;
-                let list = data[_date];
-                this.list = list;
-                localStorage.setItem(`his_${_date}`, JSON.stringify(list));
-            },
-        }
-    })
-</script>
-
+        formatData(data) {
+          let _date = `${month}${day}`;
+          let list = data[_date];
+          this.list = list;
+          localStorage.setItem(`his_${_date}`, JSON.stringify(list));
+        },
+      },
+    });
+  </script>
 </html>

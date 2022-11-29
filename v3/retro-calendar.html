@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-10-18 19:31:36
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-10-29 09:41:06
+ * @LastEditTime: 2022-11-29 17:48:29
  * @Description: 复古日历
 -->
 <!DOCTYPE html>
@@ -14,6 +14,7 @@
     <title>Retro calendar</title>
     <script src="../flexibleMerge.js"></script>
     <script src="../lib/global.js?v=20221106"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style>
       :root {
         --bg: #4e909e;
@@ -100,6 +101,10 @@
         --focus: #ffffff;
         --font: var(--focus);
       }
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+      }
     </style>
   </head>
   <body>
@@ -114,8 +119,11 @@
       <p class="mark">@httishere</p>
     </div>
     <script>
-      const theme = getQueryString("t");
+      const params = getAllParams(CryptoJS);
+      console.log(params)
+      const theme = getQueryString("t") || params.theme;
       document.getElementById("container").setAttribute("theme", theme);
+      handleDarkMode(params);
       const week_day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
       const months_list = [
         "Jan",

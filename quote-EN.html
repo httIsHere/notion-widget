@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quote</title>
     <script src="./lib/global.js?v=20221106"></script>
+    <script src="./lib/crypto-js.min.js"></script>
     <style>
         body, html { background-color: #ffffff; margin: 0; padding: 0; }
         @font-face { font-family: 'IndieFlower'; src: url('./fonts/Indie_Flower/IndieFlower-Regular.ttf');}
@@ -27,7 +28,7 @@
     </style>
 </head>
 <body>
-    <div class="quote-box">
+    <div class="quote-box" id="quote-box">
         <div class="quote-box__inner">
             <img class="icon icon-top" src="https://img.icons8.com/doodle/48/000000/quote-left.png"/>
             <p id="text"></p>
@@ -36,17 +37,13 @@
     </div>
 </body>
 <script>
-    function getQueryString(name) {
-      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-      let r = window.location.search.substr(1).match(reg);
-      if (r != null) {
-        return decodeURIComponent(r[2]);
-      }
-      return null;
-    }
-    window.onload = function() {
-        let _quote_content = getQueryString('text');
-        document.getElementById('text').innerHTML = _quote_content;
-    }
+    const params = getAllParams(CryptoJS);
+    handleDarkMode(params);
+    window.onload = function () {
+      let _quote_content =
+        getQueryString("text") || params.content || "HTTISHERE";
+      document.getElementById("text").innerHTML = _quote_content;
+      document.getElementById("quote-box").style.color = params.font_color;
+    };
 </script>
 </html>

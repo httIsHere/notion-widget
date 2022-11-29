@@ -1,8 +1,8 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-20 22:57:16
- * @LastEditTime: 2021-08-23 14:31:32
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-11-29 19:41:58
+ * @LastEditors: Tina Huang
  * @Description: 引用块，简约
  * @FilePath: /notion/quote.html
 -->
@@ -13,6 +13,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quote</title>
+    <script src="./lib/global.js?v=20221106"></script>
+    <script src="./lib/crypto-js.min.js"></script>
     <style>
         body, html { background-color: #ffffff; margin: 0; padding: 0; }
         @font-face { font-family: 'Klee-One'; src: url('./fonts/Klee_One/KleeOne-Regular.ttf');}
@@ -25,7 +27,7 @@
     </style>
 </head>
 <body>
-    <div class="quote-box">
+    <div class="quote-box" id="quote-box">
         <div class="quote-box__inner">
             <img class="icon icon-top" src="https://img.icons8.com/windows/32/000000/quote-left.png"/>
             <p id="text"></p>
@@ -34,17 +36,12 @@
     </div>
 </body>
 <script>
-    function getQueryString(name) {
-      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-      let r = window.location.search.substr(1).match(reg);
-      if (r != null) {
-        return decodeURIComponent(r[2]);
-      }
-      return null;
-    }
-    window.onload = function() {
-        let _quote_content = getQueryString('text');
-        document.getElementById('text').innerHTML = _quote_content;
-    }
+    const params = getAllParams(CryptoJS);
+    window.onload = function () {
+      let _quote_content =
+        getQueryString("text") || params.content || "HTTISHERE";
+      document.getElementById("text").innerHTML = _quote_content;
+      document.getElementById("quote-box").style.color = params.font_color;
+    };
 </script>
 </html>
