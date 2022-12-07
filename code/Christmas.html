@@ -3,12 +3,9 @@
   <head>
     <meta charset="UTF-8" />
 
-    <title></title>
+    <title>Merry Christmas</title>
 
-    <link
-      rel="stylesheet"
-      href="../css/normalize.min.css"
-    />
+    <link rel="stylesheet" href="../css/normalize.min.css" />
 
     <style>
       * {
@@ -77,31 +74,32 @@
       }
 
       .btn {
-          background-color: transparent;
-          border: none;
-          font-size: 68px;
-          animation: shack .4s ease-in-out infinite;
+        background-color: transparent;
+        border: none;
+        font-size: 68px;
+        animation: shack 0.4s ease-in-out infinite;
       }
 
       @keyframes shack {
-          0% {
-            transform: rotate(0);
-          }
-          25% {
-            transform: rotate(-10deg);
-          }
-          50% {
-            transform: rotate(0);
-          }
-          75% {
-            transform: rotate(10deg);
-          }
-          100% {
-            transform: rotate(0);
-          }
+        0% {
+          transform: rotate(0);
+        }
+        25% {
+          transform: rotate(-10deg);
+        }
+        50% {
+          transform: rotate(0);
+        }
+        75% {
+          transform: rotate(10deg);
+        }
+        100% {
+          transform: rotate(0);
+        }
       }
 
-      #name, #extra {
+      #labels,
+      #extra {
         /* color: rgb(106, 17, 11); */
         color: #c5a880;
         font-weight: bold;
@@ -110,16 +108,17 @@
         width: 100%;
         text-align: center;
         opacity: 0;
-        transition: all .5s ease-in-out;
+        transition: all 1s ease-in-out;
         z-index: -1;
         top: 20%;
       }
-      #name.hide {
-          opacity: 0;
+      #labels.hide {
+        opacity: 0;
       }
-      #name.show, #extra.show {
-          opacity: 1;
-          z-index: 100;
+      #labels.show,
+      #extra.show {
+        opacity: 1;
+        z-index: 100;
       }
     </style>
 
@@ -159,10 +158,16 @@
         </li> -->
       </ul>
     </div>
-    <div id="name">肥汪卷<br>Merry Christmas</div>
-    <div id="extra">一定要成为更好的人鸭</div>
+    <div id="labels"></div>
 
     <script id="rendered-js">
+      // 💗 ‼️ ‼️ 想要说的话在这里 💗
+      const my_labels = [
+        "肥汪卷",
+        "Merry Christmas",
+        "一定要成为更好的人鸭",
+        "健健康康，平安喜乐",
+      ];
       const { PI, sin, cos } = Math;
       const TAU = 2 * PI;
 
@@ -204,31 +209,30 @@
 
       const audio = new THREE.Audio(listener);
 
-    //   document
-    //     .querySelector("input")
-    //     .addEventListener("change", uploadAudio, false);
+      //   document
+      //     .querySelector("input")
+      //     .addEventListener("change", uploadAudio, false);
 
       const buttons = document.querySelectorAll(".btn");
       buttons.forEach((button, index) =>
         button.addEventListener("click", () => loadAudio(index))
       );
 
-    //   loadAudio(0);
+      //   loadAudio(0);
 
-    // init();
+      // init();
 
       function init() {
         const overlay = document.getElementById("overlay");
         overlay.remove();
-        const name = document.getElementById("name");
-        const extra = document.getElementById("extra");
-        setTimeout(() => {
-            name.className = "show";
-        }, 1314);
-        setTimeout(() => {
-            name.className = "hide";
-            extra.className = "show";
-        }, 3344);
+        const labels = document.getElementById("labels");
+        for (let i = 0; i < my_labels.length; i++) {
+          setTimeout(() => {
+            labels.className = "hide";
+            labels.innerHTML = my_labels[i];
+            labels.className = "show";
+          }, 2000 * i);
+        }
 
         scene = new THREE.Scene();
         renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -305,7 +309,7 @@
         document.getElementById("overlay").innerHTML =
           '<div class="text-loading">Merry Christmas ...</div>';
         const files = [
-        "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Simon_Panrucker/Happy_Christmas_You_Guys/Simon_Panrucker_-_01_-_Snowflakes_Falling_Down.mp3",
+          "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Simon_Panrucker/Happy_Christmas_You_Guys/Simon_Panrucker_-_01_-_Snowflakes_Falling_Down.mp3",
           "../assets/music/Dott_-_01_-_This_Christmas.mp3",
           "../assets/music/TRG_Banks_-_12_-_No_room_at_the_inn.mp3",
           "../assets/music/Mark_Smeby_-_07_-_Jingle_Bell_Swing.mp3",
