@@ -2299,15 +2299,16 @@ new la({color:void 0!==b?b:16777215}))};k.WrapAroundEnding=2402;k.XHRLoader=func
         document.getElementById("overlay").innerHTML =
           '<div class="text-loading">Merry Christmas ...</div>';
         const files = [
-          // "http://music.163.com/song/media/outer/url?id=28828078.mp3",
+          "http://m701.music.126.net/20221208120107/d7c5012530669c4df39f587a74d5f53c/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/19883935120/f53b/2f75/f72e/c45a8ea06503fc1cc3108e9c473a6021.mp3",
           // "../assets/music/Simon_Panrucker_-_01_-_Snowflakes_Falling_Down.mp3",
-          "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Simon_Panrucker/Happy_Christmas_You_Guys/Simon_Panrucker_-_01_-_Snowflakes_Falling_Down.mp3",
+          // "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Simon_Panrucker/Happy_Christmas_You_Guys/Simon_Panrucker_-_01_-_Snowflakes_Falling_Down.mp3",
         ];
 
         const file = files[i];
 
         const loader = new THREE.AudioLoader();
         loader.load(file, function (buffer) {
+          console.log(buffer)
           audio.setBuffer(buffer);
           audio.play();
           analyser = new THREE.AudioAnalyser(audio, fftSize);
