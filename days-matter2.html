@@ -1,8 +1,8 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-19 10:45:40
- * @LastEditTime: 2021-12-28 09:41:55
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-12-22 17:39:51
+ * @LastEditors: Tina Huang
  * @Description: 简易倒数日组件
  * @FilePath: /notion/days-matter.html
 -->
@@ -15,6 +15,7 @@
     <title>Days Matter</title>
     <script src="./flexibleMerge.js"></script>
     <script src="./lib/global.js?v=20221106"></script>
+    <script src="./lib/crypto-js.min.js"></script>
     <style>
       body,
       html {
@@ -114,14 +115,8 @@
     </div>
   </body>
   <script>
-    function getQueryString(name) {
-      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-      let r = window.location.search.substr(1).match(reg);
-      if (r != null) {
-        return decodeURIComponent(r[2]);
-      }
-      return null;
-    }
+    const params = getAllParams(CryptoJS);
+    handleDarkMode(params);
     var week = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     var week_ZN = [
       "星期日",
@@ -133,8 +128,8 @@
       "星期六",
     ];
     window.onload = function () {
-      let target_day = getQueryString("day"),
-        name = getQueryString("name");
+      let target_day = getQueryString("day") || params.day,
+        name = getQueryString("name") || params.name;
       let _now = new Date().getTime(),
         _target = new Date(target_day).getTime();
       // 设置项目名
