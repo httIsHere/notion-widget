@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-12-24 17:52:21
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-12-24 18:53:19
+ * @LastEditTime: 2022-12-24 19:08:08
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -32,7 +32,7 @@
       }
 
       body {
-          background-color: #191919;
+        background-color: #191919;
         /* background: #0f3854;
         background: radial-gradient(ellipse at center, #0a2e38 0%, #000000 70%); */
         background-size: 100%;
@@ -98,8 +98,20 @@
             "星期五",
             "星期六",
           ],
+          en_week: [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+          ],
+          lan: 'cn'
         },
         mounted() {
+          const params = getAllParams(CryptoJS);
+          this.lan = params.lan || 'cn'; 
           this.updateTime();
           setInterval(this.updateTime, 1000);
         },
@@ -119,7 +131,7 @@
               "-" +
               this.zeroPadding(cd.getDate(), 2) +
               " " +
-              this.week[cd.getDay()];
+              (this.lan === "en" ? this.en_week[cd.getDay()] : this.week[cd.getDay()]);
           },
           zeroPadding(num, digit) {
             var zero = "";
