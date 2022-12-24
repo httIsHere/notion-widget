@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-22 09:45:27
- * @LastEditTime: 2022-01-08 16:05:41
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-12-24 17:36:23
+ * @LastEditors: Tina Huang
  * @Description: 周日历
  * @FilePath: /notion/calenderByWeek.html
 -->
@@ -13,11 +13,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calendar by Week</title>
-    <script src="./lib/global.js?v=20221106"></script>
+    <script src="./lib/global.js?v=20221224"></script>
+    <script src="./lib/crypto-js.min.js"></script>
+    <script src="./lib/jquery-3.6.0.min.js"></script>
     <style>
       html,
       body {
         background-color: #ffffff;
+      }
+      em {
+        font-style: normal;
       }
       @font-face {
         font-family: "Rampart-One";
@@ -44,31 +49,57 @@
         font-size: 16px;
         margin-bottom: 5px;
       }
+      .week-days.head > span {
+        /* color: #ffffff;
+        background-color: rgba(0, 0, 0, .4);
+        border-radius: 50%; */
+      }
       .week-days.week {
         margin-bottom: 3px;
       }
       .week-days span {
-        line-height: 30px;
+        line-height: 35px;
         font-size: 14px;
-        width: 40px;
+        width: 35px;
+        height: 35px;
         display: inline-block;
         text-align: center;
       }
       .start,
       .active,
       .end {
-        background-color: rgba(119, 172, 152, 0.2);
+        background-color: rgb(119, 172, 151, 0.2);
+        position: relative;
+        z-index: 1;
+      }
+      .start,
+      .end {
+        color: #ffffff;
+      }
+      .start em,
+      .end em {
+        display: inline-block;
+        background-color: #77ac98;
+        content: "";
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        position: absolute;
+        top: 3.5px;
+        left: 3.5px;
+        z-index: -1;
+        line-height: 28px;
       }
       .start {
-        border-top-left-radius: 15px;
-        border-bottom-left-radius: 15px;
+        border-top-left-radius: 17.5px;
+        border-bottom-left-radius: 17.5px;
       }
       .end {
-        border-top-right-radius: 15px;
-        border-bottom-right-radius: 15px;
+        border-top-right-radius: 17.5px;
+        border-bottom-right-radius: 17.5px;
       }
       .gray {
-        color: #999999;
+        color: #aaaaaa;
       }
       .title {
         text-align: center;
@@ -80,7 +111,11 @@
       .dis_none {
         display: none;
       }
-        html[theme="dark"], html[theme="dark"] body {background-color:#191919; color:#ffffff;}
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
     </style>
   </head>
   <body>
@@ -104,6 +139,14 @@
     </div>
   </body>
   <script type="text/javascript">
+    const params = getAllParams(CryptoJS);
+    handleDarkMode(params);
+    let highligh_bg,
+      highligh_color = "#77ac98";
+    if (params) {
+      highligh_color = params.highlight;
+      highligh_bg = hexToRgba(highligh_color, 0.2).rgba;
+    }
     window.onload = function () {
       let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
       const months = [
@@ -121,8 +164,8 @@
         "November",
         "December",
       ];
-      let start_p = getQueryString("start"),
-        end_p = getQueryString("end");
+      let start_p = getQueryString("start") || params.date_range[0],
+        end_p = getQueryString("end") || params.date_range[1];
       let _now = new Date(start_p),
         _end = new Date(end_p);
       let _year = _now.getFullYear();
@@ -135,7 +178,8 @@
         now_date = _now.getDate(),
         now_month = _now.getMonth() + 1;
       let end_date = _end.getDate(),
-        end_month = _end.getMonth() + 1;
+        end_month = _end.getMonth() + 1,
+        end_year = _end.getFullYear();
       let _arr = [], // 当月
         _arr_after = []; // 跨月
       // ****************** v1: 当月内 ******************
@@ -151,7 +195,7 @@
         let weekday = __s + now_weekday,
           _end_date = end_date;
         let item = { weekday: weekday || 7, date: i };
-        if (end_month > now_month) {
+        if (end_month > now_month || end_year > _year) {
           _end_date += days[now_month];
         }
         if (i === now_date) {
@@ -164,11 +208,11 @@
         _arr.push(item);
       }
       // ****************** v1: 当月内 end ******************
-      console.log(_arr)
+      console.log(_arr);
       // ****************** v2：可跨月，相邻月分 ******************
-      if (end_month > now_month) {
+      if (end_month > now_month || end_year > _year) {
         let start_weekday = _arr[_arr.length - 1].weekday + 1;
-        start_weekday = (start_weekday % 7) || 7;
+        start_weekday = start_weekday % 7 || 7;
         for (let i = start_weekday - 1; i >= 1; i--) {
           let _item = JSON.parse(JSON.stringify(_arr[_arr.length - i]));
           _item.status = "gray";
@@ -198,25 +242,36 @@
           _html += '<div class="week-days week">';
         }
         if (i === 0) {
-          if(_arr[i].weekday % 7 !== 1) _html += '<div class="week-days week">';
+          if (_arr[i].weekday % 7 !== 1)
+            _html += '<div class="week-days week">';
           // 确定第一天所在的位置
           for (let j = 1; j < _arr[i].weekday; j++) {
             _html += "<span></span>";
           }
         }
-        _html += `<span class="${_arr[i].status || ""}">${_arr[i].date}</span>`;
+        _html += `<span ${
+          highligh_color ? "data-color='" + highligh_color + "'" : ""
+        } class="${_arr[i].status || ""}" id="${
+          _arr[i].status === "start" || _arr[i].status === "end"
+            ? _arr[i].status
+            : ""
+        }"><em>${_arr[i].date}</em></span>`;
         if (_arr[i].weekday % 7 === 0) {
           _html += "</div>";
         }
       }
       // 相邻月份
-      console.log(_arr_after);
+      console.log("afetr", _arr_after);
       for (let i = 0; i < _arr_after.length; i++) {
         let item = _arr_after[i];
         if (item.weekday % 7 === 1) {
           _html_after += '<div class="week-days week">';
         }
-        _html_after += `<span class="${item.status || ""}">${item.date}</span>`;
+        _html_after += `<span ${
+          highligh_color ? "data-color='" + highligh_color + "'" : ""
+        } class="${item.status || ""}" id="${
+          item.status === "start" || item.status === "end" ? item.status : ""
+        }"><em>${item.date}</em></span>`;
         if (item.weekday % 7 === 0) {
           _html_after += "</div>";
         }
@@ -226,6 +281,13 @@
       }
       document.getElementById("content").innerHTML = _html;
       document.getElementById("content2").innerHTML = _html_after;
+
+      $(".start, .end, .active").css({
+        background: highligh_bg,
+      });
+      $(".start em, .end em").css({
+        background: highligh_color,
+      });
     };
   </script>
 </html>
