@@ -1,0 +1,85 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2022-12-27 15:28:11
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-12-27 16:59:34
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="../lib/global.js?v=20221224"></script>
+    <script src="../lib/crypto-js.min.js"></script>
+    <title>custom button</title>
+    <style>
+      html,
+      body {
+        background-color: #ffffff;
+        font-family: serif;
+        margin: 0;
+        padding: 0;
+      }
+      a {
+        display: block;
+        width:fit-content;
+        height: 30px;
+        border-radius: 15px;
+        background-color: #ecebe8;
+        border-color: transparent;
+        outline: none;
+        text-decoration: none;
+        color: #333;
+        padding: 0 10px;
+        line-height: 30px;
+        display: flex;
+        align-items: center;
+          font-size: 16px;
+      }
+      a.large {
+          height: 40px;
+          line-height: 40px;
+          border-radius: 20px;
+          padding: 0 15px;
+          font-size: 18px;
+      }
+      .icon {
+          width: 20px;
+          height: 20px;
+          margin-right: 5px;
+      }
+      a.large .icon {
+          width: 25px;
+          height: 25px;
+      }
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="" id="btn" target="_blank">
+        <img class="icon" id="icon" src="./logos/github.png"></img>
+        <span class="label" id="label">Github</span>
+    </a>
+    <script>
+  
+        const params = getAllParams(CryptoJS);
+        handleDarkMode(params);
+        console.log(params)
+        let url = params.link, icon = params.icon, name = params.btn_name, size = params.size, bg_color = params.bg_color, font_color = params.font_color;
+        let btn = document.getElementById('btn'), label = document.getElementById("label"), icon_url = `./logos/${icon}.png`;
+        if(size && size === 'large') {
+          btn.classList.add('large');
+        }
+        btn.setAttribute("href", url);
+        label.innerHTML = name;
+        document.getElementById("icon").setAttribute("src", icon_url);
+        btn.style.backgroundColor = bg_color;
+        btn.style.color = font_color;
+    </script>
+  </body>
+</html>
