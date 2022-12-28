@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-12-28 20:58:00
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-12-28 21:21:25
+ * @LastEditTime: 2022-12-28 21:27:33
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -20,12 +20,18 @@
       defer
     ></script>
     <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
       @font-face {
         font-family: huangyou;
         src: url("../fonts/站酷仓耳渔阳体-W02.ttf") format("truetype");
         /* src: url("../assets/fonts/站酷庆科黄油体.ttf") format('truetype'); */
       }
       .box {
+        margin: 0 auto;
         font-family: huangyou;
         background: url("../assets/rose.jpg") no-repeat;
         background-size: 100% 100%;
@@ -43,13 +49,13 @@
         position: relative;
       }
       #hitokoto {
-          line-height: 1.5;
+        line-height: 1.5;
       }
       #date {
-          position: absolute;
-          font-size: 14px;
-          bottom: 20px;
-          right: 20px;
+        position: absolute;
+        font-size: 14px;
+        bottom: 20px;
+        right: 20px;
       }
     </style>
   </head>
@@ -59,10 +65,12 @@
       <span id="date"></span>
     </div>
     <script>
-        const params = getAllParams(CryptoJS);
-        handleDarkMode(params);
-        let _now = new Date();
-        document.getElementById("date").innerHTML = `${_now.getMonth() + 1}/${_now.getDate()}`
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+      let _now = new Date();
+      document.getElementById("date").innerHTML = `${
+        _now.getMonth() + 1
+      }/${_now.getDate()}`;
     </script>
   </body>
 </html>
