@@ -1,0 +1,68 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2022-12-28 20:58:00
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2022-12-28 21:21:25
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One</title>
+    <script src="../lib/global.js?v=20221224"></script>
+    <script src="../lib/crypto-js.min.js"></script>
+    <!-- <script type="text/javascript" src="https://api.xygeng.cn/one/get/"></script> -->
+    <script
+      src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto"
+      defer
+    ></script>
+    <style>
+      @font-face {
+        font-family: huangyou;
+        src: url("../fonts/站酷仓耳渔阳体-W02.ttf") format("truetype");
+        /* src: url("../assets/fonts/站酷庆科黄油体.ttf") format('truetype'); */
+      }
+      .box {
+        font-family: huangyou;
+        background: url("../assets/rose.jpg") no-repeat;
+        background-size: 100% 100%;
+        color: #fff;
+        border-radius: 10px;
+        width: 200px;
+        height: 280px;
+        box-sizing: border-box;
+        padding: 20px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        position: relative;
+      }
+      #hitokoto {
+          line-height: 1.5;
+      }
+      #date {
+          position: absolute;
+          font-size: 14px;
+          bottom: 20px;
+          right: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <p id="hitokoto"></p>
+      <span id="date"></span>
+    </div>
+    <script>
+        const params = getAllParams(CryptoJS);
+        handleDarkMode(params);
+        let _now = new Date();
+        document.getElementById("date").innerHTML = `${_now.getMonth() + 1}/${_now.getDate()}`
+    </script>
+  </body>
+</html>
