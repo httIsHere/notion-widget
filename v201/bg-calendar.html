@@ -1,0 +1,200 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-12-23 11:43:48
+ * @LastEditTime: 2022-12-29 15:50:53
+ * @LastEditors: Tina Huang
+ * @Description: 显示当前日历
+ * @FilePath: /notion/calender.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js?v=20221224"></script>
+    <script src="../lib/crypto-js.min.js"></script>
+    <style>
+      html,
+      body {
+        background-color: #ffffff;
+        font-family: serif;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 9.2rem;
+        margin: 0 auto;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: url(../assets/snow.jpeg) no-repeat;
+        background-size: 100% 100%;
+        color: #ffffff;
+        border-radius: 0.4rem;
+        box-sizing: border-box;
+        padding: 0.4rem;
+      }
+      #month {
+        font-weight: bold;
+        font-size: 0.6rem;
+        text-align: right;
+        margin: 0;
+      }
+      .week-days {
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .week-days.head {
+        font-weight: bold;
+        font-size: 0.426667rem;
+        margin-bottom: 0.133333rem;
+      }
+      .week-days.week {
+        margin-bottom: 0.066667rem;
+      }
+      .week-days span {
+        line-height: 0.6rem;
+        font-size: 0.373333rem;
+        width: 0.6rem;
+        height: 0.6rem;
+        display: inline-block;
+        text-align: center;
+      }
+      .start,
+      .active,
+      .end {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        color: #7FA2BE;
+        font-weight: bold;
+      }
+      #d-day {
+        width: 2.666667rem;
+      }
+      #d-day h3 {
+        font-size: 0.64rem;
+        margin: 0.266667rem 0 0 0;
+      }
+      #d-day h1 {
+        font-size: 1.92rem;
+        margin: 0.3rem 0;
+      }
+
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="d-day"></div>
+      <div class="inner">
+        <h2 id="month"></h2>
+        <!-- <div class="days"></div> -->
+        <div class="week-days head" id="week-head"></div>
+        <div id="content">
+          <div class="week-days" id="week-days_1">
+            <span id="d-0"></span><span id="d-1"></span><span id="d-2"></span
+            ><span id="d-3"></span><span id="d-4"></span><span id="d-5"></span
+            ><span id="d-6"></span>
+          </div>
+          <div class="week-days" id="week-days_2">
+            <span id="d-7"></span><span id="d-8"></span><span id="d-9"></span
+            ><span id="d-10"></span><span id="d-11"></span
+            ><span id="d-12"></span><span id="d-13"></span>
+          </div>
+          <div class="week-days" id="week-days_3">
+            <span id="d-14"></span><span id="d-15"></span><span id="d-16"></span
+            ><span id="d-17"></span><span id="d-18"></span
+            ><span id="d-19"></span><span id="d-20"></span>
+          </div>
+          <div class="week-days" id="week-days_4">
+            <span id="d-21"></span><span id="d-22"></span><span id="d-23"></span
+            ><span id="d-24"></span><span id="d-25"></span
+            ><span id="d-26"></span><span id="d-27"></span>
+          </div>
+          <div class="week-days" id="week-days_5">
+            <span id="d-28"></span><span id="d-29"></span><span id="d-30"></span
+            ><span id="d-31"></span><span id="d-32"></span
+            ><span id="d-33"></span><span id="d-34"></span>
+          </div>
+          <div class="week-days" id="week-days_6">
+            <span id="d-35"></span><span id="d-36"></span><span id="d-37"></span
+            ><span id="d-38"></span><span id="d-39"></span
+            ><span id="d-40"></span><span id="d-41"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const week_day_en = ["S", "M", "T", "W", "T", "F", "S"];
+    const week_day = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+    const months = [
+      " ",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    window.onload = function () {
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+      let start_param = getStartSunday(params);
+      let cur_date = new Date(),
+        _year;
+      _year = cur_date.getFullYear();
+      if (_year % 4 === 0 && _year % 100 != 0) {
+        // 闰年
+        days[2] = 29;
+      }
+      let cur_month = cur_date.getMonth() + 1,
+        cur_d = cur_date.getDate(),
+        cur_week_d = cur_date.getDay();
+      let month_first_day = cur_date,
+        first_day;
+      month_first_day.setDate(1);
+      first_day = month_first_day.getDay() || 7;
+      first_day = start_param
+        ? month_first_day.getDay() + 1
+        : month_first_day.getDay() || 7;
+      let _html = '<div class="week-days">',
+        _fd = first_day,
+        label_html = "";
+      let start_type = start_param ? 0 : 1; // 周几开始
+      for (let i = start_type; i <= 6 + start_type; i++) {
+        let _label = i === 7 ? week_day_en[0] : week_day_en[i];
+        label_html += `<span>${_label}</span>`;
+      }
+      for (let i = 1; i <= days[cur_month]; i++) {
+        if (i === cur_d) {
+          document.getElementById(`d-${i + first_day - 2}`).className =
+            "active";
+        }
+        document.getElementById(`d-${i + first_day - 2}`).innerHTML = i;
+      }
+      document.getElementById('week-head').innerHTML = label_html;
+      document.getElementById("month").innerHTML = months[cur_month];
+      document.getElementById(
+        "d-day"
+      ).innerHTML = `<h3>${week_day[cur_week_d]}</h3><h1>${cur_d}</h1>`;
+      // document.getElementById('d-content').innerHTML = _html;
+    };
+  </script>
+</html>
