@@ -1,129 +1,162 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-01 21:08:08
- * @LastEditTime: 2022-01-08 15:55:08
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2023-01-05 10:51:54
+ * @LastEditors: Tina Huang
  * @Description: 年格子
  * @FilePath: /notion/new/year-block.html
 -->
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>年格</title>
     <script src="../flexibleMerge.js"></script>
     <script src="../lib/global.js?v=20221224"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style type="text/css">
-        html,
-        body {
-            background-color: #ffffff;
-            font-size: .48rem;
-            /* color: #999999; */
-        }
-        p {font-size: .32rem; margin:0; line-height: 1.2;}
+      html,
+      body {
+        background-color: #ffffff;
+        font-size: 0.48rem;
+        /* color: #999999; */
+      }
+      p {
+        font-size: 0.32rem;
+        margin: 0;
+        line-height: 1.2;
+      }
 
-        .container {
-            width: 100%;
-            box-sizing: border-box;
-            padding: .266667rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .right {text-align: right;}
+      .container {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.266667rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .right {
+        text-align: right;
+      }
 
-        .row {height: auto; line-height: 1;}
-        .ceil {
-            display: inline-block;
-            width: .2rem;
-            height: .2rem;
-            background: #f3f3f3;
-            margin-right: .04rem;
-            cursor: pointer;
-        }
+      .row {
+        height: auto;
+        line-height: 1;
+      }
+      .ceil {
+        display: inline-block;
+        width: 0.2rem;
+        height: 0.2rem;
+        background: #f3f3f3;
+        margin-right: 0.04rem;
+        cursor: pointer;
+      }
 
-        .ceil.past {
-            background: #333333;
-        }
+      .ceil.past {
+        background: #333333;
+      }
 
-        .ceil.today {
-            background: teal;
-        }
-        #percent {font-size: .48rem; margin: .133333rem 0; color: #333333;}
-        #percent em {font-style: normal; font-size: .32rem;}
-        html[theme="dark"], html[theme="dark"] body {background-color:#191919; color:#ffffff;}
-        html[theme="dark"] .ceil {background-color:rgb(255, 255, 255, .2);}
-        html[theme="dark"] .ceil.past {background-color:rgb(255, 255, 255,1)}
-        html[theme="dark"] .ceil.today {background-color:lightblue;}
-        html[theme="dark"] #percent {color:rgb(255, 255, 255,1)}
+      .ceil.today {
+        background: teal;
+      }
+      #percent {
+        font-size: 0.48rem;
+        margin: 0.133333rem 0;
+        color: #333333;
+      }
+      #percent em {
+        font-style: normal;
+        font-size: 0.32rem;
+      }
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
+      html[theme="dark"] .ceil {
+        background-color: rgb(255, 255, 255, 0.2);
+      }
+      html[theme="dark"] .ceil.past {
+        background-color: rgb(255, 255, 255, 1);
+      }
+      html[theme="dark"] .ceil.today {
+        background-color: teal;
+      }
+      html[theme="dark"] #percent {
+        color: rgb(255, 255, 255, 1);
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <div class="left" id="ceils"></div>
-        <div class="right">
-            <p id="date"></p>
-            <h2 id="percent"></h2>
-            <p id="days"></p>
-        </div>
+      <div class="left" id="ceils"></div>
+      <div class="right">
+        <p id="date"></p>
+        <h2 id="percent"></h2>
+        <p id="days"></p>
+      </div>
     </div>
-</body>
-<script type="text/javascript">
+  </body>
+  <script type="text/javascript">
     let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const months = [
-        " ",
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
+      " ",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     window.onload = function () {
-        let cur_date = new Date(),
-            _year, year_days = 365;;
-        _year = cur_date.getFullYear();
-        let cur_month = cur_date.getMonth() + 1,
-            cur_d = cur_date.getDate();
-        if (_year % 4 === 0 && _year % 100 != 0) {
-            // 闰年
-            days[2] = 29;
-            year_days = 366;
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+      let cur_date = new Date(),
+        _year,
+        year_days = 365;
+      _year = cur_date.getFullYear();
+      let cur_month = cur_date.getMonth() + 1,
+        cur_d = cur_date.getDate();
+      if (_year % 4 === 0 && _year % 100 != 0) {
+        // 闰年
+        days[2] = 29;
+        year_days = 366;
+      }
+      console.log(_year, cur_month, cur_d);
+      let _html = "",
+        sum = 0,
+        percent = 0;
+      for (let i = 1; i <= 12; i++) {
+        _html += `<div class="row row-${i}">`;
+        for (let j = 1; j <= days[i]; j++) {
+          let _class_name = "";
+          if (cur_month > i || (cur_month === i && j < cur_d)) {
+            _class_name = "past";
+            sum++;
+          } else if (cur_month === i && j === cur_d) {
+            _class_name = "today";
+            sum++;
+          } else if (cur_month < i) _class_name = "future";
+          _html += `<span class="ceil ${_class_name}"></span>`;
         }
-        console.log(_year, cur_month, cur_d)
-        let _html = '', sum = 0, percent = 0;
-        for (let i = 1; i <= 12; i++) {
-            _html += `<div class="row row-${i}">`
-            for (let j = 1; j <= days[i]; j++) {
-                let _class_name = '';
-                if (cur_month > i || (cur_month === i && j < cur_d)) {
-                    _class_name = 'past';
-                    sum++;
-                } else if (cur_month === i && j === cur_d) {
-                    _class_name = 'today';
-                    sum++;
-                }
-                else if (cur_month < i) _class_name = 'future';
-                _html += `<span class="ceil ${_class_name}"></span>`;
-            }
-            _html += '</div>';
-        }
-        percent = (sum * 100 / year_days).toFixed(1);
-        document.getElementById('ceils').innerHTML = _html;
-        document.getElementById('date').innerHTML = `${_year}/${cur_month}/${cur_d}`;
-        document.getElementById('percent').innerHTML = `${percent}<em>%</em>`;
-        document.getElementById('days').innerHTML = `${sum}/${year_days}`;
-    }
-</script>
-
+        _html += "</div>";
+      }
+      percent = ((sum * 100) / year_days).toFixed(1);
+      document.getElementById("ceils").innerHTML = _html;
+      document.getElementById(
+        "date"
+      ).innerHTML = `${_year}/${cur_month}/${cur_d}`;
+      document.getElementById("percent").innerHTML = `${percent}<em>%</em>`;
+      document.getElementById("days").innerHTML = `${sum}/${year_days}`;
+    };
+  </script>
 </html>
