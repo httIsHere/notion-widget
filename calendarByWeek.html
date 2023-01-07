@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-22 09:45:27
- * @LastEditTime: 2022-12-24 17:36:23
+ * @LastEditTime: 2023-01-07 15:46:03
  * @LastEditors: Tina Huang
  * @Description: 周日历
  * @FilePath: /notion/calenderByWeek.html
@@ -35,6 +35,8 @@
       .container {
         /* width: 280px; */
         display: flex;
+        justify-content: center;
+        margin: 0 auto;
       }
       .container .inner {
         margin-right: 20px;
@@ -90,11 +92,13 @@
         z-index: -1;
         line-height: 28px;
       }
-      .start {
+      .start,
+      .round-left {
         border-top-left-radius: 17.5px;
         border-bottom-left-radius: 17.5px;
       }
-      .end {
+      .end,
+      .round-right {
         border-top-right-radius: 17.5px;
         border-bottom-right-radius: 17.5px;
       }
@@ -143,7 +147,7 @@
     handleDarkMode(params);
     let highligh_bg,
       highligh_color = "#77ac98";
-    if (params) {
+    if (params && params.highlight) {
       highligh_color = params.highlight;
       highligh_bg = hexToRgba(highligh_color, 0.2).rgba;
     }
@@ -164,10 +168,18 @@
         "November",
         "December",
       ];
-      let start_p = getQueryString("start") || params.date_range[0],
-        end_p = getQueryString("end") || params.date_range[1];
-      let _now = new Date(start_p),
-        _end = new Date(end_p);
+      let start_p =
+          getQueryString("start") ||
+          (params && params.date_range && params.date_range[0]) ||
+          "",
+        end_p =
+          getQueryString("end") ||
+          (params && params.date_range && params.date_range[1]) ||
+          "";
+      let _now = start_p ? new Date(start_p) : new Date(),
+        _end = end_p
+          ? new Date(end_p)
+          : new Date(new Date().getTime() + 6 * 24 * 60 * 60 * 1000);
       let _year = _now.getFullYear();
       if (_year % 4 === 0 && _year % 100 != 0) {
         // 闰年
@@ -238,20 +250,26 @@
       let _html = "",
         _html_after = "";
       for (let i = 0; i < _arr.length; i++) {
+        let round_left = null,
+          round_right = null;
         if (_arr[i].weekday % 7 === 1) {
           _html += '<div class="week-days week">';
+          round_left = "round-left";
         }
         if (i === 0) {
-          if (_arr[i].weekday % 7 !== 1)
+          if (_arr[i].weekday % 7 !== 1) {
             _html += '<div class="week-days week">';
+          }
           // 确定第一天所在的位置
           for (let j = 1; j < _arr[i].weekday; j++) {
             _html += "<span></span>";
           }
         }
+        if (_arr[i].weekday % 7 === 0 || i === _arr.length - 1)
+          round_right = "round-right";
         _html += `<span ${
           highligh_color ? "data-color='" + highligh_color + "'" : ""
-        } class="${_arr[i].status || ""}" id="${
+        } class="${_arr[i].status || ""} ${round_left} ${round_right}" id="${
           _arr[i].status === "start" || _arr[i].status === "end"
             ? _arr[i].status
             : ""
@@ -259,22 +277,30 @@
         if (_arr[i].weekday % 7 === 0) {
           _html += "</div>";
         }
+        round_left = round_right = null;
       }
       // 相邻月份
       console.log("afetr", _arr_after);
       for (let i = 0; i < _arr_after.length; i++) {
-        let item = _arr_after[i];
+        let item = _arr_after[i],
+          round_left = null,
+          round_right = null;
         if (item.weekday % 7 === 1) {
           _html_after += '<div class="week-days week">';
+          round_left = "round-left";
         }
+        if (item.date === 1) round_left = "round-left";
+        if (item.weekday % 7 === 0 || i === _arr_after.length - 1)
+          round_right = "round-right";
         _html_after += `<span ${
           highligh_color ? "data-color='" + highligh_color + "'" : ""
-        } class="${item.status || ""}" id="${
+        } class="${item.status || ""} ${round_left} ${round_right}" id="${
           item.status === "start" || item.status === "end" ? item.status : ""
         }"><em>${item.date}</em></span>`;
         if (item.weekday % 7 === 0) {
           _html_after += "</div>";
         }
+        round_left = round_right = null;
       }
       if (_arr_after.length) {
         document.getElementById("month2").classList.remove("dis_none");
