@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-12-27 15:28:11
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-12-28 21:24:12
+ * @LastEditTime: 2023-01-07 13:24:49
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -76,8 +76,8 @@
           btn.classList.add('large');
         }
         btn.setAttribute("href", url);
-        label.innerHTML = name;
-        document.getElementById("icon").setAttribute("src", icon_url);
+        name && (label.innerHTML = name);
+        icon && document.getElementById("icon").setAttribute("src", icon_url);
         btn.style.backgroundColor = bg_color;
         btn.style.color = font_color;
     </script>
