@@ -1,0 +1,152 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2023-01-07 17:50:57
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2023-01-08 13:40:56
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Range</title>
+    <script src="../lib/global.js?v=20221224"></script>
+    <script src="../lib/crypto-js.min.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 80vw;
+        padding: 15px;
+        margin: 0 auto;
+        min-width: 300px;
+      }
+      .bar {
+        width: 100%;
+        height: 3vw;
+        min-height: 14px;
+        background-color: transparent;
+        border: 2px solid #333;
+        border-radius: 100px;
+        padding: 3px;
+      }
+      .inner {
+        width: 0;
+        height: 100%;
+        background-color: #333;
+        border-radius: 15px;
+        /* border: 2px solid #333; */
+        position: relative;
+      }
+      .inner::after,
+      .inner::before {
+        content: attr(data-percent);
+        font-size: 12px;
+        /* line-height: 100%; */
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .inner.after::before,
+      .inner.before::after {
+        display: none;
+      }
+      .inner.after::after {
+        right: -40px;
+      }
+      .inner.before::before {
+        right: 40px;
+        color: #fff;
+      }
+      #label {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+      #label span {
+        font-size: 30px;
+        color: #999;
+        display: inline-block;
+        padding: 0 10px;
+      }
+      html[theme="dark"] .bar {
+        border-color: #fff;
+      }
+      html[theme="dark"] .inner {
+        background-color: #fff;
+      }
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
+      /* html[theme="dark"] #label {color: #999;} */
+      html[theme="dark"] #label span {
+        color: #ffffff;
+        text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+      }
+      html[theme="dark"] .inner.before::before {
+        color: #191919;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="label" id="label"></div>
+      <div class="bar">
+        <div class="inner" id="inner" data-percent=""></div>
+      </div>
+    </div>
+    <script>
+      window.onload = function () {
+        const params = getAllParams(CryptoJS);
+        handleDarkMode(params);
+
+        const bar = document.getElementById("inner"),
+          label = document.getElementById("label");
+
+        let name = getQueryString("name") || params.name;
+        let start_p =
+            getQueryString("start") ||
+            (params && params.date_range && params.date_range[0]) ||
+            "",
+          end_p =
+            getQueryString("end") ||
+            (params && params.date_range && params.date_range[1]) ||
+            "";
+        let _start = start_p ? new Date(start_p) : new Date(),
+          _end = end_p
+            ? new Date(end_p)
+            : new Date(new Date().getTime() + 6 * 24 * 60 * 60 * 1000),
+          _now = new Date();
+        let percent = 0,
+          remain_label = "";
+        if (_now <= _start) {
+          percent = 0;
+          remain_label = `${name}还没来哦～`;
+        } else if (_now >= _end) {
+          percent = 1;
+          remain_label = `${name}结束啦～`;
+        } else {
+          let passed = _now.getTime() - _start.getTime(),
+            total = _end.getTime() - _start.getTime();
+          percent = Math.round((passed / total) * 100) / 100;
+          let remain = total - passed;
+          let seconds = (remain / 1000) % 60,
+            minutes = (remain / (60 * 1000)) % 60,
+            hours = (remain / (60 * 60 * 1000)) % 24,
+            days = parseInt(remain / (24 * 60 * 60 * 1000));
+          remain_label = `距离${name}结束还有<span>${days}</span>天`;
+        }
+        bar.style.width = `${percent * 100}%`;
+        bar.classList.add(percent > 0.9 ? "before" : "after");
+        bar.setAttribute("data-percent", `${percent * 100}%`);
+        label.innerHTML = remain_label;
+      };
+    </script>
+  </body>
+</html>
