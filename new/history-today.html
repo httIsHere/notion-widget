@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-04 16:11:38
- * @LastEditTime: 2022-01-12 10:12:22
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2023-01-12 10:48:33
+ * @LastEditors: Tina Huang
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /notion/new/history-today.html
 -->
@@ -165,7 +165,7 @@
         formatData(data) {
           let _date = `${month}${day}`;
           let list = data[_date];
-          this.list = list;
+          this.list = list.reverse();
           localStorage.setItem(`his_${_date}`, JSON.stringify(list));
         },
       },
