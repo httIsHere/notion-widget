@@ -1,0 +1,57 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2023-01-12 11:08:13
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2023-01-12 11:14:51
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      circle {
+        -webkit-transition: stroke-dasharray 0.25s;
+        transition: stroke-dasharray 0.25s;
+      }
+    </style>
+    <svg width="400" height="400" viewbox="0 0 400 400">
+      <circle
+        cx="200"
+        cy="200"
+        r="170"
+        stroke-width="20"
+        stroke="#D1D3D7"
+        fill="none"
+      ></circle>
+      <circle
+        cx="200"
+        cy="200"
+        r="170"
+        stroke-width="20"
+        stroke="#00A5E0"
+        fill="none"
+        transform="matrix(0,-1,1,0,0,400)"
+        stroke-dasharray="0 1069"
+      ></circle>
+    </svg>
+    <input type="text" id="range">
+    <script type="text/javascript">
+      var range = document.querySelector("#range"),
+        circle = document.querySelectorAll("circle")[1];
+      if (range && circle) {
+        var percent = 30 / 100,
+          perimeter = Math.PI * 2 * 170;
+        circle.setAttribute(
+          "stroke-dasharray",
+          perimeter * percent + " " + perimeter * (1 - percent)
+        );
+      }
+    </script>
+  </body>
+</html>
