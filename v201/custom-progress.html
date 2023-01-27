@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2023-01-07 17:50:57
  * @LastEditors: Tina Huang
- * @LastEditTime: 2023-01-27 16:54:18
+ * @LastEditTime: 2023-01-27 17:15:15
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -143,9 +143,9 @@
             days = parseInt(remain / (24 * 60 * 60 * 1000));
           remain_label = `距离${name}结束还有<span>${days}</span>天<span>${hours}</span>小时`;
         }
-        bar.style.width = `${(percent * 100).toFixed(2)}%`;
+        bar.style.width = `${(percent * 100).toFixed(0)}%`;
         bar.classList.add(percent > 0.9 ? "before" : "after");
-        bar.setAttribute("data-percent", `${(percent * 100).toFixed(2)}%`);
+        bar.setAttribute("data-percent", `${(percent * 100).toFixed(0)}%`);
         label.innerHTML = remain_label;
       };
     </script>
