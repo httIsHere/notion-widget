@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2023-01-27 14:27:50
  * @LastEditors: Tina Huang
- * @LastEditTime: 2023-01-28 13:23:04
+ * @LastEditTime: 2023-01-28 14:13:27
  * @Description: 倒数卡片
 -->
 <!DOCTYPE html>
@@ -30,7 +30,7 @@
         border-radius: 20px;
         box-sizing: border-box;
         padding: 5vw;
-        background-image: url("../assets/days-card/card-bg-3.jpg");
+        background-image: url("../assets/days-card/card-bg-9.jpg");
         background-size: 100% 100%;
         color: white;
       }
@@ -49,10 +49,14 @@
       .event-box {
         text-align: right;
       }
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+      }
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="container" id="container">
       <div class="inner">
         <div class="days-box">
           <h1 id="days">230</h1>
@@ -68,6 +72,7 @@
       window.onload = function () {
         const params = getAllParams(CryptoJS);
         handleDarkMode(params);
+        console.log(params)
         let _now = new Date();
         let name = getQueryString("name") || params.name || "今年";
         let day =
@@ -91,6 +96,16 @@
           document.getElementById("days").innerText = Math.abs(days);
           document.getElementById("name").innerText = `${name}`;
         }
+
+        // for ui style
+        let bg_color = params.bg_color, background = params.background, font_color = params.font_color;
+        let _container = document.getElementById("container");
+        if(!background) {
+          _container.style.background = bg_color;
+        } else {
+          _container.style.backgroundImage = `url("../assets/days-card/card-bg-${background}.jpg")`;
+        }
+        _container.style.color = font_color;
       };
     </script>
   </body>
