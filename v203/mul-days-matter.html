@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Many Days</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js?v=20221224"></script>
+    <script src="../lib/crypto-js.min.js"></script>
+    <style type="text/css">
+      @font-face {
+        font-family: huangyou;
+        src: url("../fonts/站酷仓耳渔阳体-W02.ttf") format("truetype");
+        /* src: url("../assets/fonts/站酷庆科黄油体.ttf") format('truetype'); */
+      }
+      html,
+      body {
+        background-color: #ffffff;
+        font-family: huangyou;
+        color: #333;
+      }
+      ul,
+      li {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        width: 9.2rem;
+        margin: 0.8rem auto;
+        /* box-shadow: 0 0 0.266667rem 0.266667rem rgba(170, 151, 191, 0.2); */
+        border: 2px solid #333;
+        border-radius: 0.266667rem;
+        overflow: hidden;
+        /* background-image: url(https://gitee.com/httishere/blog-image/raw/master/img/WechatIMG1235.jpeg); */
+        background-origin: center;
+        padding: .45rem 0.666667rem;
+        box-sizing: border-box;
+        font-size: 0.373333rem;
+        position: relative;
+      }
+
+      .container .head {
+        font-weight: bold;
+        margin-bottom: 0.266667rem;
+      }
+
+      .container .head span {
+        font-weight: normal;
+        float: right;
+      }
+
+      .container .list .item {
+        margin-top: 0.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .container .list .item .label {
+        width: 2rem;
+        text-align: right;
+        display: inline-block;
+      }
+
+
+      .container .list .item .label p {
+        font-size: 12px;
+        color: #999999;
+        margin: 0;
+      }
+
+      .container .list .item .progress {
+        width: 4rem;
+        height: 0.133333rem;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 0.133333rem;
+        overflow: hidden;
+      }
+
+      .container .list .item .progress div {
+        background-color: rgba(0, 0, 0, 0.7);
+        width: 0;
+        height: 100%;
+        border-radius: 0.133333rem;
+      }
+
+      .container .list .item .remain {
+        width: 1.333333rem;
+        font-size: 0.32rem;
+        text-align: right;
+      }
+
+      .container .list .item .remain em {
+        font-style: normal;
+        font-size: 0.266667rem;
+      }
+
+      .deco {
+        position: absolute;
+        font-size: 4rem;
+        opacity: .05;
+        font-family: none;
+      }
+
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+        color: #ffffff;
+      }
+      html[theme="dark"] .container {
+        border-color: #9999;
+      }
+      html[theme="dark"] .list .item .progress {
+        background-color: rgba(255, 255, 255, .2);
+      }
+      html[theme="dark"] .list .item .progress div {
+        background-color: rgba(255, 255, 255, .7);
+      }
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container" id="root" v-cloak>
+      <strong class="deco">DAY</strong>
+      <div class="head">
+        My days<span v-show="list"
+          >{{ dues }}/{{ list && list.length }}</span
+        >
+      </div>
+      <ul class="list">
+        <li class="item" v-for="item in list" :key="item.key">
+          <div class="label"><span>{{ item.key }}</span><p>{{item.value}}</p></div>
+          <div class="progress">
+            <div
+              :style="{
+              width:
+                item.remain > 0
+                  ? `${((item.total - item.remain) * 100) / item.total}%`
+                  : '100%',
+            }"
+            ></div>
+          </div>
+          <span class="remain"
+            >{{ Math.abs(item.remain) }}天{{ item.remain > 0 ? "后" : " "}}</span
+          >
+        </li>
+      </ul>
+    </div>
+  </body>
+  <script src="../lib/vue@2.js"></script>
+  <script>
+    new Vue({
+      el: "#root",
+      data() {
+        return {
+          msg: null,
+
+          created: null,
+          // list: [],
+          dues: 0,
+        };
+      },
+      computed: {
+        list() {
+          if (!this.msg) return;
+          const _this = this;
+          let _msg = this.msg.split(","),
+            cur_date = new Date(),
+            cur_time = cur_date.getTime(),
+            created = new Date(this.created).getTime(),
+            list = [];
+          _msg.forEach((item) => {
+            let _arr = item.split("-");
+            let _date = new Date(_arr[1]),
+              _time = _date.getTime();
+            let ttime = _time - cur_time,
+              days = Math.floor(ttime / (60 * 24 * 60 * 1000));
+            let total_time = _time - created,
+              t_days = Math.floor(total_time / (60 * 24 * 60 * 1000));
+            if (days <= 0) {
+              _this.dues += 1;
+            }
+            list.push({
+              key: _arr[0],
+              value: _arr[1],
+              remain: days,
+              total: t_days,
+            });
+          });
+          return list;
+        },
+      },
+      mounted() {
+        const params = getAllParams(CryptoJS);
+        handleDarkMode(params);
+        if (params.hasOwnProperty("tasks")) {
+          this.created = params.created;
+          let _msg = [];
+          params.tasks.map((task) => {
+            _msg.push(`${task.name}-${task.day}`);
+          });
+          this.msg = _msg.join(",");
+        } else {
+          this.msg =
+            getQueryString("msg") ||
+            "生日-2022/07/28,2023-2023/12/31";
+          this.created = getQueryString("created") || "2021/09/04";
+        }
+      },
+    });
+  </script>
+</html>
