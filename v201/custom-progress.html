@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2023-01-07 17:50:57
  * @LastEditors: Tina Huang
- * @LastEditTime: 2023-01-28 14:19:53
+ * @LastEditTime: 2023-03-20 23:14:23
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -141,7 +141,7 @@
             minutes = (remain / (60 * 1000)) % 60,
             hours = parseInt((remain / (60 * 60 * 1000)) % 24),
             days = parseInt(remain / (24 * 60 * 60 * 1000));
-          remain_label = `距离${name}结束还有<span>${days}</span>天<span>${hours}</span>小时`;
+          remain_label = `距离${name}还有<span>${days}</span>天<span>${hours}</span>小时`;
         }
         bar.style.width = `${(percent * 100).toFixed(0)}%`;
         bar.classList.add(percent > 0.9 ? "before" : "after");
