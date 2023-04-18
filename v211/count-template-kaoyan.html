@@ -1,0 +1,67 @@
+<!--
+ * @Author: HTT httishere0728@gmail.com
+ * @Date: 2023-04-18 20:18:50
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @LastEditTime: 2023-04-18 20:54:27
+ * @FilePath: /notion/v211/count-template-main.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Count</title>
+    <style type="text/css">
+        .box {
+            width: 100%;
+            text-align: center;
+            background-color: #d6e1ce;
+            color: #697e5e;
+            padding: 10px 0;
+            border-radius: 5px;
+        }
+
+        #busuanzi_value_site_pv,
+        #name {
+            color: #ba5134;
+            font-weight: bold;
+        }
+        #contact {
+            font-size:12px;
+            opacity: .8;
+        }
+        #contact a {
+            color: #795a5f;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <span id="busuanzi_container_site_pv">🎉 你是第 <span id="busuanzi_value_site_pv"></span> 位<span
+                id="label"></span>，感谢支持关注<span id="name">「阿汪同学」</span></span>
+        <p id="contact"><span>小红书：<a target="blank"
+                    href="https://www.xiaohongshu.com/user/profile/5c049fc9000000000800af53?xhsshare=WeixinSession&appuid=5c049fc9000000000800af53&apptime=1664074455">@肥汪卷</a></span> | <span>B站：<a
+                    href="https://space.bilibili.com/19225439?spm_id_from=333.1007.0.0"
+                    target="blank">阿汪同学</a></span> | <span>微信公众号：<a href="#">汪汪汪世界</a></span></p>
+    </div>
+</body>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+    function getQueryString(name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURIComponent(r[2]);
+        }
+        return null;
+    }
+    const label = getQueryString('label') || '使用该模版的小伙伴'
+    document.getElementById('label').innerHTML = label;
+</script>
+
+</html>
