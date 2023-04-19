@@ -1,0 +1,314 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2023-02-06 21:22:48
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @LastEditTime: 2023-04-19 11:59:42
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>星座运势</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js?v=20221224"></script>
+    <script src="../lib/crypto-js.min.js"></script>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+      html,
+      body,
+      h3,
+      h4,
+      p {
+        margin: 0;
+        padding: 0;
+      }
+      .wrapper {
+        padding: 0.2rem;
+        width: 80%;
+        margin: 0.3rem auto;
+        border-radius: 20px;
+        box-sizing: border-box;
+        background: #654ea3; /* fallback for old browsers */
+        background: -webkit-linear-gradient(
+          to right,
+          #eaafc8,
+          #654ea3
+        ); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(
+          to right,
+          #eaafc8,
+          #654ea3
+        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+        color: #ffffff;
+      }
+      .container {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.3rem;
+        position: relative;
+        border: 1px solid #ffffff;
+        border-radius: 15px;
+      }
+      .tag {
+        height: 0.5rem;
+        border-radius: 0.5rem;
+        background-color: #654ea3;
+        position: absolute;
+        text-align: center;
+        padding: 0 10px;
+        top: -0.3rem;
+        line-height: 0.5rem;
+      }
+      h3,
+      h4 {
+        margin-bottom: 10px;
+      }
+      p {
+        margin-top: 5px;
+        text-align: left;
+      }
+      ul,
+      li {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      .right {
+        width: 60%;
+        text-align: center;
+      }
+      .items {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .items.clear {
+        display: block;
+      }
+      .item {
+        background-color: rgba(255, 255, 255, 0.2);
+        /* background-color: rgba(239, 142, 155, 0.5); */
+        width: 40%;
+        border-radius: 5px;
+        padding: 3px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.2rem;
+        margin-bottom: 5px;
+      }
+      .item .strong {
+        font-size: 0.25rem;
+      }
+      .fortunetext-all {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        text-align: left;
+      }
+      .fortunetext-all.line-4 {
+        -webkit-line-clamp: 4;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" v-cloak>
+      <div class="wrapper">
+        <div class="container" v-if="size === 'small'">
+          <div class="tag">{{timeLabel}} {{data && data.time}}</div>
+          <div class="left">
+            <h3>{{name}} {{data && stars[data.fortune.all]}}</h3>
+            <ul>
+              <li v-if="data&&data.fortune.health">
+                健康：{{data && stars[data.fortune.health]}}
+              </li>
+              <li>事业：{{data && stars[data.fortune.work]}}</li>
+              <li>财富：{{data && stars[data.fortune.money]}}</li>
+              <li>爱情：{{data && stars[data.fortune.love]}}</li>
+            </ul>
+          </div>
+          <div class="right">
+            <h3>「 {{data && data.shortcomment}} 」</h3>
+            <div class="items" v-if="time==='today'">
+              <div class="item" v-if="data && data.luckynumber">
+                <span class="strong">{{data && data.luckynumber || '无'}}</span>
+                <span>幸运数字</span>
+              </div>
+              <div class="item" v-if="data && data.luckycolor">
+                <span class="strong">{{data && data.luckycolor || '无'}}</span>
+                <span>幸运颜色</span>
+              </div>
+              <div class="item" v-if="data && data.luckyconstellation">
+                <span class="strong"
+                  >{{data && data.luckyconstellation || '无'}}</span
+                >
+                <span>贵人星座</span>
+              </div>
+              <div class="item">
+                <span class="strong"
+                  >{{data && data.index && data.index.health || '无'}}</span
+                >
+                <span>健康指数</span>
+              </div>
+            </div>
+            <div class="items" v-else-if="time==='week'">
+              <div class="item" v-if="data && data.luckycolor">
+                <span class="strong">{{data && data.luckycolor || '无'}}</span>
+                <span>幸运颜色</span>
+              </div>
+              <div class="item" v-if="data && data.luckyconstellation">
+                <span class="strong"
+                  >{{data && data.luckyconstellation || '无'}}</span
+                >
+                <span>贵人星座</span>
+              </div>
+              <p class="fortunetext-all">
+                {{data && data.fortunetext && data.fortunetext.all}}
+              </p>
+            </div>
+            <div
+              class="items clear"
+              v-else-if="time==='month' || time === 'year'"
+            >
+              <p class="fortunetext-all">
+                {{data && data.fortunetext && data.fortunetext.all}}
+              </p>
+              <div v-if="time === 'month'">
+                <p>解压：{{data && data.fortunetext.decompression}}</p>
+                <p>开运：{{data && data.fortunetext.openluck}}</p>
+              </div>
+              <div v-if="time === 'year'">
+                <p class="fortunetext-all">
+                  {{data && data.fortunetext && data.fortunetext.money}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container big" v-else></div>
+      </div>
+    </div>
+  </body>
+  <script src="../lib/vue@2.js"></script>
+  <script src="../lib/axios.min.js"></script>
+  <script>
+    const params = getAllParams(CryptoJS);
+    handleDarkMode(params);
+    new Vue({
+      el: "#root",
+      data() {
+        return {
+          size: "small",
+          data: null,
+          type: params.type || getQueryString("type") || "leo",
+          time: params.time || getQueryString("time") || "today",
+          name: "",
+          timeLabel: "",
+          stars: [
+            "",
+            "⭐️",
+            "⭐️⭐️",
+            "⭐️⭐️⭐️",
+            "⭐️⭐️⭐️⭐️",
+            "⭐️⭐️⭐️⭐️⭐️",
+          ],
+          currentDate: new Date(),
+        };
+      },
+      mounted() {
+        this.getData();
+      },
+      methods: {
+        getData() {
+          const _this = this,
+            _now = _this.currentDate;
+          if (localStorage.horoData) {
+            let _data = JSON.parse(localStorage.horoData);
+            let flag = false;
+            if (
+              (_this.time === "today" || _this.time === "nextday") &&
+              `${_now.getMonth() + 1}月${_now.getDate()}日` === _data.time
+            ) {
+              flag = true;
+            } else if (
+              _this.time === "week" &&
+              _data._monday === _this.getMonday(_now)
+            ) {
+              flag = true;
+            } else if (
+              _this.time === "month" &&
+              _data._month === _this.getMonth(_now)
+            ) {
+              flag = true;
+            } else if (
+              _this.time === "year" &&
+              _data._year === _now.getFullYear()
+            ) {
+              flag = true;
+            }
+            if (flag) {
+              _this.data = _data;
+              _this.formatData(_data);
+              return;
+            }
+          }
+          console.log(_this.type, _this.time);
+          axios
+            .get(
+              `https://api.vvhan.com/api/horoscope?type=${_this.type}&time=${_this.time}`
+            )
+            .then((res) => {
+              let data = res.data.data;
+              if (data.title === null) {
+                _this.time = "year";
+                _this.getData();
+                return
+              } else if (_this.time === "today" || _this.time === "nextday") {
+                data._today = `${_now.getFullYear()}/${
+                  _now.getMonth() + 1
+                }/${_now.getDate()}`;
+              } else if (_this.time === "week") {
+                data._monday = _this.getMonday(_now);
+              } else if (_this.time === "month") {
+                data._month = _this.getMonth(_now);
+              } else if (_this.time === "year") {
+                data._year = _now.getFullYear();
+              }
+              localStorage.horoData = JSON.stringify(data);
+              _this.formatData(data);
+            });
+        },
+        formatData(data) {
+          const _this = this;
+          _this.data = data;
+          console.log(data);
+          let _names = data.title.split("座");
+          (_this.name = _names[0]), (_this.timeLabel = _names[1]);
+        },
+        getMonday(date) {
+          let day = date.getDay();
+          let deltaDay = day;
+          let monday = new Date(
+            date.getTime() - deltaDay * 24 * 60 * 60 * 1000
+          );
+          monday.setHours(0);
+          monday.setMinutes(0);
+          monday.setSeconds(0);
+          return monday.toDateString(); //返回本周的周一的0时0分0秒
+        },
+        getMonth(date) {
+          return `${date.getFullYear()}/${date.getMonth() + 1}`;
+        },
+      },
+    });
+  </script>
+</html>
