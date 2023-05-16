@@ -1,0 +1,354 @@
+<!--
+ * @Author: HTT httishere0728@gmail.com
+ * @Date: 2023-04-24 14:00:49
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @LastEditTime: 2023-04-24 14:38:07
+ * @FilePath: /notion/v211/tomato.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PomodoroClock</title>
+
+    <link rel="stylesheet" type="text/css"
+        href="../fonts/font-awesome.min.css">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Bitter|Sedgwick+Ave+Display" rel="stylesheet"> -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            /* background-color: #cb4042; */
+            overflow: hidden;
+        }
+
+        .container {
+            width: 70vw;
+            margin: 0 auto;
+            background-color: #cb4042;
+            border-radius: 10px;
+            padding: 15px 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 5%;
+            color: #fff;
+            font-family: 'Sedgwick Ave Display', cursive;
+        }
+
+        .main {
+            margin-top: 5%;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 70%;
+            text-align: center;
+        }
+
+        .control {
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .break {
+            display: inline;
+            padding: 0 5px;
+        }
+
+        .length {
+            display: inline;
+            padding: 0 5px;
+        }
+
+        span {
+            font-size: 2em;
+            color: #fff;
+            /* font-family: 'Bitter', serif; */
+        }
+
+        .fa {
+            font-size: 1em;
+            color: #fff;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .control p {
+            color: #b5caa0;
+        }
+
+        .clock {
+            width: 50vw;
+            height: 50vw;
+            border-radius: 50%;
+            border: 4px solid #a8d8b9;
+            text-align: center;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            z-index: 20;
+            overflow: hidden;
+        }
+
+        .clock:before {
+            content: '';
+            position: absolute;
+            border: 4px solid #cb4042;
+            border-radius: 50%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background-color: #b5caa0;
+        }
+
+        .clock h2 {
+            /* font-family: 'Bitter', serif; */
+            /* font-size: 2.5em; */
+            margin-top: 10vw;
+            color: #fff;
+        }
+
+        #per {
+            margin: 0;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 0%;
+            width: 100%;
+            background-color: #cb4042;
+            /* background-color: #3f2b36; */
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Pomodoro</h1>
+
+        <div class="main">
+            <div class="clock">
+                <h2 id="show-title">计时</h2>
+                <h2 id="show-time">1:00</h2>
+                <span id="per"></span>
+            </div>
+            <div class="control">
+                <div class="break">
+                    <p>休息时长</p>
+                    <i class="fa fa-minus-square-o" aria-hidden="true" id="break-minus"></i>
+                    <span id="break-length">5</span>
+                    <i class="fa fa-plus-square-o" aria-hidden="true" id="break-plus"></i>
+                </div>
+                <div class="length">
+                    <p>计时时长</p>
+                    <i class="fa fa-minus-square-o" aria-hidden="true" id="session-minus"></i>
+                    <span id="session-length">1</span>
+                    <i class="fa fa-plus-square-o" aria-hidden="true" id="session-plus"></i>
+                </div>
+            </div>
+            <div class="control">
+                <div class="break">
+                    <p>休息时长</p>
+                    <span id="break-length">5</span>
+                </div>
+                <div class="length">
+                    <p>计时时长</p>
+                    <span id="session-length">1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src='../lib/jquery-3.6.0.min.js'></script>
+    <script>
+        $(document).ready(function () {
+            var session = 1;       //这个是默认工作时间，用在设置那儿显示的，这里以分钟为单位，且超过60也是分钟
+            var breaklength = 5;            //设置break时长——休息时长,细节同session
+            var flag = 1;           //设置工作状态，1是工作的暂停，2是正在休息的暂停，3是在工作中，4是休息中
+            var sec = session * 60;   //用来记录变化中的时间，单位为秒
+            var percent = 0;    //记录背景颜色显示的高度，0-100，是百分比
+
+            $("#break-minus").on("click", function () {
+                if (flag !== 1 && flag !== 2) {
+                    return;         //如果非暂停状态，点击无效
+                }
+                breaklength--;
+                if (breaklength < 1) {
+                    breaklength = 1;
+                }
+                $("#break-length").html(breaklength);
+                if (flag === 2) {
+                    //如果是休息的暂停，一旦改了，就又对sec产生了修改
+                    sec = breaklength * 60;
+                }
+                showHMS(breaklength, 2);
+            });
+            $("#break-plus").on("click", function () {
+                if (flag !== 1 && flag !== 2) {
+                    return;         //如果非暂停状态，点击无效
+                }
+                breaklength++;
+                $("#break-length").html(breaklength);
+                if (flag === 2) {
+                    //如果是休息的暂停，一旦改了，就又对sec产生了修改
+                    sec = breaklength * 60;
+                }
+                showHMS(breaklength, 2);
+            });
+            $("#session-minus").on("click", function () {
+                if (flag !== 1 && flag !== 2) {
+                    return;         //如果非暂停状态，点击无效
+                }
+                session--;
+                if (session < 1) {
+                    session = 1;
+                }
+                $("#session-length").html(session);
+                if (flag === 1) {
+                    //如果是工作的暂停，一旦改了，就又对sec产生了修改
+                    sec = session * 60;
+                }
+                showHMS(session, 1);
+            });
+            $("#session-plus").on("click", function () {
+                if (flag !== 1 && flag !== 2) {
+                    return;         //如果非暂停状态，点击无效
+                }
+                session++;
+                $("#session-length").html(session);
+                if (flag === 1) {
+                    //如果是工作的暂停，一旦改了，就又对sec产生了修改
+                    sec = session * 60;
+                }
+                showHMS(session, 1);
+            });
+
+            //在时钟上显示时分秒，传两个参数，一个是分钟，一个是状态。
+            //如果在工作的暂停中，修改休息的时长，不改变时钟上的显示，state有两个取值，取1时表示修改工作时长，取2表示修改休息时长
+            var showHMS = function (min, state) {
+                if (state !== flag) {
+                    return;         //如果不是在对应的暂停状态，就不改变时钟上显示的值
+                }
+                var show = "";
+                if (min >= 60) {
+                    show += parseInt(min / 60) + ":";
+                    min = min % 60;
+                }
+                if (min < 10) {
+                    show += "0";
+                }
+                show += min + ":00";
+                $("#show-time").html(show);
+            };
+
+
+
+
+            //开始后时间的变化,参数是剩下的秒数
+            function timeChange() {
+                var temp = sec;
+                if (flag === 1 || flag === 2) {
+                    $("#show-title").html("已暂停");
+                    //如果是暂停中，就不变时间
+                    return;
+                }
+                if (sec === 0) {
+                    if (flag === 3) {
+                        flag = 4;
+                        sec = breaklength * 60;
+                        $("#show-title").html("休息");
+                    } else {
+                        flag = 3;
+                        sec = session * 60;
+                        $("#show-title").html("计时");
+                    }
+
+                }
+
+                var showHMS = "";
+                if (temp >= 3600) {
+                    showHMS += parseInt(second / 360) + ":";
+                    temp = temp % 360;
+                }
+                if (temp < 70) {
+                    showHMS += "0";
+                }
+                showHMS += parseInt(temp / 60) + ":";
+                temp = temp % 60;
+                if (temp < 10) {
+                    showHMS += "0";
+                }
+                showHMS += temp;
+
+
+                //console.log(showHMS);
+                $("#show-time").html(showHMS);
+                if (flag === 3) {
+                    //工作中
+                    $("#per").css('background-color', '#cb4042');
+                    if (sec === 0) {
+                        percent = 100;
+                    } else {
+                        percent = (session * 60 - sec) / session / 60 * 100;
+                    }
+                    $("#per").css('height', percent + '%');
+                }
+                if (flag === 4) {
+                    //休息中
+                    $("#per").css('background-color', "#3f2b36");
+                    if (sec === 0) {
+                        percent = 100;
+                    } else {
+                        percent = (breaklength * 60 - sec) / breaklength / 60 * 100;
+                    }
+                    $("#per").css('height', percent + '%');
+                }
+                sec--;
+                setTimeout(timeChange, 1000);
+            };
+
+
+
+            //时钟点击事件——开始与暂停的转换，及开始后时间的变化
+            $(".clock").on("click", function () {
+                if (flag === 1) {
+                    flag = 3;
+                } else if (flag === 3) {
+                    flag = 1;
+                } else if (flag === 2) {
+                    flag = 4;
+                } else if (flag === 4) {
+                    flag = 2;
+                }
+
+                //console.log(sec);
+                timeChange();
+            });
+
+
+
+
+        });
+
+    </script>
+</body>
+
+</html>
