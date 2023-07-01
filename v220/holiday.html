@@ -1,23 +1,27 @@
 <!--
  * @Author: Tina Huang
  * @Date: 2023-06-29 17:23:31
- * @LastEditors: Tina Huang
- * @LastEditTime: 2023-06-29 17:42:44
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @LastEditTime: 2023-07-01 11:24:15
  * @Description: 
 -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../lib/global.js?v=20221224"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <title>节假日</title>
     <style>
         @font-face {
-          font-family: huangyou;
-          src: url("../fonts/站酷仓耳渔阳体-W02.ttf") format("truetype");
-          /* src: url("../fonts/站酷庆科黄油体.ttf") format('truetype'); */
+            font-family: huangyou;
+            src: url("../fonts/站酷仓耳渔阳体-W02.ttf") format("truetype");
+            /* src: url("../fonts/站酷庆科黄油体.ttf") format('truetype'); */
         }
+
         .container {
             margin: 0 auto;
             width: 70vw;
@@ -26,8 +30,16 @@
             box-shadow: 0 0 5vw 1vw rgba(0, 0, 0, .1);
             font-family: huangyou;
         }
-        h1 { text-align: center; margin: 1vw 0;}
-        ul { padding: 0 4vw;}
+
+        h1 {
+            text-align: center;
+            margin: 1vw 0;
+        }
+
+        ul {
+            padding: 0 4vw;
+        }
+
         ul li {
             list-style: none;
             border-bottom: 1px solid #000;
@@ -35,22 +47,119 @@
             display: flex;
             justify-content: space-between;
         }
+
         ul li.passed span {
             color: gray;
             text-decoration: line-through;
         }
+
         ul li em {
             font-style: normal;
         }
+
+        html[theme="dark"],
+        html[theme="dark"] body {
+            background-color: #191919;
+        }
+        html[theme="dark"] .container {
+            background-color: #3b3d3b;
+            color: #fff;
+        }
+        html[theme="dark"]  ul li {
+            border-bottom: 1px solid rgba(255, 255, 255, .5);
+        }
+        html[theme="dark"]  ul li.passed span {
+            color: rgba(255, 255, 255, .5);
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>2023节假日</h1>
-        <ul>
+        <ul id="holidays">
             <li><span>哈哈哈哈哈哈</span><em>还有3天</em></li>
             <li class="passed"><span>测试测试</span><em>✅</em></li>
         </ul>
     </div>
 </body>
+<script>
+    const holidays = [
+        {
+            name: "元旦",
+            start: '2023/01/01 00:00:00',
+            end: '2023/01/02 23:59:59',
+        },
+        {
+            name: "春节",
+            start: '2023/01/21 00:00:00',
+            end: '2023/01/27 23:59:59',
+        },
+        {
+            name: "清明节",
+            start: '2023/04/05 00:00:00',
+            end: '2023/04/05 23:59:59',
+        },
+        {
+            name: "劳动节",
+            start: '2023/04/29 00:00:00',
+            end: '2023/05/03 23:59:59',
+        },
+        {
+            name: "端午节",
+            start: '2023/06/22 00:00:00',
+            end: '2023/06/24 23:59:59',
+        },
+        {
+            name: "中秋节&国庆节",
+            start: '2023/09/29 00:00:00',
+            end: '2023/10/06 23:59:59',
+        },
+    ]
+
+    window.onload = function () {
+        const params = getAllParams(CryptoJS);
+        handleDarkMode(params);
+        calculateHoliday(holidays)
+    }
+
+    function calculateHoliday(holiday) {
+        const _date = new Date();
+        const _holidays = [];
+        holiday.map(item => {
+            const result = calculateHolidayDate(item, _date);
+            _holidays.push(result);
+        })
+        renderHolidays(_holidays);
+    }
+
+    function calculateHolidayDate(singleDate, nowDate) {
+        const start = new Date(singleDate.start), end = new Date(singleDate.end);
+        if (start > nowDate) {
+            // 还没到，需要计算还差几天
+            const du = start.getTime() - nowDate.getTime();
+            const _d = Math.ceil(du / 24 / 60 / 60 / 1000);
+            singleDate.msg = `还有${_d}天`;
+            singleDate.type = 'nostart';
+        } else if (end < nowDate) {
+            // 已过去， 显示已完成
+            singleDate.msg = '✅';
+            singleDate.type = 'passed';
+        } else {
+            // 进行中
+            singleDate.msg = '进行中';
+            singleDate.type = 'process';
+        }
+        return singleDate;
+    }
+
+    function renderHolidays(holidays) {
+        let _html = '';
+        holidays.map(item => {
+            _html += `<li class='${item.type}'><span>${item.name}</span><em>${item.msg}</em></li>`
+        })
+        document.getElementById('holidays').innerHTML = _html
+    }
+</script>
+
 </html>
