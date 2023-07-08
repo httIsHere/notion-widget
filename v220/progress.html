@@ -1,0 +1,246 @@
+<!--
+ * @Author: httishere
+ * @Date: 2021-08-13 09:37:29
+ * @LastEditTime: 2023-07-08 20:19:50
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @Description: In User Settings Edit
+ * @FilePath: /mobile-frontend-lanqb/Users/httishere/workspace/httishere/notion/progress.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>年进度</title>
+    <script src="../flexibleMerge.js"></script>
+    <script src="../lib/global.js?v=20230701"></script>
+    <style>
+        body,
+        html {
+            background-color: #ffffff;
+            padding: 0;
+            margin: 0;
+        }
+
+        .progress-group {
+            width: 10rem;
+            margin: 0 auto;
+            /* font-family: Verdana; */
+            font-family: "Share Tech Mono", monospace;
+            /* height: 100vh; */
+            padding: .266667rem;
+            box-sizing: border-box;
+            font-size: .266667rem;
+        }
+
+        #left {
+            width: 100px;
+        }
+
+        #right {
+            width: 100%;
+        }
+
+        li {
+            list-style: none;
+            width: 6rem;
+            height: .3rem;
+            border-radius: .3rem;
+            background: #f3f3f3;
+            color: #ffffff;
+            overflow: hidden;
+            margin: 0 .2rem;
+        }
+
+        li div {
+            background: #333333;
+            height: 100%;
+            width: 0;
+            border-radius: .3rem;
+            font-size: 12px;
+            text-align: right;
+            line-height: 20px;
+        }
+
+        /* li div span {display: inline-block; box-sizing: border-box; text-align: right; font-size: .426667rem;} */
+        h2 {
+            margin: 0;
+            line-height: 28px;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .countdown span {
+            width: 50px;
+            border-radius: 10px;
+            border: 2px solid #333333;
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            display: inline-block;
+            margin: 0 20px;
+            font-size: 24px;
+        }
+
+        .top {
+            display: flex;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-item>span {
+            font-size: .373333rem;
+            width: 1.2rem;
+            /* text-align: right; */
+        }
+
+        .progress-item>em {
+            font-style: normal;
+        }
+
+        /* #year-bar {
+            color: rgba(167, 119, 119, 1);
+        }
+
+        #year {
+            background-color: rgba(167, 119, 119, .2);
+        }
+
+        #year div {
+            background-color: rgba(167, 119, 119, 1);
+        }
+
+        #month-bar {
+            color: rgba(165, 169, 187, 1);
+        }
+
+        #month {
+            background-color: rgba(165, 169, 187, .2);
+        }
+
+        #month div {
+            background-color: rgba(165, 169, 187, 1);
+        }
+
+        #week-bar {
+            color: rgba(213, 182, 176, 1);
+        }
+
+        #week {
+            background-color: rgba(213, 182, 176, .2);
+        }
+
+        #week div {
+            background-color: rgba(213, 182, 176, 1);
+        } */
+
+        #clock {
+            font-family: "Share Tech Mono", monospace;
+            /* font-family: Verdana; */
+            text-align: center;
+            letter-spacing: 0.05em;
+            font-size: 1.2rem;
+        }
+
+        #time {
+            margin: 0;
+            margin-bottom: 20px;
+        }
+
+        html[theme="dark"],
+        html[theme="dark"] body {
+            background-color: #191919;
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="progress-group">
+
+        <div id="clock">
+            <!-- <p class="date"></p> -->
+            <p id="time"></p>
+        </div>
+        <div id="right">
+            <div class="progress-item" id="year-bar">
+                <span>Year</span>
+                <li id="year">
+                    <div></div>
+                </li>
+                <em></em>
+            </div>
+            <div class="progress-item" id="month-bar">
+                <span>Month</span>
+                <li id="month">
+                    <div></div>
+                </li>
+                <em></em>
+            </div>
+            <div class="progress-item" id="week-bar">
+                <span>Week</span>
+                <li id="week">
+                    <div></div>
+                </li>
+                <em></em>
+            </div>
+        </div>
+    </ul>
+</body>
+<script>
+    let Days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    let now_date = new Date(), _time = now_date.getTime(), now_year = now_date.getFullYear();
+    // 周
+    let _day = now_date.getDay();
+    _day = _day ? _day : 7;
+    let _week = document.getElementById('week');
+    _week.children[0].style.width = `${_day * 100 / 7}%`;
+    document.getElementById('week-bar').children[2].innerHTML = `${_day}/7`;
+
+    // 月
+    if (now_year % 4 === 0 && now_year % 100 != 0) {
+        // 闰年
+        Days[2] = 29;
+    }
+    let cur_month = now_date.getMonth() + 1, month_day = now_date.getDate();
+
+    document.getElementById('month').children[0].style.width = `${month_day * 100 / Days[cur_month]}%`;
+    document.getElementById('month-bar').children[2].innerHTML = `${month_day}/${Days[cur_month]}`;
+
+    // 年
+    let year_start = new Date(`${now_year}/1/1`).getTime();
+    let _du = _time - year_start;
+    let days = Math.ceil(_du / (24 * 60 * 60 * 1000));
+    let total = now_year % 4 === 0 && now_year % 100 !== 0 ? 366 : 365;
+    let _year = document.getElementById('year');
+    let year_rate = days * 100 / total;
+    let year_text = year_rate <= 15 ? days : year_rate <= 30 ? `${days} / ${total}` : `${days} / ${total} (${(year_rate).toFixed(0)}%)`;
+    _year.children[0].style.width = `${days * 100 / total}%`;
+    document.getElementById('year-bar').children[2].innerHTML = `${days}/${total}`;
+
+    // 倒计时
+    setTime();
+    setInterval(setTime, 1000);
+    function setTime() {
+        let _now = new Date();
+        let hour = _now.getHours();
+        let minutes = _now.getMinutes();
+        let seconds = _now.getSeconds();
+        let h = hour < 10 ? `0${hour}` : hour;
+        let m = minutes < 10 ? `0${minutes}` : minutes;
+        let s = seconds < 10 ? `0${seconds}` : seconds;
+        document.getElementById('time').innerHTML = `${h}:${m}:${s}`;
+    }
+</script>
+
+</html>
