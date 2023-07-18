@@ -1,0 +1,103 @@
+<!--
+ * @Author: HTT httishere0728@gmail.com
+ * @Date: 2023-07-18 22:03:55
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @LastEditTime: 2023-07-18 22:44:29
+ * @FilePath: /notion/v220/day.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日</title>
+    <script src="../lib/global.js?v=20230701"></script>
+    <!-- <script src="../lib/crypto-js.min.js"></script> -->
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            width: 100vw;
+            padding: 10px;
+            background-color: rgba(254, 201, 56, .2);
+            border-radius: 20px;
+            text-align: center;
+            color: #333;
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+            /* margin-top: 40px; */
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h2,
+        p, h1 {
+            margin: 0;
+        }
+        h2 {
+            font-size: 6vw;
+        }
+        p {
+            font-size: 4vw
+        }
+
+        #co-2 {
+            display: block;
+            width: 50px;
+            height: 50px;
+            /* position: absolute; */
+            /* top: 20px; */
+            /* margin-left: 80px; */
+        }
+
+        #inner {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(254, 201, 56, .6);
+            z-index: -1;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+        h1 {
+            font-weight: bold;
+            font-size: 10vw;
+            opacity: 0.3;
+            /* color: rgba(254, 201, 56, 1); */
+                /* -webkit-text-stroke: 1px #333; */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="../assets/flowus/slice_2_0.png" id="co-2">
+        <div>
+            <h2 id="date"></h2>
+            <p>新的一天，今天也要加油哟！</p>
+        </div>
+        <div id="inner" style="width: 50%;"></div>
+        <h1 id="percent"></h1>
+    </div>
+    <script>
+        const date = new Date();
+        const formatDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
+        document.getElementById("date").innerHTML = formatDate
+        const mins = date.getHours() * 60 + date.getMinutes();
+        const total = 1440;
+        const percent = Math.round(mins / total*100);
+        console.log(percent);
+        document.getElementById("inner").style.width = `${percent}%`
+        document.getElementById("percent").innerHTML = `${percent}%`
+    </script>
+</body>
+
+</html>
