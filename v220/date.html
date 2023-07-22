@@ -1,0 +1,72 @@
+<!--
+ * @Author: HTT httishere0728@gmail.com
+ * @Date: 2023-07-22 15:36:45
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @LastEditTime: 2023-07-22 16:17:00
+ * @FilePath: /notion/v220/date.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My date</title>
+    <script src="../lib/global.js?v=20230701"></script>
+    <style>
+        @font-face {
+            font-family: "Klee-One";
+            src: url("../fonts/荆南波波黑-Bold.ttf");
+        }
+
+        .container {
+            font-family: "Klee-One";
+            text-align: center;
+            color: #333;
+        }
+
+        .week {
+            width: 50vw;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 auto;
+        }
+
+        .day {
+            display: block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            /* background-color: #b0b298; */
+            line-height: 30px;
+            /* color: #fff; */
+        }
+
+        .day.active {
+            color: #fff;
+            background-color: #333
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="date">2023/07/22</h1>
+        <div class="week">
+            <span class="day" id="day-1">M</span><span class="day" id="day-2">T</span><span class="day" id="day-3">W</span><span
+                class="day" id="day-4">T</span><span class="day" id="day-5">F</span><span class="day" id="day-6">S</span><span class="day" id="day-0">S</span>
+        </div>
+    </div>
+    <script>
+        const date = new Date();
+        const formatDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+        document.getElementById("date").innerHTML = formatDate;
+        const day = date.getDay();
+        document.getElementById(`day-${day}`).classList.add('active')
+    </script>
+</body>
+
+</html>
