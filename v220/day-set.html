@@ -2,7 +2,7 @@
  * @Author: HTT httishere0728@gmail.com
  * @Date: 2023-07-18 22:03:55
  * @LastEditors: HTT httishere0728@gmail.com
- * @LastEditTime: 2023-07-22 15:37:00
+ * @LastEditTime: 2023-07-26 23:16:51
  * @FilePath: /notion/v220/day.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>每日</title>
     <script src="../lib/global.js?v=20230701"></script>
-    <!-- <script src="../lib/crypto-js.min.js"></script> -->
+    <script src="../lib/crypto-js.min.js"></script>
     <style>
         html,
         body {
@@ -25,25 +25,32 @@
         .container {
             width: 100vw;
             padding: 10px;
-            background-color: rgba(254, 201, 56, .2);
+            background-color: rgba(254, 201, 56, 0.2);
             border-radius: 20px;
             text-align: center;
             color: #333;
             box-sizing: border-box;
             position: relative;
+        }
+        .z {
             display: flex;
             /* margin-top: 40px; */
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
         h2,
-        p, h1 {
+        p,
+        h1 {
             margin: 0;
         }
+
         h2 {
             font-size: 6vw;
         }
+
         p {
             font-size: 4vw
         }
@@ -63,38 +70,68 @@
             bottom: 0;
             left: 0;
             background-color: rgba(254, 201, 56, .6);
-            z-index: -1;
+            z-index: 0;
             overflow: hidden;
             border-radius: 20px;
         }
+
         h1 {
             font-weight: bold;
             font-size: 10vw;
             opacity: 0.3;
             /* color: rgba(254, 201, 56, 1); */
-                /* -webkit-text-stroke: 1px #333; */
+            /* -webkit-text-stroke: 1px #333; */
+        }
+
+        html[theme="dark"],
+        html[theme="dark"] body {
+            background-color: #191919;
+            color: #ffffff;
+        }
+        html[theme="dark"] .container {
+            color: #ffffff;
+        }
+        html[theme="dark"] h1 {
+            opacity: .7;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <img src="../assets/flowus/slice_2_0.png" id="co-2">
-        <div>
-            <h2 id="date"></h2>
-            <p>新的一天，今天也要加油哟！</p>
+    <div class="container" id="box">
+        <div class="z">
+            <img src="../assets/emoji/emoji-1.png" id="co-2">
+            <div>
+                <h2 id="date"></h2>
+                <p>新的一天，今天也要加油哟！</p>
+            </div>
+            <h1 id="percent"></h1>
         </div>
         <div id="inner" style="width: 50%;"></div>
-        <h1 id="percent"></h1>
     </div>
     <script>
+        window.onload = function () {
+            getDarkMode();
+            const params = getAllParams(CryptoJS);
+            handleDarkMode(params);
+            if(params.icon) {
+                document.getElementById('co-2').setAttribute('src', `../assets/emoji/${params.icon}.png`)
+            }
+            if(params.bg_color) {
+                const _bg = hexToRgba(params.bg_color, 0.2), _inner = hexToRgba(params.bg_color, 0.6);
+                document.getElementById('inner').style.backgroundColor = _inner.rgba;
+                document.getElementById('box').style.backgroundColor = _bg.rgba;
+            }
+            if(params.font_color) {
+                document.getElementById('box').style.color = params.font_color;
+            }
+        }
         const date = new Date();
         const formatDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
         document.getElementById("date").innerHTML = formatDate
         const mins = date.getHours() * 60 + date.getMinutes();
         const total = 1440;
-        const percent = Math.round(mins / total*100);
-        console.log(percent);
+        const percent = Math.round(mins / total * 100);
         document.getElementById("inner").style.width = `${percent}%`
         document.getElementById("percent").innerHTML = `${percent}%`
     </script>
