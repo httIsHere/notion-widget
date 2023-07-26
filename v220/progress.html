@@ -1,7 +1,7 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-13 09:37:29
- * @LastEditTime: 2023-07-08 20:19:50
+ * @LastEditTime: 2023-07-26 17:53:46
  * @LastEditors: HTT httishere0728@gmail.com
  * @Description: In User Settings Edit
  * @FilePath: /mobile-frontend-lanqb/Users/httishere/workspace/httishere/notion/progress.html
@@ -161,6 +161,13 @@
         html[theme="dark"],
         html[theme="dark"] body {
             background-color: #191919;
+            color: #ffffff;
+        }
+        html[theme="dark"] li {
+            background-color: rgba(255, 255, 255, .3);
+        }
+        html[theme="dark"] li div {
+            background-color: rgba(255, 255, 255, .9);
         }
     </style>
 </head>
@@ -198,6 +205,11 @@
     </ul>
 </body>
 <script>
+    window.onload = function () {
+      getDarkMode();
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+    }
     let Days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let now_date = new Date(), _time = now_date.getTime(), now_year = now_date.getFullYear();
     // 周
