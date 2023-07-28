@@ -1,7 +1,7 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-13 09:37:29
- * @LastEditTime: 2023-07-26 17:53:46
+ * @LastEditTime: 2023-07-28 11:32:22
  * @LastEditors: HTT httishere0728@gmail.com
  * @Description: In User Settings Edit
  * @FilePath: /mobile-frontend-lanqb/Users/httishere/workspace/httishere/notion/progress.html
@@ -16,6 +16,7 @@
     <title>年进度</title>
     <script src="../flexibleMerge.js"></script>
     <script src="../lib/global.js?v=20230701"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style>
         body,
         html {
@@ -173,7 +174,7 @@
 </head>
 
 <body>
-    <ul class="progress-group">
+    <ul class="progress-group" id="box">
 
         <div id="clock">
             <!-- <p class="date"></p> -->
@@ -206,9 +207,19 @@
 </body>
 <script>
     window.onload = function () {
-      getDarkMode();
       const params = getAllParams(CryptoJS);
       handleDarkMode(params);
+      if (params.font_color) {
+        const font_color = hexToRgba(params.font_color), _bg = hexToRgba(params.font_color, 0.2);
+
+        document.getElementById('box').style.color = params.font_color;
+        document.getElementById('year').style.backgroundColor = _bg.rgba;
+        document.getElementById('year').children[0].style.backgroundColor = params.font_color;
+        document.getElementById('week').style.backgroundColor = _bg.rgba;
+        document.getElementById('week').children[0].style.backgroundColor = params.font_color;
+        document.getElementById('month').style.backgroundColor = _bg.rgba;
+        document.getElementById('month').children[0].style.backgroundColor = params.font_color;
+      }
     }
     let Days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let now_date = new Date(), _time = now_date.getTime(), now_year = now_date.getFullYear();

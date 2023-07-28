@@ -1,96 +1,102 @@
 <!--
  * @Author: HTT httishere0728@gmail.com
  * @Date: 2023-07-22 15:36:45
- * @LastEditors: Tina Huang
- * @LastEditTime: 2023-07-26 09:44:40
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @LastEditTime: 2023-07-28 11:33:41
  * @FilePath: /notion/v220/date.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My date</title>
-    <script src="../lib/global.js?v=20230701"></script>
-    <script src="../lib/crypto-js.min.js"></script>
-    <style>
-      @font-face {
-        font-family: "Klee-One";
-        src: url("../fonts/荆南波波黑-Bold.ttf");
-      }
 
-      .container {
-        font-family: "Klee-One";
-        text-align: center;
-        color: #333;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My date</title>
+  <script src="../lib/global.js?v=20230701"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    @font-face {
+      font-family: "Klee-One";
+      src: url("../fonts/荆南波波黑-Bold.ttf");
+    }
 
-      .week {
-        width: 50vw;
-        max-width: 400px;
-        min-width: 220px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: 0 auto;
-      }
+    .container {
+      font-family: "Klee-One";
+      text-align: center;
+      color: #333;
+    }
 
-      .day {
-        display: block;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        /* background-color: #b0b298; */
-        line-height: 30px;
-        /* color: #fff; */
-      }
+    .week {
+      width: 50vw;
+      max-width: 400px;
+      min-width: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 auto;
+    }
 
-      .day.active {
-        color: #fff;
-        background-color: #333;
-      }
+    .day {
+      display: block;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      /* background-color: #b0b298; */
+      line-height: 30px;
+      /* color: #fff; */
+    }
 
-      html[theme="dark"],
-      html[theme="dark"] body {
-        background-color: #191919;
-      }
-      html[theme="dark"] .container {
-          color: #fff;
-      }
-      html[theme="dark"] .day.active {
-          color: #333;
-          background-color: rgba(255, 255, 255, 1);
-      }
-    </style>
-  </head>
+    .day.active {
+      color: #fff;
+      background-color: #333;
+    }
 
-  <body>
-    <div class="container">
-      <h1 id="date">2023/07/22</h1>
-      <div class="week">
-        <span class="day" id="day-1">M</span
-        ><span class="day" id="day-2">T</span
-        ><span class="day" id="day-3">W</span
-        ><span class="day" id="day-4">T</span
-        ><span class="day" id="day-5">F</span
-        ><span class="day" id="day-6">S</span
-        ><span class="day" id="day-0">S</span>
-      </div>
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+    }
+
+    html[theme="dark"] .container {
+      color: #fff;
+    }
+
+    html[theme="dark"] .day.active {
+      color: #333;
+      background-color: rgba(255, 255, 255, 1);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="box">
+    <h1 id="date">2023/07/22</h1>
+    <div class="week">
+      <span class="day" id="day-1">M</span><span class="day" id="day-2">T</span><span class="day"
+        id="day-3">W</span><span class="day" id="day-4">T</span><span class="day" id="day-5">F</span><span class="day"
+        id="day-6">S</span><span class="day" id="day-0">S</span>
     </div>
-    <script>
-        window.onload = function () {
-          getDarkMode();
-          const params = getAllParams(CryptoJS);
-          handleDarkMode(params);
-        }
-      const date = new Date();
-      const formatDate = `${date.getFullYear()}/${
-        date.getMonth() + 1
+  </div>
+  <script>
+    window.onload = function () {
+      getDarkMode();
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+      console.log(params);
+      if (params.font_color) {
+        const font_color = hexToRgba(params.font_color);
+
+        document.getElementById('box').style.color = params.font_color;
+        document.getElementsByClassName('active')[0].style.backgroundColor = params.font_color;
+      }
+    }
+    const date = new Date();
+    const formatDate = `${date.getFullYear()}/${date.getMonth() + 1
       }/${date.getDate()}`;
-      document.getElementById("date").innerHTML = formatDate;
-      const day = date.getDay();
-      document.getElementById(`day-${day}`).classList.add("active");
-    </script>
-  </body>
+    document.getElementById("date").innerHTML = formatDate;
+    const day = date.getDay();
+    document.getElementById(`day-${day}`).classList.add("active");
+  </script>
+</body>
+
 </html>
