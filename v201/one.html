@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2022-12-28 20:58:00
  * @LastEditors: Tina Huang
- * @LastEditTime: 2022-12-28 21:27:33
+ * @LastEditTime: 2023-01-28 16:23:59
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -57,6 +57,10 @@
         bottom: 20px;
         right: 20px;
       }
+      html[theme="dark"],
+      html[theme="dark"] body {
+        background-color: #191919;
+      }
     </style>
   </head>
   <body>
@@ -65,12 +69,14 @@
       <span id="date"></span>
     </div>
     <script>
-      const params = getAllParams(CryptoJS);
-      handleDarkMode(params);
-      let _now = new Date();
-      document.getElementById("date").innerHTML = `${
-        _now.getMonth() + 1
-      }/${_now.getDate()}`;
+      // window.onload = function () {
+        const params = getAllParams(CryptoJS);
+        handleDarkMode(params);
+        let _now = new Date();
+        document.getElementById("date").innerHTML = `${
+          _now.getMonth() + 1
+        }/${_now.getDate()}`;
+      // };
     </script>
   </body>
 </html>

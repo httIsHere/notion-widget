@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2023-01-07 17:50:57
  * @LastEditors: Tina Huang
- * @LastEditTime: 2023-01-28 13:58:51
+ * @LastEditTime: 2023-01-28 14:19:53
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -145,7 +145,7 @@
         }
         bar.style.width = `${(percent * 100).toFixed(0)}%`;
         bar.classList.add(percent > 0.9 ? "before" : "after");
-        bar.setAttribute("data-percent", `${(percent * 100).toFixed(2)}%`);
+        bar.setAttribute("data-percent", `${(percent * 100).toFixed(0)}%`);
         label.innerHTML = remain_label;
       };
     </script>

@@ -8,6 +8,8 @@
 -->
 # [notion-widget](http://httishere.gitee.io/notion/)
 
+[English](./docs/en/README.md)
+
 ## Features
 
 -- 2022/08 v1.2.1 --
