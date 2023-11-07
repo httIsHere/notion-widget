@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://shoroukaziz.github.io/notion_widgets/buttons/socials.html -->
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="./socials_files/all.min.css">
+
+  <link href="./socials_files/css2" rel="stylesheet">
+
+  <!-- Awesome fonts -->
+  <link rel="stylesheet" href="./socials_files/all.css"
+    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+  <!-- Roboto font -->
+  <link href="./socials_files/css" rel="stylesheet">
+  <link rel="stylesheet" href="./socials_files/reset.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    *:focus,
+    *:active {
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      display: grid;
+      height: 100%;
+      /* width: 100%; */
+      font-family: "Poppins", sans-serif;
+      place-items: center;
+    }
+
+    .wrapper {
+      display: inline-flex;
+      list-style: none;
+    }
+
+    .wrapper .icon {
+      position: relative;
+      background: #cdcdcd;
+      border-radius: 50%;
+      padding: 10px;
+      margin: 10px;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      /* box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1); */
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .wrapper .tooltip {
+      position: absolute;
+      top: 0;
+      font-size: 14px;
+      background: #ffffff;
+      color: #ffffff;
+      padding: 5px 8px;
+      border-radius: 5px;
+      box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .wrapper .tooltip::before {
+      position: absolute;
+      content: "";
+      height: 8px;
+      width: 8px;
+      background: #ffffff;
+      bottom: -3px;
+      left: 50%;
+      transform: translate(-50%) rotate(45deg);
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .wrapper .icon:hover .tooltip {
+      top: -45px;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .wrapper .icon:hover span,
+    .wrapper .icon:hover .tooltip {
+      text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    .wrapper .blog:hover,
+    .wrapper .blog:hover .tooltip,
+    .wrapper .blog:hover .tooltip::before {
+      background: #f2c618;
+      color: #ffffff;
+    }
+
+    .wrapper .twitter:hover,
+    .wrapper .twitter:hover .tooltip,
+    .wrapper .twitter:hover .tooltip::before {
+      background: #1DA1F2;
+      color: #ffffff;
+    }
+
+    .wrapper .pinterest:hover,
+    .wrapper .pinterest:hover .tooltip,
+    .wrapper .pinterest:hover .tooltip::before {
+      background: #E4405F;
+      color: #ffffff;
+    }
+
+
+
+    .wrapper .youtube:hover,
+    .wrapper .youtube:hover .tooltip,
+    .wrapper .youtube:hover .tooltip::before {
+      background: #CD201F;
+      color: #ffffff;
+    }
+  </style>
+
+  <script src="chrome-extension://eobmipchbaebfpmkjacmokdibnjdhfkc/data/js/extension/splashvault-inject.js"></script>
+  <script src="chrome-extension://nkkkienfpgnjpbbpdccldokodhamdlha/data/js/extension/splashvault-inject.js"></script>
+</head>
+
+<body style="transition: margin 0.25s cubic-bezier(0, 0, 0.3, 1) 0s; margin-left: 0px;">
+
+  <ul class="wrapper">
+    <li onclick="navigate(this.id)" id="blog" class="icon blog">
+      <span class="tooltip">Blog</span>
+      <span><svg t="1699339359827" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          p-id="6051" width="200" height="200">
+          <path
+            d="M957.2 445.4c-3.6-16-13.6-30.8-25-37-3.6-2-26-4.4-50-5.4-40.2-1.8-44.6-2.6-57.4-10-20.2-11.8-25.6-24.6-25.8-59-0.2-66-27.6-127.4-81.8-182.6-38.6-39.4-81.8-66-131-81-11.8-3.6-38.2-4.8-126.6-5.8-138.8-1.6-169.6 1.2-216.8 20C155.8 119 93.4 192.2 70.6 285.8 66.4 303.4 65.4 331.6 64.4 493.6c-1.2 203 0.2 232.8 12.8 273 31.2 99.2 119.8 172.6 208.8 188.6 29.6 5.4 394.6 6.6 432 1.6 65-8.8 116-35 163.8-83.8 34.6-35.4 56.2-73.6 70.4-124.2 9.8-35.2 9-285.6 5-303.4z m-644.2-127.2c15.6-15.8 20-16.4 117.6-16.4 87.8 0 90.8 0.2 103.6 6.8 18.6 9.4 26.8 22.6 26.8 43.8 0 19-7.6 32.4-24.6 43.2-9.2 5.8-14.6 6.2-100.6 6.6-53 0.4-95.4-0.8-101.6-2.4-33.2-9.4-45.6-57-21.2-81.6z m383.6 399.6l-29.8 4.8-155 1.8c-136.2 1.6-174.6-0.8-181.8-4-14.2-6.2-27.6-23.4-29.8-38.8-2.2-14.6 5.2-34.6 16.4-44.8 14.2-12.8 20.4-13.2 194.6-13.4 179.2-0.2 178.2-0.2 195.2 15.6 24.2 22.6 19 62.4-9.8 78.8z"
+            p-id="6052" fill="#707070"></path>
+        </svg></span>
+    </li>
+    <li onclick="navigate(this.id)" id="twitter" class="icon twitter">
+      <span class="tooltip">小红书</span>
+      <span><svg t="1699339321812" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          p-id="4969" width="200" height="200">
+          <path
+            d="M769.365333 479.061333v-55.978666h-46.250666v-65.706667h46.250666v-21.845333h63.317334v21.845333h25.6a70.826667 70.826667 0 0 1 71.68 73.045333v48.64a173.226667 173.226667 0 0 1 31.573333 2.389334 55.296 55.296 0 0 1 43.861333 53.589333v97.28a52.394667 52.394667 0 0 1-37.546666 50.346667 88.917333 88.917333 0 0 1-56.149334-1.024 53.589333 53.589333 0 0 1-32.938666-51.2h63.317333v-60.928a21.845333 21.845333 0 0 0-23.722667-24.917334h-76.629333c-9.386667 0-9.045333 5.290667-9.045333 11.776v129.706667h-63.317334v-143.701333h-65.706666v-63.317334z m63.317334-55.978666v53.589333h34.133333v-44.714667a8.874667 8.874667 0 0 0-8.874667-8.874666zM703.658667 685.909333l-230.912-0.341333 33.792-65.365333h63.317333V423.082667h-41.472v-65.365334l150.869333-0.341333v65.706667h-41.301333v197.12h65.706667v65.706666zM146.432 335.530667h65.706667v292.010666c0 29.696-10.581333 51.2-34.133334 58.368a55.637333 55.637333 0 0 1-72.874666-55.978666h41.301333z"
+            p-id="4970" fill="#707070"></path>
+          <path
+            d="M421.376 488.789333h-36.352c-22.698667-1.194667-32.426667-14.336-23.381333-34.986666 17.066667-38.058667 35.84-75.264 54.101333-112.64a10.24 10.24 0 0 1 6.997333-5.290667h61.269334c-9.045333 18.602667-17.066667 35.157333-25.429334 51.2-5.461333 10.922667-11.264 21.504-16.213333 32.597333-1.536 3.584-3.925333 10.752 5.802667 13.312 7.338667-9.898667 9.728-10.24 24.234666-10.24h44.714667c-3.072 6.826667-5.12 11.946667-7.509333 17.066667-14.336 29.013333-29.013333 57.856-43.349334 86.869333-6.656 13.312-4.778667 17.066667 9.728 17.066667h25.429334c-9.557333 18.944-17.92 35.84-26.794667 52.394667-1.024 1.877333-5.461333 2.730667-8.362667 2.730666h-57.173333c-24.405333 0-34.133333-14.848-24.746667-37.034666s25.258667-47.274667 37.034667-73.045334zM102.4 423.082667c-2.389333 65.706667-7.168 199.509333-49.152 232.789333l-34.133333-68.266667a15.018667 15.018667 0 0 1 0-12.970666c11.605333-25.088 13.824-87.893333 18.432-152.405334zM256 423.082667c2.389333 65.706667 7.338667 199.509333 49.322667 232.789333l34.133333-68.266667a15.018667 15.018667 0 0 0 0-12.970666c-11.605333-25.088-13.994667-87.893333-18.602667-152.405334zM474.965333 620.202667l-36.522666 65.877333h-73.045334a55.978667 55.978667 0 0 1-26.965333-4.949333l34.133333-65.706667a87.381333 87.381333 0 0 0 24.405334 4.949333zM940.885333 422.741333v-34.133333a32.938667 32.938667 0 0 1 66.048-1.536 32.768 32.768 0 0 1-29.184 35.498667 326.485333 326.485333 0 0 1-36.864 0.170666z"
+            p-id="4971" fill="#707070"></path>
+        </svg></span>
+    </li>
+
+    <!-- <li onclick="navigate(this.id)" id="youtube" class="icon youtube">
+      <span class="tooltip">Youtube</span>
+      <span><i class="fab fa-youtube"></i></span>
+    </li> -->
+
+    <li onclick="navigate(this.id)" id="pinterest" class="icon pinterest">
+      <span class="tooltip">Email</span>
+      <span><svg t="1699339038711" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          p-id="3811" width="240" height="240">
+          <path
+            d="M886.3 299.8l-381.1 220-371.6-214.6c3.6-56.2 50.3-100.7 107.4-100.7h538.3c55.3 0 100.9 41.6 107 95.3z m0.7 78.8v334.9c0 59.5-48.2 107.7-107.7 107.7H241c-59.5 0-107.7-48.2-107.7-107.7V384.3l354.9 204.9c12.2 7 26.9 5.7 37.5-2.1 0.5-0.2 0.9-0.5 1.4-0.8L887 378.6z"
+            p-id="3812" fill="#707070"></path>
+        </svg></span>
+    </li>
+  </ul>
+
+  <script>
+    function navigate(id) {
+      if (id === "blog")
+        window.open("https://blog.shorouk.dev/", '_blank').focus();
+      else if (id === "twitter") {
+        window.open("https://twitter.com/ShoroukSAziz", '_blank').focus();
+      } else if (id === "youtube") {
+        window.open("https://www.youtube.com/@shorouksaziz", '_blank').focus();
+      } else if (id === "pinterest") {
+        window.open("https://www.pinterest.ca/organizing_wonderland/", '_blank').focus();
+      }
+    }
+  </script>
+
+
+
+  <ug-extension></ug-extension>
+  <div></div>
+  <div id="vt-sidebar-root">
+    <div id="vt-sidebar-container"
+      style="background-color: rgb(255, 255, 255); position: fixed; top: 0px; height: 100%; padding: 0px; box-sizing: border-box; border-radius: 3px; box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 8px; transition: transform 0.25s cubic-bezier(0, 0, 0.3, 1) 0s; z-index: 99999999; left: 0px; cursor: pointer; transform: translateX(-105%);">
+      <div
+        style="position: relative; user-select: auto; width: 320px; height: 100%; max-width: 800px; min-width: 250px; box-sizing: border-box; flex-shrink: 0;">
+        <div style="display: flex; height: 100%;">
+          <div style="flex: 1 1 0%;"><iframe title="vt-sidebar-iframe" src="./socials_files/default_popup.html"
+              data-src="chrome-extension://eobmipchbaebfpmkjacmokdibnjdhfkc/data/default_popup.html"
+              allow="clipboard-write"
+              style="border: none; width: 100%; height: 100vh; background-color: white; box-sizing: border-box; background-position: center center; background-repeat: no-repeat;"></iframe>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+  <div></div>
+  <div></div>
+  <div id="vt-sidebar-root">
+    <div id="vt-sidebar-container"
+      style="background-color: rgb(255, 255, 255); position: fixed; top: 0px; height: 100%; padding: 0px; box-sizing: border-box; border-radius: 3px; box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 8px; transition: transform 0.25s cubic-bezier(0, 0, 0.3, 1) 0s; z-index: 99999999; left: 0px; cursor: pointer; transform: translateX(-105%);">
+      <div
+        style="position: relative; user-select: auto; width: 320px; height: 100%; max-width: 800px; min-width: 250px; box-sizing: border-box; flex-shrink: 0;">
+        <div style="display: flex; height: 100%;">
+          <div style="flex: 1 1 0%;"><iframe title="vt-sidebar-iframe" src="./socials_files/default_popup(1).html"
+              data-src="chrome-extension://nkkkienfpgnjpbbpdccldokodhamdlha/data/default_popup.html"
+              allow="clipboard-write"
+              style="border: none; width: 100%; height: 100vh; background-color: white; box-sizing: border-box; background-position: center center; background-repeat: no-repeat;"></iframe>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+  <div></div>
+  <div id="extension-login" style="height: 0px; overflow: hidden;">false</div>
+</body>
+
+</html>
