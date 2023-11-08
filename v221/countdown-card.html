@@ -1,0 +1,149 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2023-11-07 16:09:02
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2023-11-07 16:57:10
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Days card</title>
+  <script src="../lib/global.js?v=20230701"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    html,
+    body,
+    h1,
+    h3 {
+      margin: 0;
+      padding: 0;
+    }
+
+    @font-face {
+      font-family: "Klee-One";
+      src: url("../fonts/Klee_One/KleeOne-Regular.ttf");
+    }
+
+    @font-face {
+      font-family: "Rampart-One";
+      src: url("../fonts/Rampart_One/RampartOne-Regular.ttf");
+    }
+
+    .container {
+      font-family: "Rampart-One";
+      width: 80vw;
+      height: 80vw;
+      background-color: #f4dfd7;
+      margin: 0 auto;
+      border-radius: 20px;
+      box-sizing: border-box;
+      padding: 5vw;
+      background-size: 100% 100%;
+      color: #cfa1a4;
+      font-size: 5vw;
+    }
+
+    .inner {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .space {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .deco {
+      display: block;
+      width: 60%;
+    }
+
+    .days-box {
+      font-weight: 500;
+    }
+
+    h1 {
+      font-size: 20vw;
+    }
+
+    .event-box {
+      text-align: center;
+      font-weight: bold;
+      font-size: 10vw;
+    }
+
+    h3 {
+
+      line-height: 1;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="container">
+    <div class="inner">
+      <div class="event-box">
+        <h3 id="name">event name</h3>
+        <span id="date">2023-03-19</span>
+      </div>
+      <div class="space">
+        <div class="days-box">
+          <h1 id="days">230</h1>
+          <span id="days_label">Days left</span>
+        </div>
+        <img src="../assets/flowers/eto.jpg" alt="" class="deco">
+      </div>
+    </div>
+  </div>
+  <script>
+    window.onload = function () {
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+      console.log(params)
+      let _now = new Date();
+      let name = getQueryString("name") || params.name || "今年";
+      let day =
+        getQueryString("day") || params.day || `${_now.getFullYear()}/12/31`;
+      let target_date = new Date(`${day} 23:59`);
+      let passed = target_date.getTime() - _now.getTime();
+      let seconds = (passed / 1000) % 60,
+        minutes = (passed / (60 * 1000)) % 60,
+        hours = parseInt((passed / (60 * 60 * 1000)) % 24),
+        days = parseInt(passed / (24 * 60 * 60 * 1000));
+      document.getElementById("date").innerText = day;
+      if (days > 0) {
+        document.getElementById("days").innerText = days;
+        document.getElementById("name").innerText = `${name}`;
+      } else if (days === 0) {
+        document.getElementById("days").innerText = "D-Day";
+        document.getElementById("days_label").innerText = "";
+        document.getElementById("name").innerText = `${name}`;
+      } else {
+        document.getElementById("days_label").innerText = "Days";
+        document.getElementById("days").innerText = Math.abs(days);
+        document.getElementById("name").innerText = `${name}`;
+      }
+
+      // for ui style
+      let bg_color = params.bg_color,
+        font_color = params.font_color;
+      let _container = document.getElementById("container");
+      bg_color && (_container.style.background = bg_color)
+      font_color && (_container.style.color = font_color)
+    };
+  </script>
+</body>
+
+</html>
