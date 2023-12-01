@@ -1,8 +1,8 @@
 <!--
  * @Author: Tina Huang
- * @Date: 2024-06-29 17:23:31
+ * @Date: 2023-12-01 15:43:51
  * @LastEditors: Tina Huang
- * @LastEditTime: 2023-12-01 15:28:48
+ * @LastEditTime: 2023-12-01 16:26:32
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -25,9 +25,9 @@
 
         .container {
             margin: 0 auto;
-            width: 70vw;
-            padding: 2vw;
-            border-radius: 2vw;
+            /* width: 70vw; */
+            padding: 15px;
+            border-radius: 10px;
             box-shadow: 0 0 5vw 1vw rgba(204, 172, 136, .3);
             font-family: huangyou;
             background-color: #ddc7b5;
@@ -36,19 +36,35 @@
 
         h1 {
             text-align: center;
-            margin: 1vw 0;
+            margin: 0;
+            margin-bottom: 5px;
         }
 
         ul {
-            padding: 0 4vw;
+            /* padding: 0 4vw; */
+            display: flex;
+            flex-wrap: wrap;
+            /* justify-content: space-between; */
+            padding: 0;
+            margin: 0;
         }
 
         ul li {
             list-style: none;
             /* border-bottom: 1px solid #000; */
-            padding: 2vw;
+            padding: 5px 2vw;
             display: flex;
             justify-content: space-between;
+            width: 20%;
+            background-color: rgba(126, 106, 92, .1);
+            border-radius: 5px;
+            margin-bottom: 5px;
+            border: 1px solid rgba(126, 106, 92, .2);
+            margin-right: 5px;
+        }
+
+        ul li.passed {
+            background-color: rgba(126, 106, 92, .2);
         }
 
         ul li.passed span {
@@ -63,10 +79,17 @@
         .alert {
             line-height: 2;
             text-align: center;
-            background-color: rgba(126, 106, 92, .5);
+            background-color: rgba(126, 106, 92, .8);
             color: #eadacb;
             border-radius: 5px;
             font-weight: bold;
+            margin-left: 20px;
+            padding: 0 20px;
+        }
+
+        .head {
+            display: flex;
+            align-items: center;
         }
 
         html[theme="dark"],
@@ -91,8 +114,10 @@
 
 <body>
     <div class="container">
-        <h1><span id="year"></span>节假日</h1>
-        <div class="alert" id="alert-msg"></div>
+        <div class="head">
+            <h1><span id="year"></span>节假日</h1>
+            <div class="alert" id="alert-msg"></div>
+        </div>
         <ul id="holidays"></ul>
     </div>
 </body>
