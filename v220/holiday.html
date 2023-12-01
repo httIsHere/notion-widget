@@ -1,8 +1,8 @@
 <!--
  * @Author: Tina Huang
- * @Date: 2023-06-29 17:23:31
- * @LastEditors: HTT httishere0728@gmail.com
- * @LastEditTime: 2023-07-01 11:24:15
+ * @Date: 2024-06-29 17:23:31
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2023-12-01 15:28:48
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../lib/global.js?v=20231130"></script>
+    <script src="../lib/global.js?v=20241130"></script>
     <script src="../lib/crypto-js.min.js"></script>
     <title>节假日</title>
     <style>
@@ -27,8 +27,10 @@
             width: 70vw;
             padding: 2vw;
             border-radius: 2vw;
-            box-shadow: 0 0 5vw 1vw rgba(0, 0, 0, .1);
+            box-shadow: 0 0 5vw 1vw rgba(204, 172, 136, .3);
             font-family: huangyou;
+            background-color: #ddc7b5;
+            color: #58220d;
         }
 
         h1 {
@@ -42,14 +44,14 @@
 
         ul li {
             list-style: none;
-            border-bottom: 1px solid #000;
+            /* border-bottom: 1px solid #000; */
             padding: 2vw;
             display: flex;
             justify-content: space-between;
         }
 
         ul li.passed span {
-            color: gray;
+            color: #7e6a5c;
             text-decoration: line-through;
         }
 
@@ -57,63 +59,77 @@
             font-style: normal;
         }
 
+        .alert {
+            line-height: 2;
+            text-align: center;
+            background-color: rgba(126, 106, 92, .5);
+            color: #eadacb;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
         html[theme="dark"],
         html[theme="dark"] body {
             background-color: #191919;
         }
-        html[theme="dark"] .container {
+
+        /* html[theme="dark"] .container {
             background-color: #3b3d3b;
             color: #fff;
         }
-        html[theme="dark"]  ul li {
+
+        html[theme="dark"] ul li {
             border-bottom: 1px solid rgba(255, 255, 255, .5);
         }
-        html[theme="dark"]  ul li.passed span {
+
+        html[theme="dark"] ul li.passed span {
             color: rgba(255, 255, 255, .5);
-        }
+        } */
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>2023节假日</h1>
-        <ul id="holidays">
-            <li><span>哈哈哈哈哈哈</span><em>还有3天</em></li>
-            <li class="passed"><span>测试测试</span><em>✅</em></li>
-        </ul>
+        <h1>2024节假日</h1>
+        <div class="alert" id="alert-msg"></div>
+        <ul id="holidays"></ul>
     </div>
 </body>
 <script>
-    const holidays = [
-        {
+    const holidays = [{
             name: "元旦",
-            start: '2023/01/01 00:00:00',
-            end: '2023/01/02 23:59:59',
+            start: '2024/01/01 00:00:00',
+            end: '2024/01/01 23:59:59',
         },
         {
             name: "春节",
-            start: '2023/01/21 00:00:00',
-            end: '2023/01/27 23:59:59',
+            start: '2024/02/10 00:00:00',
+            end: '2024/02/17 23:59:59',
         },
         {
             name: "清明节",
-            start: '2023/04/05 00:00:00',
-            end: '2023/04/05 23:59:59',
+            start: '2024/04/04 00:00:00',
+            end: '2024/04/06 23:59:59',
         },
         {
             name: "劳动节",
-            start: '2023/04/29 00:00:00',
-            end: '2023/05/03 23:59:59',
+            start: '2024/05/01 00:00:00',
+            end: '2024/05/05 23:59:59',
         },
         {
             name: "端午节",
-            start: '2023/06/22 00:00:00',
-            end: '2023/06/24 23:59:59',
+            start: '2024/06/10 00:00:00',
+            end: '2024/06/10 23:59:59',
         },
         {
-            name: "中秋节&国庆节",
-            start: '2023/09/29 00:00:00',
-            end: '2023/10/06 23:59:59',
+            name: "中秋节",
+            start: '2024/09/15 00:00:00',
+            end: '2024/09/17 23:59:59',
+        },
+        {
+            name: "国庆节",
+            start: '2024/10/01 00:00:00',
+            end: '2024/10/07 23:59:59',
         },
     ]
 
@@ -126,15 +142,20 @@
     function calculateHoliday(holiday) {
         const _date = new Date();
         const _holidays = [];
+        let _next = null;
         holiday.map(item => {
             const result = calculateHolidayDate(item, _date);
             _holidays.push(result);
+            if (result.type === 'nostart' && !_next) {
+                _next = result
+            }
         })
-        renderHolidays(_holidays);
+        renderHolidays(_holidays, _next);
     }
 
     function calculateHolidayDate(singleDate, nowDate) {
-        const start = new Date(singleDate.start), end = new Date(singleDate.end);
+        const start = new Date(singleDate.start),
+            end = new Date(singleDate.end);
         if (start > nowDate) {
             // 还没到，需要计算还差几天
             const du = start.getTime() - nowDate.getTime();
@@ -153,12 +174,15 @@
         return singleDate;
     }
 
-    function renderHolidays(holidays) {
+    function renderHolidays(holidays, _next) {
         let _html = '';
         holidays.map(item => {
             _html += `<li class='${item.type}'><span>${item.name}</span><em>${item.msg}</em></li>`
         })
         document.getElementById('holidays').innerHTML = _html
+        if (_next) {
+            document.getElementById('alert-msg').innerHTML = `距离下一个节日${_next.msg}`
+        }
     }
 </script>
 
