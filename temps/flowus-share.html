@@ -1,0 +1,87 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2024-01-05 14:37:00
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-01-05 15:28:38
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlowUs Share</title>
+  <script src="../lib/global.js?v=20231130"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    .box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    #tip {
+      text-align: center;
+    }
+
+    #sad {
+      font-size: 98px;
+      display: none;
+    }
+
+    #sad.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <div id="sad">💔</div>
+    <div id="name"></div>
+    <h2 id="tip">模板加载中...</h2>
+  </div>
+
+  <script>
+    const params = getAllParams(CryptoJS);
+
+    const {
+      share,
+      version,
+      dd,
+      name
+    } = params
+
+    if (name) {
+      document.getElementById('name').innerHTML = `<h1>${name}</h1>`
+    }
+
+    const expired_date = new Date(dd);
+
+    if (expired_date <= new Date()) handleExpired()
+    else {
+      handleTemplate(share, version)
+    }
+
+
+
+    function handleExpired() {
+      document.getElementById('sad').classList.add('show')
+      document.getElementById('tip').innerHTML =
+        `<div><span>⚠️ 模板链接已过期或已锁定</span><p style="font-size: 14px;color: gray;">有问题请联系👉<span style="color: teal;">阿汪同学（肥汪卷）</span></p></div>`
+    }
+
+    function handleTemplate(share, version) {
+
+      if (!share || !version) return
+
+      window.location.href =
+        `https://flowus.cn/httishere/share/${share}?promotionChannel=Red_fwj_${version}`
+    }
+  </script>
+</body>
+
+</html>
