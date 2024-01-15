@@ -1,0 +1,206 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2024-01-15 12:38:52
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-01-15 12:48:36
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week</title>
+  <script src="../lib/font.js"></script>
+  <script src="../lib/global.js?v=20231130"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    html,
+    body,
+    h2,
+    p {
+      margin: 0;
+    }
+
+    .container {
+      width: 280px;
+      padding: 20px;
+      border-radius: 20px;
+      border: 2px solid #333;
+      margin: 10px auto;
+    }
+
+    .info {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    #date {
+      background-color: #ffca22;
+      padding: 0 5px;
+      border-radius: 30px;
+    }
+
+    .week {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 50px;
+    }
+
+    .week-item {
+      width: 30px;
+      text-align: center;
+    }
+
+    .week-item>div {
+      background-color: #333;
+      color: #fff;
+      border-radius: 30px;
+      padding: 5px 0;
+      position: relative;
+    }
+
+    .week-item>div.active {
+      background-color: #ffca22;
+      color: #333;
+    }
+
+    .passed::after {
+      content: "";
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      left: 0;
+      top: -34px;
+    }
+
+    .passed#week-1::after {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEuElEQVR4nO2ZS0hkRxSGfx0F2wdiomAICIkulKBmOYyvTYJEF74IKsFFIAsjKCEQXPkCXbjzgZJWQRdJmsDgRmSULBOxFSO4SCYGQeKztaMEH5jptH3Cqdxqyuu9fe2nGuaDoi9Vp6r+U/dWnapq4DX/H94F8DmAbwGsA/gTwCsAHu2Z877TbNj2QfAEQBOAnwD4ANAdE9suAWjW2rgXPgTwUopKS0ujpqYmmpiYoNXVVTo+PiaPxyMSP3MelzU3NwtbxZmXAD6IpXAbALsUkJ2dTePj43R5eUl3hW2npqYoLy9PdcSutR1VsgCscodJSUnU19dHFxcXFCoej4cGBwdFW5oTq1ofURP/K3eUm5tLGxsbFCmWl5fFm1Q+qYg7YZMjX1xcTC6XiyLN7u4uFRYWqm8iKZIOfC1HPhriJTs7O+qb4D4jAq8Q4jtdX18nI0pLSyk+Pp4KCgpodnaWzOAytmHbkpISQ5u1tTWy2WzSiY/CFf9ELpW9vb2mwuLi4vyrCYtzOp23bFZWVkSZGg98Pp9hezyxlfkQVpzgICVe6/n5uaUDHR0d4reuru6WTUNDgyhrb2/32/tMHODVSVliOdiFzI/cyNjYmKl41YGDgwNKTEykhIQE2t/f95cfHh7eyLdygOE4oTnAETsk3uGQn5qaarnWq4Lq6+vFc39/v798YGBA5HGZ3j5QsNMiti/UvVMrd9LY2EhWqIIWFhbEc05ODnm9XpEnPwcu09sHgrcm2lvgDWDQfMOV7XY7WaEK0gteXFy84ZDePhCTk5PSAd7FBs0vXNloRdGjF6R+MnLycp6ZvRm8cmkO8A4gaP7mykdHR2SFXpCctDLx5OUJbmZvhtvtlg7wuSJoxP7+6uqKrDASJEdenbyB7M2WUyVuBI2oeHZ2RlYYCZKTWZ28gezNViLFgfiQHNja2iIrjARdX19TeXk5lZWViWcreyO2t7fDcsDLFZeWlsiKuwoK1t7pdKpH0KA548pDQ0P35sDIyEhYk/h3rlxVVXVvDlRXV0sH/gjFge+5Mm9tT05OYu7A6ekpJScnSweeh+LAJ3ICdXd3x9yBnp4edQK3hOJAJoBrbiA9PV0EFTN4peFDzV2xsne73ZSRkaFO4LcQIvNyFGpqaihW1NbWqqP/AmHwlBuRr3x4eDjq4kdHR0VfyimvDGHyQj0uOhyOqIl3OBz6Y+ciIsDbAE5ko7w5m56ejrj4mZkZ0bYi/i8AOYgQH6uXt/x6u7q6/Pv7cPB6vWKVUy8GtL74PB5R2tUbBU4VFRW0t7cXsniXy0WVlZU32tTSV4gSPfrOMjMzaW5uLmjx8/PzlJWVZSS+D1HmUwD/6DtuaWm500Uvny86Oztv3RHhv81jG2JEBYA9vRNFRUU3Tl56uIzvVg1G3QWgEjGGI/WcXgwLNDrFcZ6J+B8AZOOeiAPwhTw/B9o76fY2pNX5Umvj3imW/x1wSklJufEp8WrDF2SKeL7zfB8PjDcA/CZFtra2+h1oa2tTxbPNm3igPJUBj6Pq5uamSEqE5bJneOA8l6Odn58v/g9QRn8Wj4ACeSFgsM6/h0eC3cCBCTwi0gH8rIhf1/IeFSkAPtMSP78GBvwL1qW8m8IF6PoAAAAASUVORK5CYII=);
+      background-size: 100% 100%;
+    }
+
+    .passed#week-2::after {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAD6klEQVR4nO1ZTUgbQRT+VMTEKhWagqFQaPViQc2xBQWhbQ560FNVqJfSQz300ELxpFZPXpOD1njQSyMUelJKodfiX7HioW2wKEVEQzT0kBVNmvrKW3ZkCIm4s9lsLH4wsMzOe+/73u7Mm9kFLvH/oA5AP4AwgK8ADgCkjHZg9L01xtxGkaAMQC+AzwBOANA524lh02P4cAQPAUQEqerqaurt7aVQKEQrKysUi8UolUrpja+5j+/19PToYyUxPwA8KCRxN4CQIOD1emliYoIODw/pvOCxU1NTVF9fLwt5A8BlN/nrAL5wQLfbTaOjo6RpGqkilUrR2NgYVVRUCBHLRgzbyPPj1jO3vr5O+cLCwgLV1tYKEd/tEOEWmW9ubqZoNEr5xvb2NjU2NspPIq+v06TIvB3kZRHSk5jI52pDLpeL1tbWKBtaWlrOu3yeNrbJ9TpJc+K+VfJlYqkcGRmhXGhtbTUtgG1ygSe2NB8s1QkuUvpjVVltBFmzSCaTVFdXJ+y52CmDqyWNj4+bJmFFAIPrhGHPHJTA+5UTrpqqa70VAZqmiYrN245bKgJ406WXflVYEcDo7u4WPp6pCOCdo75/cUpAKBQSPpiLafAKQMvLy44JWFpaEj6+qQg4ZmPeSTolIBaLCR9JFQG68fHxsWMCksmkXDvUBCQSCccEaJomCyhRErC5uemYgK2tLUsC0mzIexOnBCwuLspHUNNIsHEgEHBMQCAQED54QTGNn2zc0dHhmID29nbh45eKgHdsXFlZSfF4vOAC4vG4HtvwwVxM47EgMDw8XHABQ0ND8gRmLqbB59K/7KCmpob29/dNk+BDy1n7/rMKGMeUJrAXivggstDV1UWFQmdnp5x95qCMu/IpKhgM2k4+GAzqsUpKSkTcFljERyGgtLSUZmdnbSMfDof1GFLSOLZl3AAQF07Ly8tpZmYm7+Snp6d13xL53wBuIk94JH+85cfLq0Q6nbZMPJ1O0+DgoPzKiInbjTzjeeaXhba2NtrZ2VEmH41Gye/3Z/tq8Qo24XVmMI/HQ3Nzc6bJz8/P67ZZyHMMW/EEwJ/MwH19fec6/B8dHdHAwEDmZCVj88jn8IKgDcBOpoimpiba3d3NSZ7v8bfVLFmPAvCjwPAAmMsk4/P59Cxny3wO8p8A1MIh8CHjhTg/n7V34r4M4mzzUuWgYgeaxb8DblVVVbS3t3dKnq+5TyLPY30oMlyT/5n19/efCuBriXzEGFuUuCcKHlfVjY0NikQicoU9McYUNd6LbDc0NOhNyj7fK3o0iA8CWdb5O7ggmMwigPsuDK4CWJXIrxp9FwpXADw1Gl9fAlnwD/tDZOseEHN+AAAAAElFTkSuQmCC);
+      background-size: 100% 100%;
+    }
+
+    .passed#week-3::after {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEt0lEQVR4nO1ZS0hrRxj+NAo+EVsFS0FodeEDtctLfW1apLrwjZHiotCFFZRSKK58gQ+y84HSaEAXbUPhUhQR0S5bMUYbcNHeWgSpz6hVihpsT2Om/MOZMIbk3pyTh1ruB4PjmX/++b55/jMBXuP/g3cBfAbgGwAOAH8C+AeAoubp27eqDdk+ChgAGAH8BMADgAWZyHYNQKvq40HwIYAXglRqaiozGo1senqa2e12dnZ2xhRF4Yny9I3KWltbua0k5gWAD6JJPBGAWRDIyspiU1NTzOVysWBBthaLheXm5spCzKrviCITgJ0aTEhIYAMDA+zm5obphaIozGQycV+qCLvaRsTI/0oN5eTksO3tbRYurK+v85GUplTYRSSKni8pKWFOp5OFGwcHB6yoqEgeiYRwCvhK9HwkyAvs7+/LI0FthgW0Q/B56nA4mD+UlZWx0tJSv2Va7be2tlhiYqIQ8VGo5A1iq+zv7w9IKCYmhjfo8XiCEvAqe5PJJK+HkM4JOqT4sF5fX0dNgKIo8hZLh51u/EhOJicnQyKkx95isQgBdGLrwjt05KekpLxyr4+EAJfLJU5sj97YqZ0aaWlpCQshPfZGo1GMAgWAmvE1VTabzboI3d3dsYqKClZeXs7zegTMzMwIARTFasYvVNlms+kSsLKy4o1zlpeXdQnY2NgQPigC0Iy/qfLp6akuAY2NjV4BDQ0NugScn58LH3Sv0Awe39/e3moWcHJywuLj41lcXJz37/HxsWYBiqLI0apm8IpXV1eaBQwPD/P/6+vrWVNTE88PDg5qFuByuWQBsboE7O7uahJASRxCNPdXV1d5Pjs7m7ndbk0C9vb2QhLgpopra2uaBIjFKwj7CtIiwGazyVdQzbiiyqOjo5oEiMU7NDTkLR8ZGfFOKS0CxsfHQ1rEv1Pl6urqoAXIi/fo6MhbTiG4/D1YATU1NULAH3oEfEeVKbS9uLgISkBXV5ffbZPQ3NzMyzo7O4MScHl5yZKSkoSA53oEfCwWUG9vb1ACKBkMBv4C4YvNzU1eJj+veF4ioK+vT7Zt0yMgA8AdOUhLS+OHSiBQuBAbG8sKCwvZwsJCQLv5+XlWUFDAbelSEwjUVnp6uryA34JOLIleqK2tZdFCXV2d3PvLCAHPyImYImNjYxEnPzExwduSpmU5QgT1AHdGQ2+1WiNG3mq18jak3l9BGPA2gAvhlLbD2dnZsJOfm5vjviXyfwHIRpjQLD/e0vD29PR4Q4NQ4Ha7+S4n72RqW3QfDys65S2QUmVlJTs8PNRN3ul0sqqqqns+1fQlIoQ+38YyMjLY4uKiZvJLS0ssMzPTH/kBRBifAPjXt+G2tragHnrpftHd3e27WJkaPHYgSqgEcOgrori4+N7FxRdURm+rfnrdCaAKUQad1Iu+ZIigv1scfQtA/gcAWXggxAD4XNyfXxY7+cQ2TK3zherjwVEifjuglJycfG8q0W5DD2QSeXrzfA+PDG8A+E2QbG9v9wro6OiQyZPNm3ikeCYOPDpVd3Z2eJJOWCp7H48cz0Vv5+Xlsfz8fLn3v8cTQL54EPCzzxfiicDsR8A0nhDSAPwskXeo354UkgF8qibKvwb84D+/h7zUGenMlwAAAABJRU5ErkJggg==);
+      background-size: 100% 100%;
+    }
+
+    .passed#week-4::after {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAD6klEQVR4nO1ZTUgbQRT+VMTEKhWagqFQaPViQc2xBQWhbQ560FNVqJfSQz300ELxpFZPXpOD1njQSyMUelJKodfiX7HioW2wKEVEQzT0kBVNmvrKW3ZkCIm4s9lsLH4wsMzOe+/73u7Mm9kFLvH/oA5AP4AwgK8ADgCkjHZg9L01xtxGkaAMQC+AzwBOANA524lh02P4cAQPAUQEqerqaurt7aVQKEQrKysUi8UolUrpja+5j+/19PToYyUxPwA8KCRxN4CQIOD1emliYoIODw/pvOCxU1NTVF9fLwt5A8BlN/nrAL5wQLfbTaOjo6RpGqkilUrR2NgYVVRUCBHLRgzbyPPj1jO3vr5O+cLCwgLV1tYKEd/tEOEWmW9ubqZoNEr5xvb2NjU2NspPIq+v06TIvB3kZRHSk5jI52pDLpeL1tbWKBtaWlrOu3yeNrbJ9TpJc+K+VfJlYqkcGRmhXGhtbTUtgG1ygSe2NB8s1QkuUvpjVVltBFmzSCaTVFdXJ+y52CmDqyWNj4+bJmFFAIPrhGHPHJTA+5UTrpqqa70VAZqmiYrN245bKgJ406WXflVYEcDo7u4WPp6pCOCdo75/cUpAKBQSPpiLafAKQMvLy44JWFpaEj6+qQg4ZmPeSTolIBaLCR9JFQG68fHxsWMCksmkXDvUBCQSCccEaJomCyhRErC5uemYgK2tLUsC0mzIexOnBCwuLspHUNNIsHEgEHBMQCAQED54QTGNn2zc0dHhmID29nbh45eKgHdsXFlZSfF4vOAC4vG4HtvwwVxM47EgMDw8XHABQ0ND8gRmLqbB59K/7KCmpob29/dNk+BDy1n7/rMKGMeUJrAXivggstDV1UWFQmdnp5x95qCMu/IpKhgM2k4+GAzqsUpKSkTcFljERyGgtLSUZmdnbSMfDof1GFLSOLZl3AAQF07Ly8tpZmYm7+Snp6d13xL53wBuIk94JH+85cfLq0Q6nbZMPJ1O0+DgoPzKiInbjTzjeeaXhba2NtrZ2VEmH41Gye/3Z/tq8Qo24XVmMI/HQ3Nzc6bJz8/P67ZZyHMMW/EEwJ/MwH19fec6/B8dHdHAwEDmZCVj88jn8IKgDcBOpoimpiba3d3NSZ7v8bfVLFmPAvCjwPAAmMsk4/P59Cxny3wO8p8A1MIh8CHjhTg/n7V34r4M4mzzUuWgYgeaxb8DblVVVbS3t3dKnq+5TyLPY30oMlyT/5n19/efCuBriXzEGFuUuCcKHlfVjY0NikQicoU9McYUNd6LbDc0NOhNyj7fK3o0iA8CWdb5O7ggmMwigPsuDK4CWJXIrxp9FwpXADw1Gl9fAlnwD/tDZOseEHN+AAAAAElFTkSuQmCC);
+      background-size: 100% 100%;
+    }
+
+    .passed#week-5::after {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEDklEQVR4nO2ZTUhUURTH/yqC4wdiKRhBULpQQm0pqbgpJF3oJlTCRdDChCCCcOXXcnZ+oDQq6KIaAmkjEtGyxHGwARdlhiCpyKgpoT6saZoT5/Fu3YY3Nu9j5mn0gwfDe/eec/73vXfOuW+A//w7XAJwF8ATAAEAnwF8AxDSfvO5p9oYHnsiSAPQAuANgAgAivPgsbMAWjUbjnAdwJIIKicnh1paWmh0dJT8fj9tb29TKBRSD/7N5/haa2urOlYSswTgWjIDdwHwiAAKCwtpZGSEFEWheOGx4+PjVFxcLAvxaLYTSgEAPzvMyMigvr4+Ojw8JLOEQiFyu92qLU2EX/ORsODfs6OioiJaXFwku5ibm1PvpPRI2S7CJVa+oqKCgsEg2c36+jqVlZXJdyLDTgGPxMonInjB2tqafCfYpy1whlCf00AgQLGorq6ON4WqY2OxsLBALpdLjL1hNfg0kSp7e3tjOjUqoKam5lhbbrdbfh8s1QkuUuptPTg4oHgQQUYiEbKSnYp/p1gudqZ5zUaGh4fjdm6HAIbrhGaLK7YpLnLJz87ONpTr7RKgKIqo2BGzvVM7B9Lc3GzIsV0CGG5NNHvcABrmMU/2eDzklICxsTFhj7tYw7zjyT6fzzEB8/Pzwh53AIb5ypO3trZMCdA7qqqqDNna2dkRc3lfYRi1vz86OrJNwHEFLFY6leYbRp24v79PTj1CiqLIAlJNCVhZWXFMwOrqqiUBYZ44OzvrmACfzydvQQ2zz5P7+/sdEzA4OGjpJf7Ik+vr6x0T0NDQIOx9MiPgGU/m1nZ3dzfpAvb29igzM1PYmzIj4JYIpru7+68O9dppo3lfpqenR7bVZkZAPoAfbCA3N1ctKsfBPb7VvC9gX3l5efILfA4mmRHBNDY2UrJoamqSF+IFLFDJRlJSUlRjAwMDCQ9+aGiIZJ8AamARXgHVWGpqKnm93oQF7/V6VR/S6r+EDZwHsCuMpqen08TEhO3BT05Oqral4L8AuACbuCl/vOXb29XVReFw2HLg4XBYzXLSIyNeXN6P28q96CxTW1tLGxsbpoMPBoNUV1en17k+RILoiXaWn59P09PThoOfmZmhgoICveD7kGBuA/ge7bitrS2uzT/vLzo7O6NfVtKaxw4kiVoAG9EiysvLaXNzM2bwfI2/reqsehBAHZIMV+rp6GA4QL1dHJ+LEfwrAIVwiBQA98X++bjeKaq3IW3OA82G41SI/w74yMrK+uNR4mzDH8ik4Pmb5xWcMM4A+CCCbG9v/yWgo6NDDp7HnMUJpVIUPK6qy8vL6iFVWL52FSecKbHaJSUlVFpaKq/+c5wCSsUHAZ08fxmnBI+OgFGcInIBvJWCD2jnThVZAO5oB//+D3T4CWKaN92xOOhMAAAAAElFTkSuQmCC);
+      background-size: 100% 100%;
+    }
+
+    .passed#week-6::after,
+    .passed#week-7::after {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEzUlEQVR4nO2ZTUhrRxTH//oQvxVbBUWptrpQilo/Fo+quGmR6kI3RUVFHnRhhUIpFFd+LbPTBMVoQAVrKDy6ESmly1aMwQZc2FerIlWRaKqIGqxpzClnuNN3TaO5SW78KO8HF8K9M3P+Z+7MOWdugDf8f3gPwOcAvgHgAPAngCsAHuU335tX2nDbR8EzAG0AfgbgA0AaL267BKBdGeNB+BjAKykqNTWV2traaHJykux2Ox0dHZHH4xEX/+Z7/Ky9vV20VTnzCsBH9yk8EYBZCsjOzqbx8XFyu92kFW5rsVioqKhI7YhZGTuqZAGws8GEhAQaHh6mi4sLChePx0MGg0GMpThhV2xETfyvbKiwsJDW1tZIL5aXl8WbVC0p3Z1IlDNfXl5OTqeT9GZvb49KS0vVbyJBTwcm5MxHQ7xkd3dX/SbYpi5whBDr1OFw0F1cX1/TxMQEVVRUUHx8/H/CZ01NDQVjdXWVEhMTZZ9PIhX/TIbKoaGhoOI5jAbLAT6fL6gTBoNBvR8iyhOcpMRrPT8/v9Oo2WwWRtPT02l2dpZOT09vPI+JidHsgMfjUYdYTnZh8xMPMjY2FtRoZWWlMMjiA1FXV0e1tbWkFYvFIh3gjB0W73LKT0lJ0RTr5bo9OTkhPXC73TJj+8KtnXpYUGtrqyaDBQUFwoHNzU3Si7bXe4oLwJCZ4868trXQ3d1N0mHe0HowNTUlHeAqNmTWubPNZtNkbHt7m3i5cZ+qqioyGo20vr4ekQMrKyvSAa4AQuYv7nx4eKjZIDubl5d3I2xyBOvo6KC5uTm6uroKyQGXyyXH4XNFyIj6/vLyMiSjLHJ+fp46OzspJyfnhjO5ubma36gMp6r+ISM6np2dUSTwMjKZTFRdXS3G42XGy01rJMJrB2LDcmBra4v0gDc2b3Aekze8FnZ2diJywMsdl5aWSC84xPKY+fn5mtrbbDb1ETRkzrjzyMiIbg5wkuMxOelpwWg0RrSJf+fOjY2NmoxxmRCs2pyenhaCeD9ooampSTrwRzgOfCtn6/j4OKixu4o1LuxYfFpammjDCUrL20pKSpIOvAzHgQ65gQYGBjQ7EOzinKClIh0cHFT36wrHgUwA17JE5qRyF1xt3iaaD0OcnbnC1CLe5XJRRkaGegPnIEwWpYjm5ma6L1paWtQT8D0i4DkPIpfH6Oho1MWbTCZhS7Uk6xAhPANisNjYWLJarVETb7VahQ3V7P8AHcgFcCwHjYuLExFFb2ZmZsTYKvGnAN6BTnyq/njLr7e/v5+8Xm/Ewr1er4hyflHMp5zHdeUL/+hSX19P+/v7YYt3Op3U0NAQKHJ9jSgx6G8sMzOTFhYWQha/uLhIWVlZgcQPI8q8APC3v+Guri5Nh38+X/T19flvVlKKx17cE/UA9v2dKCsro4ODg1vF8zP+thpg1p0AGnDPcKZe8BfDAgOd4vjeLeJ/BJCNByIGwJfy/HxX7eRX25DS5ytljAenXP53wFdycvKNpcTRRn6xUH3z/ACPjLcA/CZF9vT0/OtAb2+vWjy3eRuPlOcy4XFW3djYEJcqw/KzD/HIeSlnu7i4mEpKStSz/x2eACXyg0CAOP8+ngjmAA5M4gmRDuAXlXiHcu9JkQzgM+Xi329AAP4B/tkZkpuRVqgAAAAASUVORK5CYII=);
+      background-size: 100% 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="info">
+      <h2 id="msg"></h2>
+      <p id="date"></p>
+    </div>
+    <div class="week">
+      <div class="week-item">
+        <div id="week-1"></div>
+      </div>
+      <div class="week-item">
+        <div id="week-2"></div>
+      </div>
+      <div class="week-item">
+        <div id="week-3"></div>
+      </div>
+      <div class="week-item">
+        <div id="week-4"></div>
+      </div>
+      <div class="week-item">
+        <div id="week-5"></div>
+      </div>
+      <div class="week-item">
+        <div id="week-6"></div>
+      </div>
+      <div class="week-item">
+        <div id="week-7"></div>
+      </div>
+    </div>
+    <div class="extra">
+
+    </div>
+  </div>
+  <script>
+    window.onload = function () {
+      getDarkMode();
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+      console.log(params);
+      if (params.font_color) {
+        const font_color = hexToRgba(params.font_color);
+
+        document.getElementById('box').style.color = params.font_color;
+        document.getElementsByClassName('active')[0].style.backgroundColor = params.font_color;
+      }
+    }
+    const week_day_en = WEEKS_F.s_10;
+    let start_param = false;
+    let start_date = new Date(),
+      _time = start_date.getTime(),
+      s_m = start_date.getMonth() + 1,
+      s_day = start_param ?
+      start_date.getDay() + 1 :
+      start_date.getDay() || 7;
+    let real_s = _time - (s_day - 1) * 24 * 60 * 60 * 1000,
+      real_s_m = new Date(real_s).getMonth() + 1;
+    let end_date = new Date(_time + (7 - s_day) * 24 * 60 * 60 * 1000),
+      e_m = end_date.getMonth() + 1;
+    for (let i = 0; i < 7; i++) {
+      let step = start_param ? i - s_day : i - s_day + 1;
+      let _day = _time + (i - s_day + 1) * 24 * 60 * 60 * 1000;
+      let week_label = start_param ?
+        week_day_en[i] :
+        week_day_en[i + 1 >= 7 ? 0 : i + 1];
+      let __d = new Date(_day).getDate();
+      document.getElementById(
+        `week-${i + 1}`
+      ).innerHTML = `${__d}<br>${week_label}`;
+      // console.log(s_day)
+      if (i < s_day) {
+        document.getElementById(`week-${i + 1}`).className = "passed";
+      }
+      if (i == s_day - 1) {
+        document.getElementById(`week-${i + 1}`).classList.add("active");
+      }
+    }
+    let msg = document.getElementById("msg");
+    if (s_day === 1) {
+      msg.innerHTML = "😔 不想上班";
+    } else if (s_day > 1 && s_day < 6) {
+      msg.innerHTML = `距离周末还有${6 - s_day}天`;
+    } else {
+      msg.innerHTML = `~ 快乐周末 ~`;
+    }
+    document.getElementById(
+      "date"
+    ).innerHTML = `${start_date.getFullYear()}/${
+        start_date.getMonth() + 1
+      }/${start_date.getDate()}`;
+  </script>
+</body>
+
+</html>
