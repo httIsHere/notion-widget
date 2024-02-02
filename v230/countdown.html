@@ -1,0 +1,148 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2024-02-02 16:25:30
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-02-02 16:53:52
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>倒计时</title>
+  <script src="../flexibleMerge.js"></script>
+  <script src="../lib/global.js?v=20231130"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    .wrap {
+      width: 100%;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .countdown {
+      /* width: 90%; */
+      margin: 0 auto;
+      border-radius: 15px;
+      padding: 1rem;
+      font-size: 1rem;
+      text-align: center;
+      background-color: #9D0B0F;
+      color: rgba(255, 255, 255, .76);
+      font-family: monospace;
+      padding-top: 1.4rem;
+    }
+
+    .countdown span {
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    #days {
+      font-size: 3rem;
+    }
+
+    #down {
+      font-size: 0.6rem;
+      margin-bottom: 0.2rem;
+    }
+
+    #down>span {
+      display: inline-block;
+      width: 1.2rem;
+      height: 1.2rem;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, .6);
+      text-align: center;
+      line-height: 1.2rem;
+      color: #9D0B0F;
+      position: relative;
+    }
+
+    #down>span::before {
+      content: attr(label);
+      position: absolute;
+      width: 1.2rem;
+      text-align: center;
+      color: rgba(255, 255, 255, .76);
+      top: -.75rem;
+      font-size: .45rem;
+      line-height: 1;
+      left: 0;
+    }
+
+    #date {
+      font-size: .4rem;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+      color: #ffffff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="countdown">
+      <!-- <div class="days"><span id="days"></span></div> -->
+      <p id="down">12小时45分23秒</p>
+      <div id="date"></div>
+    </div>
+  </div>
+</body>
+<script>
+  const week_ZN = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+
+  window.onload = function () {
+    const params = getAllParams(CryptoJS);
+    handleDarkMode(params);
+    let target_day = getQueryString("day") || params.day || `${(new Date()).getFullYear()}/12/31`,
+      name = getQueryString("name") || params.name || "今年结束";
+    let _date = new Date(target_day).getDay();
+    let _target = new Date(target_day).getTime();
+    document.getElementById(
+      "date"
+    ).innerHTML = `${target_day} ${week_ZN[_date]}`;
+    calcCountdown();
+    setInterval(calcCountdown, 60000);
+
+    function calcCountdown() {
+      let _now = new Date().getTime();
+      // 设置时间
+      let times = Math.abs(_target - _now);
+      let d_days = Math.floor(times / 1000 / 60 / 60 / 24);
+      let is_today =
+        d_days === 0 &&
+        new Date(target_day).getDate() === new Date().getDate();
+      target_day = target_day.split("/").join("-");
+      times = times % (1000 * 24 * 60 * 60);
+      let hour = Math.floor(times / 1000 / 60 / 60);
+      times = times % (1000 * 60 * 60);
+      let minute = Math.floor(times / 1000 / 60);
+      times = times % (1000 * 60);
+      let sec = Math.floor(times / 1000);
+      // document.getElementById("days").innerHTML = `<span>D${
+      //     d_days >= 0 ? "-" : "+"
+      //   }${is_today ? "Day" : d_days}</span>`;
+      document.getElementById(
+          "down"
+        ).innerHTML =
+        `<span label='天'>${d_days}</span> : <span label='时'>${hour}</span> : <span label='分'>${minute}</span>`;
+    }
+  };
+</script>
+
+</html>
