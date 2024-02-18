@@ -1,0 +1,78 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2024-02-18 12:15:40
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-02-18 12:16:14
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月度复盘 2.0</title>
+    <style type="text/css">
+        .box {
+            width: 100%;
+            text-align: center;
+            background-color: #d6e1ce;
+            color: #697e5e;
+            padding: 10px 0;
+            border-radius: 5px;
+        }
+
+        #busuanzi_value_page_pv,
+        #name {
+            color: #ba5134;
+            font-weight: bold;
+        }
+
+        #contact {
+            font-size: 12px;
+            opacity: .8;
+        }
+
+        #contact a {
+            color: #795a5f;
+            text-decoration: none;
+        }
+
+        strong {
+            display: inline-block;
+            padding: 0 7px;
+            background-color: rgba(105, 126, 94, 1);
+            border-radius: 5px;
+            margin: 0 2px;
+            color: #d6e1ce;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <span id="busuanzi_container_page_pv">🎉 你是「<strong id="template"></strong>」的第 <span
+                id="busuanzi_value_page_pv"></span> 位<span id="label"></span>，感谢支持关注<span id="name">「阿汪同学」</span></span>
+        <p id="contact"><span>小红书：<a target="blank"
+                    href="https://www.xiaohongshu.com/user/profile/5c049fc9000000000800af53?xhsshare=WeixinSession&appuid=5c049fc9000000000800af53&apptime=1664074455">@肥汪卷</a></span>
+            | <span>B站：<a href="https://space.bilibili.com/19225439?spm_id_from=333.1007.0.0"
+                    target="blank">阿汪同学</a></span> | <span>微信公众号：<a href="#">汪汪汪世界</a></span></p>
+    </div>
+</body>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script>
+    function getQueryString(name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURIComponent(r[2]);
+        }
+        return null;
+    }
+    const label = getQueryString('label') || '访问者'
+    document.getElementById('label').innerHTML = label;
+    document.getElementById('template').innerHTML = document.title;
+</script>
+
+</html>
