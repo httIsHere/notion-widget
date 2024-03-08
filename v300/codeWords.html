@@ -1,0 +1,42 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2024-03-08 15:12:53
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-03-08 15:40:02
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>转义文字</title>
+  <script src="../lib/tailwindcss-3.js"></script>
+</head>
+
+<body class="p-2">
+  <div class="rounded-lg border-solid border-2 p-4">
+    <h1 class="text-center text-2xl mb-4">转义文字</h1>
+    <div class="flex justify-center items-center mb-4">
+      <span class="w-1/4 text-right">文字：</span>
+      <input type="text" class="w-3/4 rounded-lg border-solid border p-2" id="words">
+    </div>
+    <div class="flex justify-center items-center mb-4">
+      <span class="w-1/4 text-right">转义后：</span>
+      <div class="w-3/4 text-blue-500 break-all" id="result"></div>
+    </div>
+  </div>
+</body>
+<script>
+  const myWords = document.getElementById('words')
+  const resultBox = document.getElementById('result')
+
+  myWords.oninput = function (e) {
+    const value = e.target.value;
+    const result = encodeURIComponent(value)
+    resultBox.innerText = result
+  }
+</script>
+
+</html>
