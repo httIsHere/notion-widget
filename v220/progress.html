@@ -1,7 +1,7 @@
 <!--
  * @Author: httishere
  * @Date: 2021-08-13 09:37:29
- * @LastEditTime: 2024-03-07 16:31:26
+ * @LastEditTime: 2024-03-07 16:48:02
  * @LastEditors: Tina Huang
  * @Description: In User Settings Edit
  * @FilePath: /mobile-frontend-lanqb/Users/httishere/workspace/httishere/notion/progress.html
@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>年进度</title>
     <script src="../flexibleMerge.js"></script>
-    <script src="../lib/global.js?v=20240307"></script>
+    <script src="../lib/global.js?v=20240307.1"></script>
     <script src="../lib/crypto-js.min.js"></script>
     <style>
         body,
@@ -164,9 +164,11 @@
             background-color: #191919;
             color: #ffffff;
         }
+
         html[theme="dark"] li {
             background-color: rgba(255, 255, 255, .3);
         }
+
         html[theme="dark"] li div {
             background-color: rgba(255, 255, 255, .9);
         }
@@ -207,22 +209,26 @@
 </body>
 <script>
     window.onload = function () {
-      const params = getAllParams(CryptoJS);
-      handleDarkMode(params);
-      if (params.font_color) {
-        const font_color = hexToRgba(params.font_color), _bg = hexToRgba(params.font_color, 0.2);
-
-        document.getElementById('box').style.color = params.font_color;
-        document.getElementById('year').style.backgroundColor = _bg.rgba;
-        document.getElementById('year').children[0].style.backgroundColor = params.font_color;
-        document.getElementById('week').style.backgroundColor = _bg.rgba;
-        document.getElementById('week').children[0].style.backgroundColor = params.font_color;
-        document.getElementById('month').style.backgroundColor = _bg.rgba;
-        document.getElementById('month').children[0].style.backgroundColor = params.font_color;
-      }
+        const params = getAllParams(CryptoJS);
+        handleDarkMode(params);
+        if (params.font_color) {
+            console.log(params.font_color)
+            const font_color = hexToRgba(params.font_color),
+                _bg = hexToRgba(params.font_color, 0.2);
+            console.log(font_color, _bg)
+            document.getElementById('box').style.color = font_color.rgba;
+            document.getElementById('year').style.backgroundColor = _bg.rgba;
+            document.getElementById('year').children[0].style.backgroundColor = font_color.rgba;
+            document.getElementById('week').style.backgroundColor = _bg.rgba;
+            document.getElementById('week').children[0].style.backgroundColor = font_color.rgba;
+            document.getElementById('month').style.backgroundColor = _bg.rgba;
+            document.getElementById('month').children[0].style.backgroundColor = font_color.rgba;
+        }
     }
     let Days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    let now_date = new Date(), _time = now_date.getTime(), now_year = now_date.getFullYear();
+    let now_date = new Date(),
+        _time = now_date.getTime(),
+        now_year = now_date.getFullYear();
     // 周
     let _day = now_date.getDay();
     _day = _day ? _day : 7;
@@ -235,7 +241,8 @@
         // 闰年
         Days[2] = 29;
     }
-    let cur_month = now_date.getMonth() + 1, month_day = now_date.getDate();
+    let cur_month = now_date.getMonth() + 1,
+        month_day = now_date.getDate();
 
     document.getElementById('month').children[0].style.width = `${month_day * 100 / Days[cur_month]}%`;
     document.getElementById('month-bar').children[2].innerHTML = `${month_day}/${Days[cur_month]}`;
@@ -247,13 +254,15 @@
     let total = now_year % 4 === 0 && now_year % 100 !== 0 ? 366 : 365;
     let _year = document.getElementById('year');
     let year_rate = days * 100 / total;
-    let year_text = year_rate <= 15 ? days : year_rate <= 30 ? `${days} / ${total}` : `${days} / ${total} (${(year_rate).toFixed(0)}%)`;
+    let year_text = year_rate <= 15 ? days : year_rate <= 30 ? `${days} / ${total}` :
+        `${days} / ${total} (${(year_rate).toFixed(0)}%)`;
     _year.children[0].style.width = `${days * 100 / total}%`;
     document.getElementById('year-bar').children[2].innerHTML = `${days}/${total}`;
 
     // 倒计时
     setTime();
     setInterval(setTime, 1000);
+
     function setTime() {
         let _now = new Date();
         let hour = _now.getHours();

@@ -1,8 +1,8 @@
 <!--
  * @Author: HTT httishere0728@gmail.com
  * @Date: 2023-07-22 15:36:45
- * @LastEditors: HTT httishere0728@gmail.com
- * @LastEditTime: 2023-10-29 18:33:27
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-03-07 16:50:07
  * @FilePath: /notion/v220/date.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,7 +13,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My date</title>
-  <script src="../lib/global.js?v=20240307"></script>
+  <script src="../lib/global.js?v=20240307.1"></script>
   <script src="../lib/crypto-js.min.js"></script>
   <style>
     @font-face {
@@ -86,8 +86,8 @@
       if (params.font_color) {
         const font_color = hexToRgba(params.font_color);
 
-        document.getElementById('box').style.color = params.font_color;
-        document.getElementsByClassName('active')[0].style.backgroundColor = params.font_color;
+        document.getElementById('box').style.color = font_color.rgba;
+        document.getElementsByClassName('active')[0].style.backgroundColor = font_color.rgba;
       }
     }
     const date = new Date();

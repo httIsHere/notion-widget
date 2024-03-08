@@ -1,8 +1,8 @@
 <!--
  * @Author: HTT httishere0728@gmail.com
  * @Date: 2023-07-18 22:03:55
- * @LastEditors: HTT httishere0728@gmail.com
- * @LastEditTime: 2023-07-28 11:21:02
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-03-07 17:01:15
  * @FilePath: /notion/v220/day.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>每日</title>
-    <script src="../lib/global.js?v=20240307"></script>
+    <script src="../lib/global.js?v=20240307.1"></script>
     <script src="../lib/crypto-js.min.js"></script>
     <style>
         html,
@@ -32,6 +32,7 @@
             box-sizing: border-box;
             position: relative;
         }
+
         .z {
             display: flex;
             /* margin-top: 40px; */
@@ -88,9 +89,11 @@
             background-color: #191919;
             color: #ffffff;
         }
+
         html[theme="dark"] .container {
             color: #ffffff;
         }
+
         html[theme="dark"] h1 {
             opacity: .7;
         }
@@ -114,16 +117,19 @@
             getDarkMode();
             const params = getAllParams(CryptoJS);
             handleDarkMode(params);
-            if(params.icon) {
+            console.log(params)
+            if (params.icon) {
                 document.getElementById('co-2').setAttribute('src', `../assets/emoji/${params.icon}.png`)
             }
-            if(params.bg_color) {
-                const _bg = hexToRgba(params.bg_color, 0.2), _inner = hexToRgba(params.bg_color, 0.6);
+            if (params.bg_color) {
+                const _bg = hexToRgba(params.bg_color, 0.2),
+                    _inner = hexToRgba(params.bg_color, 0.6);
                 document.getElementById('inner').style.backgroundColor = _inner.rgba;
                 document.getElementById('box').style.backgroundColor = _bg.rgba;
             }
-            if(params.font_color) {
-                document.getElementById('box').style.color = params.font_color;
+            if (params.font_color) {
+                const font_color = hexToRgba(params.font_color);
+                document.getElementById('box').style.color = font_color.rgba;
             }
         }
         const date = new Date();
