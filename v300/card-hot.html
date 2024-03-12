@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2024-03-12 13:22:57
  * @LastEditors: Tina Huang
- * @LastEditTime: 2024-03-12 13:49:55
+ * @LastEditTime: 2024-03-12 17:45:59
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -247,6 +247,13 @@
       background-color: rgb(247, 186, 183);
     }
 
+    .title {
+      max-width: 75%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
     html[theme="dark"] #inner-bar,
     html[theme="dark"] .time>span,
     html[theme="dark"] h2>div {
@@ -272,7 +279,7 @@
       <h2>🔥 热点 Top 10</h2>
       <div class="hot-box">
         <div v-for="(item) in music" :key="item.index" class="item">
-          <a :href="item?.url"><em
+          <a :href="item?.url" class="title"><em
               :id="`${item?.index==1?'first':item?.index==2?'second':item?.index==3?'third':''}`">{{item?.index}}</em>{{item?.title}}</a>
           <span>{{item?.hot}}</span>
         </div>
@@ -294,14 +301,16 @@
         time_rate: 0,
         _audio: null,
         status: 0,
+        type: 'wbHot'
       };
     },
     mounted() {
-      this.getMusic();
-      // this.getTime();
 
       const params = getAllParams(CryptoJS);
       handleDarkMode(params);
+      console.log(params)
+      if (params.type) this.type = params.type
+      this.getMusic();
     },
     methods: {
       getMusic() {
@@ -313,7 +322,7 @@
 
         axios
           .get(
-            `https://api.vvhan.com/api/hotlist?type=wbHot`
+            `https://api.vvhan.com/api/hotlist?type=${_this.type}`
           )
           .then((res) => {
             let data = res.data.data.slice(0, 10);

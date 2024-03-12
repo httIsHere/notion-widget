@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2024-03-12 17:06:49
  * @LastEditors: Tina Huang
- * @LastEditTime: 2024-03-12 17:28:49
+ * @LastEditTime: 2024-03-12 17:32:59
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -275,6 +275,7 @@
       if (params.font_color) {
         document.getElementById('main').style.color = hexToRgba(params.font_color).rgba
         document.getElementById('week').style.backgroundColor = hexToRgba(params.font_color).rgba
+        document.getElementById('week').style.color = hexToRgba(params.bg_color).rgba
         document.getElementById('inner-bar').style.backgroundColor = hexToRgba(params.font_color).rgba
         document.getElementById('bar').style.borderColor = hexToRgba(params.font_color).rgba
       }
