@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>年进度渐变</title>
     <script src="../flexibleMerge.js"></script>
-    <script src="../lib/global.js?v=20240307.1"></script>
+    <script src="../lib/global.js?v=20240312"></script>
     <style>
         body,
         html {
@@ -143,7 +143,8 @@
         }
 
         #week {
-            border-color: rgb(166, 107, 149);;
+            border-color: rgb(166, 107, 149);
+            ;
         }
 
         #week div {
@@ -162,7 +163,16 @@
         <div id="right">
             <div class="progress-item" id="year-bar">
                 <li id="year">
-                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </li>
                 <span>YEAR: </span>
                 <em></em>
@@ -204,7 +214,9 @@
 </body>
 <script>
     let Days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    let now_date = new Date('2022/11/23'), _time = now_date.getTime(), now_year = now_date.getFullYear();
+    let now_date = new Date('2022/11/23'),
+        _time = now_date.getTime(),
+        now_year = now_date.getFullYear();
     // 周
     let _day = now_date.getDay();
     _day = _day ? _day : 7;
@@ -218,7 +230,8 @@
         // 闰年
         Days[2] = 29;
     }
-    let cur_month = now_date.getMonth() + 1, month_day = now_date.getDate();
+    let cur_month = now_date.getMonth() + 1,
+        month_day = now_date.getDate();
     let month_rate = Math.ceil(month_day * 10 / Days[cur_month]);
     formatCeils(document.getElementById('month'), month_rate);
     document.getElementById('month-bar').children[2].innerHTML = `${month_day}/${Days[cur_month]}`;

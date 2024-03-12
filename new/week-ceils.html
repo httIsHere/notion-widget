@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>周格子</title>
     <script src="../flexibleMerge.js"></script>
-    <script src="../lib/global.js?v=20240307.1"></script>
+    <script src="../lib/global.js?v=20240312"></script>
     <style type="text/css">
         html,
         body {
@@ -57,7 +57,11 @@
             background: rgba(130, 173, 190, .7);
             color: #ffffff;
         }
-      html[theme="dark"], html[theme="dark"] body {background-color:#191919;}
+
+        html[theme="dark"],
+        html[theme="dark"] body {
+            background-color: #191919;
+        }
     </style>
 </head>
 
@@ -75,7 +79,8 @@
     </div>
 </body>
 <script>
-    const cur_date = new Date(), ceils = document.getElementsByClassName('ceil');
+    const cur_date = new Date(),
+        ceils = document.getElementsByClassName('ceil');
     let day = cur_date.getDay() || 7;
     for (let i = 1; i <= day; i++) {
         ceils[i - 1].classList.add('active');

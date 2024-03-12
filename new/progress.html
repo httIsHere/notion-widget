@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>年进度</title>
     <script src="../flexibleMerge.js"></script>
-    <script src="../lib/global.js?v=20240307.1"></script>
+    <script src="../lib/global.js?v=20240312"></script>
     <style>
         body,
         html {
@@ -137,7 +137,11 @@
         #week div {
             background-color: rgba(213, 182, 176, 1);
         }
-      html[theme="dark"], html[theme="dark"] body {background-color:#191919;}
+
+        html[theme="dark"],
+        html[theme="dark"] body {
+            background-color: #191919;
+        }
     </style>
 </head>
 
@@ -170,7 +174,9 @@
 </body>
 <script>
     let Days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    let now_date = new Date(), _time = now_date.getTime(), now_year = now_date.getFullYear();
+    let now_date = new Date(),
+        _time = now_date.getTime(),
+        now_year = now_date.getFullYear();
     // 周
     let _day = now_date.getDay();
     _day = _day ? _day : 7;
@@ -183,7 +189,8 @@
         // 闰年
         Days[2] = 29;
     }
-    let cur_month = now_date.getMonth() + 1, month_day = now_date.getDate();
+    let cur_month = now_date.getMonth() + 1,
+        month_day = now_date.getDate();
 
     document.getElementById('month').children[0].style.width = `${month_day * 100 / Days[cur_month]}%`;
     document.getElementById('month-bar').children[2].innerHTML = `${month_day}/${Days[cur_month]}`;
@@ -195,7 +202,8 @@
     let total = now_year % 4 === 0 && now_year % 100 !== 0 ? 366 : 365;
     let _year = document.getElementById('year');
     let year_rate = days * 100 / total;
-    let year_text = year_rate <= 15 ? days : year_rate <= 30 ? `${days} / ${total}` : `${days} / ${total} (${(year_rate).toFixed(0)}%)`;
+    let year_text = year_rate <= 15 ? days : year_rate <= 30 ? `${days} / ${total}` :
+        `${days} / ${total} (${(year_rate).toFixed(0)}%)`;
     _year.children[0].style.width = `${days * 100 / total}%`;
     document.getElementById('year-bar').children[2].innerHTML = `${days}/${total}`;
 

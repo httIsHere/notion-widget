@@ -8,188 +8,210 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quarterly Progress</title>
-    <script src="./lib/global.js?v=20240307.1"></script>
-    <style>
-      @font-face {
-        font-family: "Klee-One";
-        src: url("./fonts/Klee_One/KleeOne-Regular.ttf");
-      }
-      html,
-      body {
-        background-color: #ffffff;
-        font-family: "Klee-One";
-      }
-      .container {
-        width: 500px;
-        height: 120px;
-        box-shadow: 0 0 30px 0 rgb(0 0 0 / 10%);
-        margin: 30px auto;
-        padding-top: 57px;
-        box-sizing: border-box;
-        border-radius: 10px;
-        background-color: #ffffff;
-      }
-      .inner {
-        position: relative;
-        width: 450px;
-        height: 5px;
-        background-color: #f3f3f3;
-        border-radius: 2.5px;
-        margin: 0 auto;
-      }
-      #active-line {
-        width: 0;
-        height: 5px;
-        border-radius: 2.5px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        background-color: #bcd6cb;
-      }
-      /* .quarter-points {width: 450px; position: absolute;display: flex; align-items: center; justify-content: flex-end; margin-top: -7.5px;} */
-      .quarter-points .point {
-        width: 50px;
-        text-align: right;
-        font-size: 16px;
-        font-weight: bold;
-        line-height: 1;
-        position: absolute;
-        margin-top: -7.5px;
-      }
-      .quarter-points .point span {
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: #f3f3f3;
-        position: relative;
-      }
-      .quarter-points .point span::after {
-        content: "\2714";
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background-color: #bcd6cb;
-        color: #ffffff;
-        display: block;
-        font-size: 12px;
-        font-weight: normal;
-        text-align: center;
-        line-height: 20px;
-        position: absolute;
-        top: -5px;
-        left: -5px;
-        display: none;
-      }
-      .quarter-points .point p {
-        margin-right: -8px;
-        color: #999999;
-        font-family: "Klee-One";
-      }
-      #point-1 {
-        left: 62.5px;
-      }
-      #point-2 {
-        left: 175px;
-      }
-      #point-3 {
-        left: 287.5px;
-      }
-      #point-4 {
-        left: 400px;
-      }
-      .quarter-points .point.active span::after {
-        display: block;
-      }
-      .quarter-points .point.active p {
-        color: rgb(188, 214, 203);
-      }
-      html[theme="dark"], html[theme="dark"] body {background-color:#191919;}
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="inner">
-        <div id="active-line"></div>
-        <div class="quarter-points">
-          <div class="point" id="point-1">
-            <span></span>
-            <p>Q1</p>
-          </div>
-          <div class="point" id="point-2">
-            <span></span>
-            <p>Q2</p>
-          </div>
-          <div class="point" id="point-3">
-            <span></span>
-            <p>Q3</p>
-          </div>
-          <div class="point" id="point-4">
-            <span></span>
-            <p>Q4</p>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quarterly Progress</title>
+  <script src="./lib/global.js?v=20240312"></script>
+  <style>
+    @font-face {
+      font-family: "Klee-One";
+      src: url("./fonts/Klee_One/KleeOne-Regular.ttf");
+    }
+
+    html,
+    body {
+      background-color: #ffffff;
+      font-family: "Klee-One";
+    }
+
+    .container {
+      width: 500px;
+      height: 120px;
+      box-shadow: 0 0 30px 0 rgb(0 0 0 / 10%);
+      margin: 30px auto;
+      padding-top: 57px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      background-color: #ffffff;
+    }
+
+    .inner {
+      position: relative;
+      width: 450px;
+      height: 5px;
+      background-color: #f3f3f3;
+      border-radius: 2.5px;
+      margin: 0 auto;
+    }
+
+    #active-line {
+      width: 0;
+      height: 5px;
+      border-radius: 2.5px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-color: #bcd6cb;
+    }
+
+    /* .quarter-points {width: 450px; position: absolute;display: flex; align-items: center; justify-content: flex-end; margin-top: -7.5px;} */
+    .quarter-points .point {
+      width: 50px;
+      text-align: right;
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 1;
+      position: absolute;
+      margin-top: -7.5px;
+    }
+
+    .quarter-points .point span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #f3f3f3;
+      position: relative;
+    }
+
+    .quarter-points .point span::after {
+      content: "\2714";
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #bcd6cb;
+      color: #ffffff;
+      display: block;
+      font-size: 12px;
+      font-weight: normal;
+      text-align: center;
+      line-height: 20px;
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      display: none;
+    }
+
+    .quarter-points .point p {
+      margin-right: -8px;
+      color: #999999;
+      font-family: "Klee-One";
+    }
+
+    #point-1 {
+      left: 62.5px;
+    }
+
+    #point-2 {
+      left: 175px;
+    }
+
+    #point-3 {
+      left: 287.5px;
+    }
+
+    #point-4 {
+      left: 400px;
+    }
+
+    .quarter-points .point.active span::after {
+      display: block;
+    }
+
+    .quarter-points .point.active p {
+      color: rgb(188, 214, 203);
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="inner">
+      <div id="active-line"></div>
+      <div class="quarter-points">
+        <div class="point" id="point-1">
+          <span></span>
+          <p>Q1</p>
+        </div>
+        <div class="point" id="point-2">
+          <span></span>
+          <p>Q2</p>
+        </div>
+        <div class="point" id="point-3">
+          <span></span>
+          <p>Q3</p>
+        </div>
+        <div class="point" id="point-4">
+          <span></span>
+          <p>Q4</p>
         </div>
       </div>
     </div>
-  </body>
-  <script>
-    let DAYS = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    function getQueryString(name) {
-      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-      let r = window.location.search.substr(1).match(reg);
-      if (r != null) {
-        return decodeURIComponent(r[2]);
-      }
-      return null;
-    }
-    const query_year = +getQueryString('year');
-    let now_date = new Date();
-    let _time = now_date.getTime();
+  </div>
+</body>
+<script>
+  let DAYS = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-    let now_year = now_date.getFullYear(),
-      now_month = now_date.getMonth() + 1,
-      now_day = now_date.getDate();
-    if(query_year && query_year < now_year) {
-        // 定位到最后一天
-        now_year = query_year;
-        now_month = 12
-        now_day = 31;
-    } else if(query_year && query_year > now_year) {
-        now_year = query_year;
-        // 定位到未开始阶段
-        now_month = 0;
-        now_day = 0;
+  function getQueryString(name) {
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    let r = window.location.search.substr(1).match(reg);
+    if (r != null) {
+      return decodeURIComponent(r[2]);
     }
-    let year_start = new Date(`${now_year}/1/1`).getTime();
-    let _du = _time - year_start;
-    let days = Math.ceil(_du / (24 * 60 * 60 * 1000));
-    let total = now_year % 4 === 0 && now_year % 100 !== 0 ? 366 : 365;
-    let percent = (days * 100) / total;
-    document.getElementById("active-line").style.width = `${
+    return null;
+  }
+  const query_year = +getQueryString('year');
+  let now_date = new Date();
+  let _time = now_date.getTime();
+
+  let now_year = now_date.getFullYear(),
+    now_month = now_date.getMonth() + 1,
+    now_day = now_date.getDate();
+  if (query_year && query_year < now_year) {
+    // 定位到最后一天
+    now_year = query_year;
+    now_month = 12
+    now_day = 31;
+  } else if (query_year && query_year > now_year) {
+    now_year = query_year;
+    // 定位到未开始阶段
+    now_month = 0;
+    now_day = 0;
+  }
+  let year_start = new Date(`${now_year}/1/1`).getTime();
+  let _du = _time - year_start;
+  let days = Math.ceil(_du / (24 * 60 * 60 * 1000));
+  let total = now_year % 4 === 0 && now_year % 100 !== 0 ? 366 : 365;
+  let percent = (days * 100) / total;
+  document.getElementById("active-line").style.width = `${
       percent > 100 ? 100 : percent
     }%`;
-    if (now_year % 4 === 0 && now_year % 100 != 0) {
-      // 闰年
-      DAYS[2] = 29;
-    }
-    if(now_month > 0 && now_day >= DAYS[now_month] && now_month % 3 === 0) {
-        document
-          .getElementById(`point-${now_month / 3}`)
-          .classList.add("active");
+  if (now_year % 4 === 0 && now_year % 100 != 0) {
+    // 闰年
+    DAYS[2] = 29;
+  }
+  if (now_month > 0 && now_day >= DAYS[now_month] && now_month % 3 === 0) {
+    document
+      .getElementById(`point-${now_month / 3}`)
+      .classList.add("active");
+  }
+  now_month--;
+  while (now_month > 0) {
+    if (now_month % 3 === 0) {
+      document
+        .getElementById(`point-${now_month / 3}`)
+        .classList.add("active");
     }
     now_month--;
-    while (now_month > 0) {
-      if (now_month % 3 === 0) {
-        document
-          .getElementById(`point-${now_month / 3}`)
-          .classList.add("active");
-      }
-      now_month--;
-    }
-  </script>
+  }
+</script>
+
 </html>

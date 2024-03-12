@@ -8,224 +8,253 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calendar by Week</title>
-    <script src="./lib/global.js?v=20240307.1"></script>
-    <style>
-      html,
-      body {
-        background-color: #ffffff;
-      }
-      @font-face {
-        font-family: "Rampart-One";
-        src: url("./fonts/Rampart_One/RampartOne-Regular.ttf");
-      }
-      @font-face {
-        font-family: "Klee-One";
-        src: url("./fonts/Klee_One/KleeOne-Regular.ttf");
-      }
-      .container {
-        /* width: 280px; */
-        display: flex;
-      }
-      .container .inner {
-        margin-right: 20px;
-      }
-      .week-days {
-        width: 100%;
-        display: flex;
-        align-items: center;
-      }
-      .week-days.head {
-        font-weight: bold;
-        font-size: 16px;
-        margin-bottom: 5px;
-      }
-      .week-days.week {
-        margin-bottom: 3px;
-      }
-      .week-days span {
-        line-height: 30px;
-        font-size: 14px;
-        width: 40px;
-        display: inline-block;
-        text-align: center;
-      }
-      .start,
-      .active,
-      .end {
-        background-color: rgba(119, 172, 152, 0.2);
-      }
-      .start {
-        border-top-left-radius: 15px;
-        border-bottom-left-radius: 15px;
-      }
-      .end {
-        border-top-right-radius: 15px;
-        border-bottom-right-radius: 15px;
-      }
-      .gray {
-        color: #999999;
-      }
-      .title {
-        text-align: center;
-        font-family: "Rampart-One";
-        font-size: 24px;
-        margin: 0;
-        margin-bottom: 10px;
-      }
-      .dis_none {
-        display: none;
-      }
-        html[theme="dark"], html[theme="dark"] body {background-color:#191919; color:#ffffff;}
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="inner" id="calenderByWeek">
-        <h2 class="title" id="title"></h2>
-        <div class="week-days head">
-          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span
-          ><span>S</span><span>S</span>
-        </div>
-        <div id="content"></div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendar by Week</title>
+  <script src="./lib/global.js?v=20240312"></script>
+  <style>
+    html,
+    body {
+      background-color: #ffffff;
+    }
+
+    @font-face {
+      font-family: "Rampart-One";
+      src: url("./fonts/Rampart_One/RampartOne-Regular.ttf");
+    }
+
+    @font-face {
+      font-family: "Klee-One";
+      src: url("./fonts/Klee_One/KleeOne-Regular.ttf");
+    }
+
+    .container {
+      /* width: 280px; */
+      display: flex;
+    }
+
+    .container .inner {
+      margin-right: 20px;
+    }
+
+    .week-days {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .week-days.head {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .week-days.week {
+      margin-bottom: 3px;
+    }
+
+    .week-days span {
+      line-height: 30px;
+      font-size: 14px;
+      width: 40px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .start,
+    .active,
+    .end {
+      background-color: rgba(119, 172, 152, 0.2);
+    }
+
+    .start {
+      border-top-left-radius: 15px;
+      border-bottom-left-radius: 15px;
+    }
+
+    .end {
+      border-top-right-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+
+    .gray {
+      color: #999999;
+    }
+
+    .title {
+      text-align: center;
+      font-family: "Rampart-One";
+      font-size: 24px;
+      margin: 0;
+      margin-bottom: 10px;
+    }
+
+    .dis_none {
+      display: none;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+      color: #ffffff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="inner" id="calenderByWeek">
+      <h2 class="title" id="title"></h2>
+      <div class="week-days head">
+        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
       </div>
-      <div class="inner dis_none" id="month2">
-        <h2 class="title" id="title2"></h2>
-        <div class="week-days head">
-          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span
-          ><span>S</span><span>S</span>
-        </div>
-        <div id="content2"></div>
-      </div>
+      <div id="content"></div>
     </div>
-  </body>
-  <script type="text/javascript">
-    window.onload = function () {
-      let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-      const months = [
-        " ",
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
-      let start_p = getQueryString("start"),
-        end_p = getQueryString("end");
-      let _now = new Date(start_p),
-        _end = new Date(end_p);
-      let _year = _now.getFullYear();
-      if (_year % 4 === 0 && _year % 100 != 0) {
-        // 闰年
-        days[2] = 29;
+    <div class="inner dis_none" id="month2">
+      <h2 class="title" id="title2"></h2>
+      <div class="week-days head">
+        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+      </div>
+      <div id="content2"></div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript">
+  window.onload = function () {
+    let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const months = [
+      " ",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    let start_p = getQueryString("start"),
+      end_p = getQueryString("end");
+    let _now = new Date(start_p),
+      _end = new Date(end_p);
+    let _year = _now.getFullYear();
+    if (_year % 4 === 0 && _year % 100 != 0) {
+      // 闰年
+      days[2] = 29;
+    }
+    // 需要获取该月第一天在星期几？还是根据当前进行推算
+    let now_weekday = _now.getDay(),
+      now_date = _now.getDate(),
+      now_month = _now.getMonth() + 1;
+    let end_date = _end.getDate(),
+      end_month = _end.getMonth() + 1;
+    let _arr = [], // 当月
+      _arr_after = []; // 跨月
+    // ****************** v1: 当月内 ******************
+    // 目标日前
+    for (let i = 1; i < now_date; i++) {
+      let __s = (now_date - i) % 7 || 7;
+      let weekday = (7 - __s + now_weekday) % 7;
+      _arr.push({
+        weekday: weekday || 7,
+        date: i
+      });
+    }
+    // 目标日开始后
+    for (let i = now_date; i <= days[now_month]; i++) {
+      let __s = (i - now_date) % 7;
+      let weekday = __s + now_weekday,
+        _end_date = end_date;
+      let item = {
+        weekday: weekday || 7,
+        date: i
+      };
+      if (end_month > now_month) {
+        _end_date += days[now_month];
       }
-      // 需要获取该月第一天在星期几？还是根据当前进行推算
-      let now_weekday = _now.getDay(),
-        now_date = _now.getDate(),
-        now_month = _now.getMonth() + 1;
-      let end_date = _end.getDate(),
-        end_month = _end.getMonth() + 1;
-      let _arr = [], // 当月
-        _arr_after = []; // 跨月
-      // ****************** v1: 当月内 ******************
-      // 目标日前
-      for (let i = 1; i < now_date; i++) {
-        let __s = (now_date - i) % 7 || 7;
-        let weekday = (7 - __s + now_weekday) % 7;
-        _arr.push({ weekday: weekday || 7, date: i });
+      if (i === now_date) {
+        item.status = "start";
+      } else if (i > now_date && i < _end_date) {
+        item.status = "active";
+      } else if (i === end_date) {
+        item.status = "end";
       }
-      // 目标日开始后
-      for (let i = now_date; i <= days[now_month]; i++) {
-        let __s = (i - now_date) % 7;
-        let weekday = __s + now_weekday,
-          _end_date = end_date;
-        let item = { weekday: weekday || 7, date: i };
-        if (end_month > now_month) {
-          _end_date += days[now_month];
-        }
-        if (i === now_date) {
-          item.status = "start";
-        } else if (i > now_date && i < _end_date) {
+      _arr.push(item);
+    }
+    // ****************** v1: 当月内 end ******************
+    console.log(_arr)
+    // ****************** v2：可跨月，相邻月分 ******************
+    if (end_month > now_month) {
+      let start_weekday = _arr[_arr.length - 1].weekday + 1;
+      start_weekday = (start_weekday % 7) || 7;
+      for (let i = start_weekday - 1; i >= 1; i--) {
+        let _item = JSON.parse(JSON.stringify(_arr[_arr.length - i]));
+        _item.status = "gray";
+        _arr_after.push(_item);
+      }
+      for (let i = 1; i <= days[end_month]; i++) {
+        let __s = (i - 1) % 7;
+        let weekday = __s + start_weekday;
+        let item = {
+          weekday: weekday || 7,
+          date: i
+        };
+        if (i < end_date) {
           item.status = "active";
         } else if (i === end_date) {
           item.status = "end";
         }
-        _arr.push(item);
+        _arr_after.push(item);
       }
-      // ****************** v1: 当月内 end ******************
-      console.log(_arr)
-      // ****************** v2：可跨月，相邻月分 ******************
-      if (end_month > now_month) {
-        let start_weekday = _arr[_arr.length - 1].weekday + 1;
-        start_weekday = (start_weekday % 7) || 7;
-        for (let i = start_weekday - 1; i >= 1; i--) {
-          let _item = JSON.parse(JSON.stringify(_arr[_arr.length - i]));
-          _item.status = "gray";
-          _arr_after.push(_item);
-        }
-        for (let i = 1; i <= days[end_month]; i++) {
-          let __s = (i - 1) % 7;
-          let weekday = __s + start_weekday;
-          let item = { weekday: weekday || 7, date: i };
-          if (i < end_date) {
-            item.status = "active";
-          } else if (i === end_date) {
-            item.status = "end";
-          }
-          _arr_after.push(item);
+    }
+    // ****************** v2：可跨月，相邻月分 end ******************
+    // 渲染
+    // & 开始月份
+    document.getElementById("title").innerHTML = months[now_month];
+    document.getElementById("title2").innerHTML = months[end_month];
+    let _html = "",
+      _html_after = "";
+    for (let i = 0; i < _arr.length; i++) {
+      if (_arr[i].weekday % 7 === 1) {
+        _html += '<div class="week-days week">';
+      }
+      if (i === 0) {
+        if (_arr[i].weekday % 7 !== 1) _html += '<div class="week-days week">';
+        // 确定第一天所在的位置
+        for (let j = 1; j < _arr[i].weekday; j++) {
+          _html += "<span></span>";
         }
       }
-      // ****************** v2：可跨月，相邻月分 end ******************
-      // 渲染
-      // & 开始月份
-      document.getElementById("title").innerHTML = months[now_month];
-      document.getElementById("title2").innerHTML = months[end_month];
-      let _html = "",
-        _html_after = "";
-      for (let i = 0; i < _arr.length; i++) {
-        if (_arr[i].weekday % 7 === 1) {
-          _html += '<div class="week-days week">';
-        }
-        if (i === 0) {
-          if(_arr[i].weekday % 7 !== 1) _html += '<div class="week-days week">';
-          // 确定第一天所在的位置
-          for (let j = 1; j < _arr[i].weekday; j++) {
-            _html += "<span></span>";
-          }
-        }
-        _html += `<span class="${_arr[i].status || ""}">${_arr[i].date}</span>`;
-        if (_arr[i].weekday % 7 === 0) {
-          _html += "</div>";
-        }
+      _html += `<span class="${_arr[i].status || ""}">${_arr[i].date}</span>`;
+      if (_arr[i].weekday % 7 === 0) {
+        _html += "</div>";
       }
-      // 相邻月份
-      console.log(_arr_after);
-      for (let i = 0; i < _arr_after.length; i++) {
-        let item = _arr_after[i];
-        if (item.weekday % 7 === 1) {
-          _html_after += '<div class="week-days week">';
-        }
-        _html_after += `<span class="${item.status || ""}">${item.date}</span>`;
-        if (item.weekday % 7 === 0) {
-          _html_after += "</div>";
-        }
+    }
+    // 相邻月份
+    console.log(_arr_after);
+    for (let i = 0; i < _arr_after.length; i++) {
+      let item = _arr_after[i];
+      if (item.weekday % 7 === 1) {
+        _html_after += '<div class="week-days week">';
       }
-      if (_arr_after.length) {
-        document.getElementById("month2").classList.remove("dis_none");
+      _html_after += `<span class="${item.status || ""}">${item.date}</span>`;
+      if (item.weekday % 7 === 0) {
+        _html_after += "</div>";
       }
-      document.getElementById("content").innerHTML = _html;
-      document.getElementById("content2").innerHTML = _html_after;
-    };
-  </script>
+    }
+    if (_arr_after.length) {
+      document.getElementById("month2").classList.remove("dis_none");
+    }
+    document.getElementById("content").innerHTML = _html;
+    document.getElementById("content2").innerHTML = _html_after;
+  };
+</script>
+
 </html>

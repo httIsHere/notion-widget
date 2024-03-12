@@ -8,160 +8,162 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>选择周</title>
-    <script src="../flexibleMerge.js"></script>
-    <script src="../lib/global.js?v=20240307.1"></script>
-    <script src="../lib/crypto-js.min.js"></script>
-    <style type="text/css">
-      html,
-      body {
-        background-color: #ffffff;
-        padding: 0;
-        margin: 0;
-      }
 
-      h4,
-      p,
-      h3 {
-        margin: 0;
-        padding: 0;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>选择周</title>
+  <script src="../flexibleMerge.js"></script>
+  <script src="../lib/global.js?v=20240312"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style type="text/css">
+    html,
+    body {
+      background-color: #ffffff;
+      padding: 0;
+      margin: 0;
+    }
 
-      h3 {
-        text-align: center;
-        color: rgba(86, 61, 98, 0.5);
-        font-size: 0.64rem;
-        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-      }
+    h4,
+    p,
+    h3 {
+      margin: 0;
+      padding: 0;
+    }
 
-      .inner {
-        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-        width: 8rem;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        background: rgba(170, 151, 191, 0.7);
-        border-radius: 1.1733rem;
-        height: 1.1733rem;
-        color: #ffffff;
-        padding: 0 0.2667rem;
-        box-sizing: border-box;
-        margin: 0.1333rem auto 0;
-      }
+    h3 {
+      text-align: center;
+      color: rgba(86, 61, 98, 0.5);
+      font-size: 0.64rem;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    }
 
-      .inner .ceil {
-        width: 0.8rem;
-        text-align: center;
-      }
+    .inner {
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      width: 8rem;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: rgba(170, 151, 191, 0.7);
+      border-radius: 1.1733rem;
+      height: 1.1733rem;
+      color: #ffffff;
+      padding: 0 0.2667rem;
+      box-sizing: border-box;
+      margin: 0.1333rem auto 0;
+    }
 
-      .inner h4 {
-        line-height: 1.2;
-        font-size: 0.4267rem;
-      }
+    .inner .ceil {
+      width: 0.8rem;
+      text-align: center;
+    }
 
-      .inner p {
-        font-size: 0.2667rem;
-        line-height: 1.2;
-      }
+    .inner h4 {
+      line-height: 1.2;
+      font-size: 0.4267rem;
+    }
 
-      html[theme="dark"],
-      html[theme="dark"] body {
-        background-color: #191919;
-      }
+    .inner p {
+      font-size: 0.2667rem;
+      line-height: 1.2;
+    }
 
-      html[theme="dark"] h3 {
-        color: rgba(170, 151, 191, 1);
-      }
-    </style>
-  </head>
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+    }
 
-  <body>
-    <div class="wrapper">
-      <h3 id="month"></h3>
-      <div class="inner">
-        <div class="ceil">
-          <h4 id="day-1"></h4>
-          <p id="label-1"></p>
-        </div>
-        <div class="ceil">
-          <h4 id="day-2"></h4>
-          <p id="label-2"></p>
-        </div>
-        <div class="ceil">
-          <h4 id="day-3"></h4>
-          <p id="label-3"></p>
-        </div>
-        <div class="ceil">
-          <h4 id="day-4"></h4>
-          <p id="label-4"></p>
-        </div>
-        <div class="ceil">
-          <h4 id="day-5"></h4>
-          <p id="label-5"></p>
-        </div>
-        <div class="ceil">
-          <h4 id="day-6"></h4>
-          <p id="label-6"></p>
-        </div>
-        <div class="ceil">
-          <h4 id="day-7"></h4>
-          <p id="label-7"></p>
-        </div>
+    html[theme="dark"] h3 {
+      color: rgba(170, 151, 191, 1);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <h3 id="month"></h3>
+    <div class="inner">
+      <div class="ceil">
+        <h4 id="day-1"></h4>
+        <p id="label-1"></p>
+      </div>
+      <div class="ceil">
+        <h4 id="day-2"></h4>
+        <p id="label-2"></p>
+      </div>
+      <div class="ceil">
+        <h4 id="day-3"></h4>
+        <p id="label-3"></p>
+      </div>
+      <div class="ceil">
+        <h4 id="day-4"></h4>
+        <p id="label-4"></p>
+      </div>
+      <div class="ceil">
+        <h4 id="day-5"></h4>
+        <p id="label-5"></p>
+      </div>
+      <div class="ceil">
+        <h4 id="day-6"></h4>
+        <p id="label-6"></p>
+      </div>
+      <div class="ceil">
+        <h4 id="day-7"></h4>
+        <p id="label-7"></p>
       </div>
     </div>
-  </body>
-  <script>
-    const months = [
-      " ",
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    const week_day = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-    window.onload = function () {
-      const params = getAllParams(CryptoJS);
-      handleDarkMode(params);
-      let start_param = getStartSunday(params);
-      let s = getQueryString("s") || params.day;
-      let start_date = s ? new Date(s) : new Date(),
-        _time = start_date.getTime(),
-        s_m = start_date.getMonth() + 1,
-        s_day = start_param
-          ? start_date.getDay() + 1
-          : start_date.getDay() || 7;
-      let real_s = _time - (s_day - 1) * 24 * 60 * 60 * 1000,
-        real_s_m = new Date(real_s).getMonth() + 1;
-      let end_date = new Date(_time + (7 - s_day) * 24 * 60 * 60 * 1000),
-        e_m = end_date.getMonth() + 1;
-      document.getElementById("month").innerHTML =
-        real_s_m !== e_m
-          ? `${months[real_s_m]} - ${months[e_m]}`
-          : months[real_s_m];
-      document.getElementById(`day-${s_day}`).innerHTML = start_date.getDate();
-      for (let i = 0; i < 7; i++) {
-        let step = start_param ? i - s_day : i - s_day + 1;
-        let _day = _time + (i - s_day + 1) * 24 * 60 * 60 * 1000;
-        let week_label = start_param
-          ? week_day[i]
-          : week_day[i + 1 >= 7 ? 0 : i + 1];
-        document.getElementById(`label-${i + 1}`).innerHTML = week_label;
-        document.getElementById(`day-${i + 1}`).innerHTML = new Date(
-          _day
-        ).getDate();
-      }
-    };
-  </script>
+  </div>
+</body>
+<script>
+  const months = [
+    " ",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const week_day = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  window.onload = function () {
+    const params = getAllParams(CryptoJS);
+    handleDarkMode(params);
+    let start_param = getStartSunday(params);
+    let s = getQueryString("s") || params.day;
+    let start_date = s ? new Date(s) : new Date(),
+      _time = start_date.getTime(),
+      s_m = start_date.getMonth() + 1,
+      s_day = start_param ?
+      start_date.getDay() + 1 :
+      start_date.getDay() || 7;
+    let real_s = _time - (s_day - 1) * 24 * 60 * 60 * 1000,
+      real_s_m = new Date(real_s).getMonth() + 1;
+    let end_date = new Date(_time + (7 - s_day) * 24 * 60 * 60 * 1000),
+      e_m = end_date.getMonth() + 1;
+    document.getElementById("month").innerHTML =
+      real_s_m !== e_m ?
+      `${months[real_s_m]} - ${months[e_m]}` :
+      months[real_s_m];
+    document.getElementById(`day-${s_day}`).innerHTML = start_date.getDate();
+    for (let i = 0; i < 7; i++) {
+      let step = start_param ? i - s_day : i - s_day + 1;
+      let _day = _time + (i - s_day + 1) * 24 * 60 * 60 * 1000;
+      let week_label = start_param ?
+        week_day[i] :
+        week_day[i + 1 >= 7 ? 0 : i + 1];
+      document.getElementById(`label-${i + 1}`).innerHTML = week_label;
+      document.getElementById(`day-${i + 1}`).innerHTML = new Date(
+        _day
+      ).getDate();
+    }
+  };
+</script>
+
 </html>

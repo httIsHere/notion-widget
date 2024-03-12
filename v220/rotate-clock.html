@@ -7,264 +7,279 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>翻页时钟</title>
-    <script src="../lib/global.js?v=20240307.1"></script>
-    <script src="../lib/crypto-js.min.js"></script>
-    <style>
-      * {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-      }
-      .show {
-        width: 80vw;
-        height: 35vw;
-        margin: 0 auto;
-        position: relative;
-        background-color: black;
-        color: #fff;
-        border-radius: 20px;
-      }
-      .time {
-        display: flex;
-        flex: 1;
-        font-size: 16vw;
-        text-align: center;
-        line-height: 30vw;
-        padding: 0 2vw;
-        overflow: hidden;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-      }
-      .beforeTime {
-        z-index: 100;
-      }
-      .time li:nth-child(2n) {
-        flex: 1;
-      }
-      .time li:nth-child(2n + 1) {
-        flex: 4;
-        background-color: #3b3d3b;
-        position: relative;
-        height: 20vw;
-        line-height: 20vw;
-        margin: auto 2vw;
-        border-radius: 1.5vw;
-        /* box-shadow: 0 0 20px 3px white; */
-        overflow: hidden;
-        font-family: monospace;
-        letter-spacing: -2vw;
-      }
-      .time li:nth-child(2n + 1) .upBox,
-      .time li:nth-child(2n + 1) .downBox {
-        position: absolute;
-        left: 0;
-        right: 0;
-        overflow: hidden;
-      }
-      .time li:nth-child(2n + 1) .upBox {
-        top: 0;
-        bottom: 50%;
-        box-sizing: border-box;
-        border-bottom: solid 3px #3b3d3b;
-        background-color: #3b3d3b;
-        transform-origin: bottom;
-      }
-      .time li:nth-child(2n + 1) .downBox {
-        top: 50%;
-        bottom: 0;
-        line-height: 0;
-        box-sizing: border-box;
-        background-color: #3b3d3b;
-        overflow: hidden;
-        transform-origin: top;
-      }
-      .change {
-        border-bottom: 2px solid white;
-      }
-      #date {
-        text-align: center;
-        position: absolute;
-        top: 28vw;
-        left: 0;
-        right: 0;
-        font-size: 3vw;
-        font-family: monospace;
-      }
-      html[theme="dark"],
-      html[theme="dark"] body {
-        background-color: #191919;
-      }
-      html[theme="dark"] .show {
-        background-color: rgba(255, 255, 255, .1);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="show">
-      <ul class="time">
-        <li>
-          <div class="upBox beforeTime"></div>
-          <div class="downBox beforeTime"></div>
-          <div class="upBox afterTime"></div>
-          <div class="downBox afterTime"></div>
-        </li>
-        <li>:</li>
-        <li>
-          <div class="upBox beforeTime"></div>
-          <div class="downBox beforeTime"></div>
-          <div class="upBox afterTime"></div>
-          <div class="downBox afterTime"></div>
-        </li>
-        <li>:</li>
-        <li>
-          <div class="upBox beforeTime"></div>
-          <div class="downBox beforeTime"></div>
-          <div class="upBox afterTime"></div>
-          <div class="downBox afterTime"></div>
-        </li>
-      </ul>
-      <p id="date"></p>
-    </div>
-  </body>
-  <script>
-    window.onload = function () {
-      const params = getAllParams(CryptoJS);
-      handleDarkMode(params);
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>翻页时钟</title>
+  <script src="../lib/global.js?v=20240312"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    * {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
     }
-    const week_day = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
-    const _date = new Date();
-    document.getElementById('date').innerHTML = `${_date.getMonth() + 1}/${_date.getDate()} ${week_day[_date.getDay()]}`
-    //格式化时间
-    const formatTime = (time) => {
-      if (time < 10) time = "0" + time;
-      return time;
-    };
-    //翻转前面下面的盒子向上180deg
-    const rotateUp = (ele, time, n) => {
-      //传入的为一开始翻转的元素，即前面下面的盒子，以及新时间，以及第几个li盒子
-      let rotateDeg = 0;
-      ele.style.zIndex = 50;
-      //这个是所有上面的盒子
-      const allUpBox = document
-        .querySelector(`li:nth-child(${n})`)
-        .querySelectorAll(".upBox");
-      //所有前面的盒子
-      const beforeTime = document
-        .querySelector(`li:nth-child(${n})`)
-        .querySelectorAll(".beforeTime");
-      // 让上面后面的盒子先不可见，然后设置为270°
-      allUpBox[1].style.display = "none";
-      allUpBox[1].transform = `rotateX(270deg)`;
-      const animation = () => {
-        rotateDeg += 3;
-        ele.style.transform = `perspective(500px) rotateX(${rotateDeg}deg)`;
-        if (rotateDeg == 90) {
-          //让它更新为最近时间后隐藏
-          ele.innerHTML = time;
-          ele.style.zIndex = -1;
-          //让刚刚上面隐藏的盒子重新显示出来并且完成90°-180°的旋转
-          allUpBox[1].style.display = "block";
-          allUpBox[0].style.zIndex = 1;
-          rotateDown(allUpBox[1]);
-          allUpBox[1].style.zIndex = 1;
-        }
-        if (rotateDeg == 150) {
-          beforeTime[0].innerHTML = time;
-        }
-        if (rotateDeg < 180) {
-          requestAnimationFrame(animation);
-        }
-      };
-      animation();
-    };
 
-    const rotateDown = (ele) => {
-      let rotateDeg = 270;
-      const animation = () => {
-        rotateDeg += 3;
-        ele.style.transform = `perspective(500px) rotateX(${rotateDeg}deg)`;
-        if (rotateDeg < 360) {
-          requestAnimationFrame(animation);
-        }
-      };
-      animation();
+    .show {
+      width: 80vw;
+      height: 35vw;
+      margin: 0 auto;
+      position: relative;
+      background-color: black;
+      color: #fff;
+      border-radius: 20px;
+    }
+
+    .time {
+      display: flex;
+      flex: 1;
+      font-size: 16vw;
+      text-align: center;
+      line-height: 30vw;
+      padding: 0 2vw;
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .beforeTime {
+      z-index: 100;
+    }
+
+    .time li:nth-child(2n) {
+      flex: 1;
+    }
+
+    .time li:nth-child(2n + 1) {
+      flex: 4;
+      background-color: #3b3d3b;
+      position: relative;
+      height: 20vw;
+      line-height: 20vw;
+      margin: auto 2vw;
+      border-radius: 1.5vw;
+      /* box-shadow: 0 0 20px 3px white; */
+      overflow: hidden;
+      font-family: monospace;
+      letter-spacing: -2vw;
+    }
+
+    .time li:nth-child(2n + 1) .upBox,
+    .time li:nth-child(2n + 1) .downBox {
+      position: absolute;
+      left: 0;
+      right: 0;
+      overflow: hidden;
+    }
+
+    .time li:nth-child(2n + 1) .upBox {
+      top: 0;
+      bottom: 50%;
+      box-sizing: border-box;
+      border-bottom: solid 3px #3b3d3b;
+      background-color: #3b3d3b;
+      transform-origin: bottom;
+    }
+
+    .time li:nth-child(2n + 1) .downBox {
+      top: 50%;
+      bottom: 0;
+      line-height: 0;
+      box-sizing: border-box;
+      background-color: #3b3d3b;
+      overflow: hidden;
+      transform-origin: top;
+    }
+
+    .change {
+      border-bottom: 2px solid white;
+    }
+
+    #date {
+      text-align: center;
+      position: absolute;
+      top: 28vw;
+      left: 0;
+      right: 0;
+      font-size: 3vw;
+      font-family: monospace;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+    }
+
+    html[theme="dark"] .show {
+      background-color: rgba(255, 255, 255, .1);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="show">
+    <ul class="time">
+      <li>
+        <div class="upBox beforeTime"></div>
+        <div class="downBox beforeTime"></div>
+        <div class="upBox afterTime"></div>
+        <div class="downBox afterTime"></div>
+      </li>
+      <li>:</li>
+      <li>
+        <div class="upBox beforeTime"></div>
+        <div class="downBox beforeTime"></div>
+        <div class="upBox afterTime"></div>
+        <div class="downBox afterTime"></div>
+      </li>
+      <li>:</li>
+      <li>
+        <div class="upBox beforeTime"></div>
+        <div class="downBox beforeTime"></div>
+        <div class="upBox afterTime"></div>
+        <div class="downBox afterTime"></div>
+      </li>
+    </ul>
+    <p id="date"></p>
+  </div>
+</body>
+<script>
+  window.onload = function () {
+    const params = getAllParams(CryptoJS);
+    handleDarkMode(params);
+  }
+  const week_day = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+  const _date = new Date();
+  document.getElementById('date').innerHTML = `${_date.getMonth() + 1}/${_date.getDate()} ${week_day[_date.getDay()]}`
+  //格式化时间
+  const formatTime = (time) => {
+    if (time < 10) time = "0" + time;
+    return time;
+  };
+  //翻转前面下面的盒子向上180deg
+  const rotateUp = (ele, time, n) => {
+    //传入的为一开始翻转的元素，即前面下面的盒子，以及新时间，以及第几个li盒子
+    let rotateDeg = 0;
+    ele.style.zIndex = 50;
+    //这个是所有上面的盒子
+    const allUpBox = document
+      .querySelector(`li:nth-child(${n})`)
+      .querySelectorAll(".upBox");
+    //所有前面的盒子
+    const beforeTime = document
+      .querySelector(`li:nth-child(${n})`)
+      .querySelectorAll(".beforeTime");
+    // 让上面后面的盒子先不可见，然后设置为270°
+    allUpBox[1].style.display = "none";
+    allUpBox[1].transform = `rotateX(270deg)`;
+    const animation = () => {
+      rotateDeg += 3;
+      ele.style.transform = `perspective(500px) rotateX(${rotateDeg}deg)`;
+      if (rotateDeg == 90) {
+        //让它更新为最近时间后隐藏
+        ele.innerHTML = time;
+        ele.style.zIndex = -1;
+        //让刚刚上面隐藏的盒子重新显示出来并且完成90°-180°的旋转
+        allUpBox[1].style.display = "block";
+        allUpBox[0].style.zIndex = 1;
+        rotateDown(allUpBox[1]);
+        allUpBox[1].style.zIndex = 1;
+      }
+      if (rotateDeg == 150) {
+        beforeTime[0].innerHTML = time;
+      }
+      if (rotateDeg < 180) {
+        requestAnimationFrame(animation);
+      }
     };
+    animation();
+  };
+
+  const rotateDown = (ele) => {
+    let rotateDeg = 270;
+    const animation = () => {
+      rotateDeg += 3;
+      ele.style.transform = `perspective(500px) rotateX(${rotateDeg}deg)`;
+      if (rotateDeg < 360) {
+        requestAnimationFrame(animation);
+      }
+    };
+    animation();
+  };
+  let time = new Date();
+  let oldHour = time.getHours();
+  var oldMinute = time.getMinutes();
+  var oldSecond = time.getSeconds();
+  document
+    .querySelector("li:nth-child(1)")
+    .querySelectorAll(".beforeTime")
+    .forEach((ele) => (ele.innerHTML = formatTime(oldHour)));
+  document
+    .querySelector(" li:nth-child(3)")
+    .querySelectorAll(".beforeTime")
+    .forEach((ele) => (ele.innerHTML = formatTime(oldMinute)));
+  document
+    .querySelector(" li:nth-child(5)")
+    .querySelectorAll(".beforeTime")
+    .forEach((ele) => (ele.innerHTML = formatTime(oldSecond)));
+  const changeTime = () => {
     let time = new Date();
-    let oldHour = time.getHours();
-    var oldMinute = time.getMinutes();
-    var oldSecond = time.getSeconds();
-    document
+    let hour = time.getHours();
+    let minute = time.getMinutes();
+    let second = time.getSeconds();
+    const setHourBox = document
       .querySelector("li:nth-child(1)")
-      .querySelectorAll(".beforeTime")
-      .forEach((ele) => (ele.innerHTML = formatTime(oldHour)));
-    document
-      .querySelector(" li:nth-child(3)")
-      .querySelectorAll(".beforeTime")
-      .forEach((ele) => (ele.innerHTML = formatTime(oldMinute)));
-    document
-      .querySelector(" li:nth-child(5)")
-      .querySelectorAll(".beforeTime")
-      .forEach((ele) => (ele.innerHTML = formatTime(oldSecond)));
-    const changeTime = () => {
-      let time = new Date();
-      let hour = time.getHours();
-      let minute = time.getMinutes();
-      let second = time.getSeconds();
-      const setHourBox = document
-        .querySelector("li:nth-child(1)")
-        .querySelectorAll(".afterTime");
-      if (
-        !setHourBox[0].innerHTML ||
-        setHourBox[0].innerHTML != formatTime(hour)
-      ) {
-        if (setHourBox[0].innerHTML)
-          rotateUp(
-            document
-              .querySelector("li:nth-child(1)")
-              .querySelectorAll(".beforeTime")[1],
-            formatTime(hour),
-            1
-          );
-        setHourBox.forEach((ele) => (ele.innerHTML = formatTime(hour)));
-      }
-      const setMinuteBox = document
-        .querySelector("li:nth-child(3)")
-        .querySelectorAll(".afterTime");
-      if (
-        !setMinuteBox[0].innerHTML ||
-        setMinuteBox[0].innerHTML != formatTime(minute)
-      ) {
-        if (setMinuteBox[0].innerHTML)
-          rotateUp(
-            document
-              .querySelector("li:nth-child(3)")
-              .querySelectorAll(".beforeTime")[1],
-            formatTime(minute),
-            3
-          );
-        setMinuteBox.forEach((ele) => (ele.innerHTML = formatTime(minute)));
-      }
-      const setSecondBox = document
-        .querySelector("li:nth-child(5)")
-        .querySelectorAll(".afterTime");
-      setSecondBox.forEach((ele) => (ele.innerHTML = formatTime(second)));
-      rotateUp(
-        document
-          .querySelector("li:nth-child(5)")
+      .querySelectorAll(".afterTime");
+    if (
+      !setHourBox[0].innerHTML ||
+      setHourBox[0].innerHTML != formatTime(hour)
+    ) {
+      if (setHourBox[0].innerHTML)
+        rotateUp(
+          document
+          .querySelector("li:nth-child(1)")
           .querySelectorAll(".beforeTime")[1],
-        formatTime(second),
-        5
-      );
+          formatTime(hour),
+          1
+        );
+      setHourBox.forEach((ele) => (ele.innerHTML = formatTime(hour)));
+    }
+    const setMinuteBox = document
+      .querySelector("li:nth-child(3)")
+      .querySelectorAll(".afterTime");
+    if (
+      !setMinuteBox[0].innerHTML ||
+      setMinuteBox[0].innerHTML != formatTime(minute)
+    ) {
+      if (setMinuteBox[0].innerHTML)
+        rotateUp(
+          document
+          .querySelector("li:nth-child(3)")
+          .querySelectorAll(".beforeTime")[1],
+          formatTime(minute),
+          3
+        );
+      setMinuteBox.forEach((ele) => (ele.innerHTML = formatTime(minute)));
+    }
+    const setSecondBox = document
+      .querySelector("li:nth-child(5)")
+      .querySelectorAll(".afterTime");
+    setSecondBox.forEach((ele) => (ele.innerHTML = formatTime(second)));
+    rotateUp(
+      document
+      .querySelector("li:nth-child(5)")
+      .querySelectorAll(".beforeTime")[1],
+      formatTime(second),
+      5
+    );
 
-      setTimeout(changeTime, 1000);
-    };
-    changeTime();
-  </script>
+    setTimeout(changeTime, 1000);
+  };
+  changeTime();
+</script>
+
 </html>

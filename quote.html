@@ -8,96 +8,99 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quote</title>
-    <script src="./lib/global.js?v=20240307.1"></script>
-    <script src="./lib/crypto-js.min.js"></script>
-    <style>
-      body,
-      html {
-        background-color: #ffffff;
-        margin: 0;
-        padding: 0;
-      }
 
-      .quote-box {
-        width: 100%;
-        margin: 0 auto;
-        height: 100vh;
-        background: #ffffff;
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quote</title>
+  <script src="./lib/global.js?v=20240312"></script>
+  <script src="./lib/crypto-js.min.js"></script>
+  <style>
+    body,
+    html {
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
 
-      svg {
-        position: absolute;
-      }
+    .quote-box {
+      width: 100%;
+      margin: 0 auto;
+      height: 100vh;
+      background: #ffffff;
+      box-sizing: border-box;
+    }
 
-      svg.icon-top {
-        top: -40px;
-        left: -40px;
-      }
+    svg {
+      position: absolute;
+    }
 
-      svg.icon-bottom {
-        transform: rotate(180deg);
-        bottom: -40px;
-        right: -20px;
-      }
+    svg.icon-top {
+      top: -40px;
+      left: -40px;
+    }
 
-      .quote-box__inner {
-        font-size: 18px;
-        position: relative;
-        line-height: 1.8;
-      }
+    svg.icon-bottom {
+      transform: rotate(180deg);
+      bottom: -40px;
+      right: -20px;
+    }
 
-      #text {
-        font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial,
-          sans-serif;
-        text-shadow: 0 8px 9px #c4b59d, 0px -2px 1px #fff;
-      }
+    .quote-box__inner {
+      font-size: 18px;
+      position: relative;
+      line-height: 1.8;
+    }
 
-      #text {
-        font-family: "Arial Rounded MT Bold", "Hiragino Sans GB",
-          "Helvetica Rounded", Arial, sans-serif;
-        font-size: 48px;
-        margin: 0;
-        box-sizing: border-box;
-        padding: 20px;
-        text-transform: uppercase;
-        display: block;
-        color: #f1ebe5;
-        text-shadow: 0 8px 9px #c4b59d, 0px -2px 1px #fff;
-        font-weight: bold;
-        text-align: center;
-        background: linear-gradient(to bottom, #ece4d9 0%, #e9dfd1 100%);
-        border-radius: 20px;
-      }
-      html[theme="dark"],
-      html[theme="dark"] body,
-      html[theme="dark"] .quote-box {
-        background-color: #191919;
-      }
-    </style>
-  </head>
+    #text {
+      font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial,
+        sans-serif;
+      text-shadow: 0 8px 9px #c4b59d, 0px -2px 1px #fff;
+    }
 
-  <body>
-    <div class="quote-box">
-      <div class="quote-box__inner">
-        <!-- <svg t="1629471757239" class="icon icon-top" viewBox="0 0 1195 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1750" width="32" height="32"><path d="M1125.400405 972.814933 651.636395 972.814933 651.636395 631.106304C651.636395 491.702016 663.719168 382.333696 687.885227 302.997931 712.0512 223.662165 737.181781 170.700459 802.935893 107.231829 868.68992 43.763285 914.312789 24.717568 1010.828373 0L1078.255957 145.030059C1010.828373 170.796971 969.749333 182.289237 906.391381 248.024235 843.033429 313.759232 838.360149 377.340075 838.360149 431.988736L1125.400405 431.988736 1125.400405 972.814933ZM473.764096 972.814933 0 972.814933 0 631.106304C0 491.702016 12.082859 382.333696 36.248832 302.997931 60.414891 223.662165 85.545472 170.700459 151.299499 107.231829 217.053611 43.763285 262.676395 24.717568 359.192064 0L426.619563 145.030059C359.192064 170.796971 318.112939 182.289237 254.754987 248.024235 191.397035 313.759232 186.723755 377.340075 186.723755 431.988736L473.764096 431.988736 473.764096 972.814933Z" p-id="1751" fill="#2c2c2c"></path></svg> -->
-        <p id="text"></p>
-        <!-- <svg t="1629471757239" class="icon icon-bottom" viewBox="0 0 1195 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1750" width="32" height="32"><path d="M1125.400405 972.814933 651.636395 972.814933 651.636395 631.106304C651.636395 491.702016 663.719168 382.333696 687.885227 302.997931 712.0512 223.662165 737.181781 170.700459 802.935893 107.231829 868.68992 43.763285 914.312789 24.717568 1010.828373 0L1078.255957 145.030059C1010.828373 170.796971 969.749333 182.289237 906.391381 248.024235 843.033429 313.759232 838.360149 377.340075 838.360149 431.988736L1125.400405 431.988736 1125.400405 972.814933ZM473.764096 972.814933 0 972.814933 0 631.106304C0 491.702016 12.082859 382.333696 36.248832 302.997931 60.414891 223.662165 85.545472 170.700459 151.299499 107.231829 217.053611 43.763285 262.676395 24.717568 359.192064 0L426.619563 145.030059C359.192064 170.796971 318.112939 182.289237 254.754987 248.024235 191.397035 313.759232 186.723755 377.340075 186.723755 431.988736L473.764096 431.988736 473.764096 972.814933Z" p-id="1751" fill="#2c2c2c"></path></svg> -->
-      </div>
+    #text {
+      font-family: "Arial Rounded MT Bold", "Hiragino Sans GB",
+        "Helvetica Rounded", Arial, sans-serif;
+      font-size: 48px;
+      margin: 0;
+      box-sizing: border-box;
+      padding: 20px;
+      text-transform: uppercase;
+      display: block;
+      color: #f1ebe5;
+      text-shadow: 0 8px 9px #c4b59d, 0px -2px 1px #fff;
+      font-weight: bold;
+      text-align: center;
+      background: linear-gradient(to bottom, #ece4d9 0%, #e9dfd1 100%);
+      border-radius: 20px;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body,
+    html[theme="dark"] .quote-box {
+      background-color: #191919;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="quote-box">
+    <div class="quote-box__inner">
+      <!-- <svg t="1629471757239" class="icon icon-top" viewBox="0 0 1195 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1750" width="32" height="32"><path d="M1125.400405 972.814933 651.636395 972.814933 651.636395 631.106304C651.636395 491.702016 663.719168 382.333696 687.885227 302.997931 712.0512 223.662165 737.181781 170.700459 802.935893 107.231829 868.68992 43.763285 914.312789 24.717568 1010.828373 0L1078.255957 145.030059C1010.828373 170.796971 969.749333 182.289237 906.391381 248.024235 843.033429 313.759232 838.360149 377.340075 838.360149 431.988736L1125.400405 431.988736 1125.400405 972.814933ZM473.764096 972.814933 0 972.814933 0 631.106304C0 491.702016 12.082859 382.333696 36.248832 302.997931 60.414891 223.662165 85.545472 170.700459 151.299499 107.231829 217.053611 43.763285 262.676395 24.717568 359.192064 0L426.619563 145.030059C359.192064 170.796971 318.112939 182.289237 254.754987 248.024235 191.397035 313.759232 186.723755 377.340075 186.723755 431.988736L473.764096 431.988736 473.764096 972.814933Z" p-id="1751" fill="#2c2c2c"></path></svg> -->
+      <p id="text"></p>
+      <!-- <svg t="1629471757239" class="icon icon-bottom" viewBox="0 0 1195 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1750" width="32" height="32"><path d="M1125.400405 972.814933 651.636395 972.814933 651.636395 631.106304C651.636395 491.702016 663.719168 382.333696 687.885227 302.997931 712.0512 223.662165 737.181781 170.700459 802.935893 107.231829 868.68992 43.763285 914.312789 24.717568 1010.828373 0L1078.255957 145.030059C1010.828373 170.796971 969.749333 182.289237 906.391381 248.024235 843.033429 313.759232 838.360149 377.340075 838.360149 431.988736L1125.400405 431.988736 1125.400405 972.814933ZM473.764096 972.814933 0 972.814933 0 631.106304C0 491.702016 12.082859 382.333696 36.248832 302.997931 60.414891 223.662165 85.545472 170.700459 151.299499 107.231829 217.053611 43.763285 262.676395 24.717568 359.192064 0L426.619563 145.030059C359.192064 170.796971 318.112939 182.289237 254.754987 248.024235 191.397035 313.759232 186.723755 377.340075 186.723755 431.988736L473.764096 431.988736 473.764096 972.814933Z" p-id="1751" fill="#2c2c2c"></path></svg> -->
     </div>
-  </body>
-  <script>
-    const params = getAllParams(CryptoJS);
-    handleDarkMode(params);
-    window.onload = function () {
-      let _quote_content =
-        getQueryString("text") || params.content || "HTTISHERE";
-      document.getElementById("text").innerHTML = _quote_content;
-    };
-  </script>
+  </div>
+</body>
+<script>
+  const params = getAllParams(CryptoJS);
+  handleDarkMode(params);
+  window.onload = function () {
+    let _quote_content =
+      getQueryString("text") || params.content || "HTTISHERE";
+    document.getElementById("text").innerHTML = _quote_content;
+  };
+</script>
+
 </html>

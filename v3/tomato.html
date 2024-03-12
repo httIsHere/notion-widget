@@ -8,133 +8,142 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tomato</title>
-    <script src="../flexibleMerge.js"></script>
-    <script src="../lib/global.js?v=20240307.1"></script>
-    <script src="../lib/crypto-js.min.js"></script>
-    <style>
-      html,
-      body,
-      p {
-        padding: 0;
-        margin: 0;
-      }
-      .container {
-        width: 100%;
-        min-width: 100px;
-        box-sizing: border-box;
-        padding: 0 0.5rem;
-        text-align: center;
-      }
-      #remain {
-        font-size: 2rem;
-      }
-      #mins {
-        display: block;
-        width: 80%;
-        margin: 0 auto;
-        height: 1.2rem;
-        box-sizing: border-box;
-        padding: 0.3rem 0.8rem;
-        border-radius: 1.2rem;
-        outline: none;
-        max-width: 8.5rem;
-        font-size: 0.5rem;
-      }
-      #start {
-        font-size: 1rem;
-        margin-top: 0.5rem;
-        cursor: pointer;
-      }
 
-      html[theme="dark"],
-      html[theme="dark"] body {
-        background-color: #191919;
-        color: #ffffff;
-      }
-      html[theme="dark"] #mins {
-        background-color: unset;
-        border-color: #ffffff;
-        color: #ffffff;
-      }
-      html[theme="dark"] #inner-bar {
-        background: rgba(255, 255, 255, 0.8);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1 id="remain"></h1>
-      <input type="number" id="mins" placeholder="番茄时间（分钟）" />
-      <div id="start">𝕊𝕥𝕒𝕣𝕥</div>
-    </div>
-  </body>
-  <script>
-    const nums = ["𝟘", "𝟙", "𝟚", "𝟛", "𝟜", "𝟝", "𝟞", "𝟟", "𝟠", "𝟡"];
-    let remain = 25 * 60,
-      minsInterval;
-    const _start = "𝕊𝕥𝕒𝕣𝕥",
-      _pause = "𝕊𝕥𝕠𝕡";
-    let status = 0;
-
-    window.onload = function() {
-      const params = getAllParams(CryptoJS);
-      console.log(params)
-      document.body.style.color = params.font_color;
-      handleDarkMode(params);
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tomato</title>
+  <script src="../flexibleMerge.js"></script>
+  <script src="../lib/global.js?v=20240312"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    html,
+    body,
+    p {
+      padding: 0;
+      margin: 0;
     }
 
-    document.getElementById("start").addEventListener("click", function () {
-      if (status === 1) {
-        // pause
-        return stopRemain();
-      }
-      status = 1;
-      clearInterval(minsInterval);
-      document.getElementById("start").innerHTML = _pause;
-      let mins = document.getElementById("mins").value;
-      if (mins) {
-        remain = mins * 60;
-      }
-      setRemain();
-      minsInterval = setInterval(setRemain, 1000);
-      document.getElementById("mins").value = null;
-    });
+    .container {
+      width: 100%;
+      min-width: 100px;
+      box-sizing: border-box;
+      padding: 0 0.5rem;
+      text-align: center;
+    }
 
+    #remain {
+      font-size: 2rem;
+    }
+
+    #mins {
+      display: block;
+      width: 80%;
+      margin: 0 auto;
+      height: 1.2rem;
+      box-sizing: border-box;
+      padding: 0.3rem 0.8rem;
+      border-radius: 1.2rem;
+      outline: none;
+      max-width: 8.5rem;
+      font-size: 0.5rem;
+    }
+
+    #start {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      cursor: pointer;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+      color: #ffffff;
+    }
+
+    html[theme="dark"] #mins {
+      background-color: unset;
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+
+    html[theme="dark"] #inner-bar {
+      background: rgba(255, 255, 255, 0.8);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 id="remain"></h1>
+    <input type="number" id="mins" placeholder="番茄时间（分钟）" />
+    <div id="start">𝕊𝕥𝕒𝕣𝕥</div>
+  </div>
+</body>
+<script>
+  const nums = ["𝟘", "𝟙", "𝟚", "𝟛", "𝟜", "𝟝", "𝟞", "𝟟", "𝟠", "𝟡"];
+  let remain = 25 * 60,
+    minsInterval;
+  const _start = "𝕊𝕥𝕒𝕣𝕥",
+    _pause = "𝕊𝕥𝕠𝕡";
+  let status = 0;
+
+  window.onload = function () {
+    const params = getAllParams(CryptoJS);
+    console.log(params)
+    document.body.style.color = params.font_color;
+    handleDarkMode(params);
+  }
+
+  document.getElementById("start").addEventListener("click", function () {
+    if (status === 1) {
+      // pause
+      return stopRemain();
+    }
+    status = 1;
+    clearInterval(minsInterval);
+    document.getElementById("start").innerHTML = _pause;
+    let mins = document.getElementById("mins").value;
+    if (mins) {
+      remain = mins * 60;
+    }
     setRemain();
+    minsInterval = setInterval(setRemain, 1000);
+    document.getElementById("mins").value = null;
+  });
 
-    function setRemain() {
-      if (remain === 0) {
-        document.getElementById("remain").innerHTML = "✅";
-        stopRemain();
-        return;
-      }
-      let secs = remain % 60,
-        mins = parseInt(remain / 60);
-      document.getElementById("remain").innerHTML = `${getNum(mins)} : ${getNum(
+  setRemain();
+
+  function setRemain() {
+    if (remain === 0) {
+      document.getElementById("remain").innerHTML = "✅";
+      stopRemain();
+      return;
+    }
+    let secs = remain % 60,
+      mins = parseInt(remain / 60);
+    document.getElementById("remain").innerHTML = `${getNum(mins)} : ${getNum(
         secs
       )}`;
-      remain--;
-    }
+    remain--;
+  }
 
-    function stopRemain() {
-      status = 0;
-      clearInterval(minsInterval);
-      document.getElementById("start").innerHTML = _start;
-      document.getElementById("mins").value = null;
-      remain = 25 * 60;
-      setRemain();
-    }
+  function stopRemain() {
+    status = 0;
+    clearInterval(minsInterval);
+    document.getElementById("start").innerHTML = _start;
+    document.getElementById("mins").value = null;
+    remain = 25 * 60;
+    setRemain();
+  }
 
-    function getNum(num) {
-      let num1, num2;
-      num1 = num % 10;
-      num2 = (num - num1) / 10;
-      return `${nums[num2]}${nums[num1]}`;
-    }
-  </script>
+  function getNum(num) {
+    let num1, num2;
+    num1 = num % 10;
+    num2 = (num - num1) / 10;
+    return `${nums[num2]}${nums[num1]}`;
+  }
+</script>
+
 </html>

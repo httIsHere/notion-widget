@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2024-03-12 13:22:57
  * @LastEditors: Tina Huang
- * @LastEditTime: 2024-03-12 17:45:59
+ * @LastEditTime: 2024-03-12 18:00:24
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -13,7 +13,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>微博热点</title>
-  <script src="../lib/global.js?v=20240307.1"></script>
+  <script src="../lib/global.js?v=20240312"></script>
   <script src="../lib/lunar.js?v=20220910"></script>
   <script src="../lib/crypto-js.min.js"></script>
   <style>
@@ -308,14 +308,13 @@
 
       const params = getAllParams(CryptoJS);
       handleDarkMode(params);
-      console.log(params)
       if (params.type) this.type = params.type
-      this.getMusic();
+      this.getMusic(params.preview);
     },
     methods: {
-      getMusic() {
+      getMusic(preview = false) {
         const _this = this;
-        if (sessionStorage.hots) {
+        if (!preview && sessionStorage.hots) {
           _this.music = JSON.parse(sessionStorage.hots)
           return
         }

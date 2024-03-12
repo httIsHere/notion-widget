@@ -8,40 +8,82 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quote</title>
-    <script src="./lib/global.js?v=20240307.1"></script>
+    <script src="./lib/global.js?v=20240312"></script>
     <script src="./lib/crypto-js.min.js"></script>
     <style>
-        body, html { background-color: #ffffff; margin: 0; padding: 0; }
-        @font-face { font-family: 'Klee-One'; src: url('./fonts/Klee_One/KleeOne-Regular.ttf');}
-        .quote-box {width: 100%; margin: 0 auto; height: 100vh; background: #ffffff;box-sizing: border-box; padding: 40px}
-        .icon {position: absolute;}
-        .icon.icon-top {top: -30px; left: -30px;}
-        .icon.icon-bottom {bottom: -30px; right: -20px;}
-        .quote-box__inner {font-size: 18px;position: relative; line-height: 1.8;}
-        #text {font-family: 'Klee-One'; font-size: 22px; margin: 0; box-sizing: border-box; }
+        body,
+        html {
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        @font-face {
+            font-family: 'Klee-One';
+            src: url('./fonts/Klee_One/KleeOne-Regular.ttf');
+        }
+
+        .quote-box {
+            width: 100%;
+            margin: 0 auto;
+            height: 100vh;
+            background: #ffffff;
+            box-sizing: border-box;
+            padding: 40px
+        }
+
+        .icon {
+            position: absolute;
+        }
+
+        .icon.icon-top {
+            top: -30px;
+            left: -30px;
+        }
+
+        .icon.icon-bottom {
+            bottom: -30px;
+            right: -20px;
+        }
+
+        .quote-box__inner {
+            font-size: 18px;
+            position: relative;
+            line-height: 1.8;
+        }
+
+        #text {
+            font-family: 'Klee-One';
+            font-size: 22px;
+            margin: 0;
+            box-sizing: border-box;
+        }
     </style>
 </head>
+
 <body>
     <div class="quote-box" id="quote-box">
         <div class="quote-box__inner">
-            <img class="icon icon-top" src="https://img.icons8.com/windows/32/000000/quote-left.png"/>
+            <img class="icon icon-top" src="https://img.icons8.com/windows/32/000000/quote-left.png" />
             <p id="text"></p>
-            <img class="icon icon-bottom" src="https://img.icons8.com/windows/32/000000/quote-right.png"/>
+            <img class="icon icon-bottom" src="https://img.icons8.com/windows/32/000000/quote-right.png" />
         </div>
     </div>
 </body>
 <script>
     const params = getAllParams(CryptoJS);
     window.onload = function () {
-      let _quote_content =
-        getQueryString("text") || params.content || "HTTISHERE";
-      document.getElementById("text").innerHTML = _quote_content;
-      document.getElementById("quote-box").style.color = params.font_color;
+        let _quote_content =
+            getQueryString("text") || params.content || "HTTISHERE";
+        document.getElementById("text").innerHTML = _quote_content;
+        document.getElementById("quote-box").style.color = params.font_color;
     };
 </script>
+
 </html>

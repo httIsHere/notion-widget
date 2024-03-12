@@ -7,319 +7,309 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Random Music</title>
-    <script src="../lib/global.js?v=20240307.1"></script>
-    <script src="../lib/lunar.js?v=20220910"></script>
-    <script src="../lib/crypto-js.min.js"></script>
-    <style>
-      [v-cloak] {
-        display: none;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Music</title>
+  <script src="../lib/global.js?v=20240312"></script>
+  <script src="../lib/lunar.js?v=20220910"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 100vw;
+    }
+
+    .music-pic {
+      width: 15vw;
+      height: 15vw;
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 1vw solid #333333;
+      /* margin: 0 auto; */
+      overflow: hidden;
+      position: relative;
+      margin-right: 3vw;
+    }
+
+    .music-pic img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      /* background-color: #f3f3f3; */
+    }
+
+    .music-pic img.listener {
+      animation: rotating 10s linear infinite forwards;
+    }
+
+    .music-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #fff;
+      width: 80vw;
+      /* height: 20vw; */
+      margin: 0 auto 0;
+      border-radius: 3vw;
+      box-shadow: 0 0 5vw 0 rgb(0 0 0 / 10%);
+      position: relative;
+      z-index: 10;
+      padding: 2vw 3vw;
+      box-sizing: border-box;
+    }
+
+    @keyframes rotating {
+      from {
+        transform: rotate(0deg);
       }
-      html,
-      body {
-        margin: 0;
-        padding: 0;
+
+      to {
+        transform: rotate(360deg);
       }
-      .container {
-        width: 100vw;
-      }
-      .music-pic {
-        width: 15vw;
-        height: 15vw;
-        box-sizing: border-box;
-        border-radius: 50%;
-        border: 1vw solid #333333;
-        /* margin: 0 auto; */
-        overflow: hidden;
-        position: relative;
-        margin-right: 3vw;
-      }
-      .music-pic img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        /* background-color: #f3f3f3; */
-      }
-      .music-pic img.listener {
-        animation: rotating 10s linear infinite forwards;
-      }
-      .music-box {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #fff;
-        width: 80vw;
-        /* height: 20vw; */
-        margin: 0 auto 0;
-        border-radius: 3vw;
-        box-shadow: 0 0 5vw 0 rgb(0 0 0 / 10%);
-        position: relative;
-        z-index: 10;
-        padding: 2vw 3vw;
-        box-sizing: border-box;
-      }
-      @keyframes rotating {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      .music-time {
-        width: 30vw;
-        height: 1.5vw;
-        border-radius: 1.5vw;
-        background-color: #f3f3f3;
-        margin: 1vw auto;
-        overflow: hidden;
-      }
-      .music-time .inner {
-        width: 0;
-        height: 1.5vw;
-        border-radius: 1.5vw;
-        background-color: #333333;
-        transition: width 0.2s ease-in-out;
-      }
-      .music-btn {
-        cursor: pointer;
-        width: 10vw;
-        height: 10vw;
-        border-radius: 50%;
-        /* background-color: #333333; */
-        margin: 3vw auto 0;
-        text-align: center;
-        line-height: 10vw;
-        stroke: #333333;
-      }
-      .music-info {
-        text-align: left;
-        padding-bottom: 1vw;
-        width: 15vw;
-      }
-      .music-info h4,
-      .music-info p {
-        margin: 1vw 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .music-info p {
-        font-size: 14px;
-      }
-      .music-timedata {
-        display: flex;
-        justify-content: space-between;
-      }
-      html[theme="dark"],
-      html[theme="dark"] body {
-        background-color: #191919;
-        color: #fff;
-      }
-      html[theme="dark"] .music-box {
-        background-color: rgba(255, 255, 255, .3);
-        backdrop-filter: blur(5vw);
-      }
-      html[theme="dark"] .music-btn {
-        stroke: #fff;
-      }
-      html[theme="dark"] .music-time {
-          background-color: rgba(255, 255, 255, 0.2);
-      }
-      html[theme="dark"] .music-time .inner {
-          background-color: #ffffff;
-      }
-      html[theme="dark"] .music-pic {
-        border-color: rgba(255, 255, 255, 0.5);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container" id="root" v-cloak>
-      <div class="music-box">
-        <div class="music-pic">
-          <img
-            :src="music && music.picurl"
-            :class="{'listener': status}"
-            id="music-cover"
-          />
-        </div>
-        <div class="music-info">
-          <h4 id="name">{{music.name}}</h4>
-          <p id="author">{{music.artistsname}}</p>
-        </div>
-        <div class="music-time">
-          <div class="inner" id="time" :style="{width: `${time_rate}%`}"></div>
-        </div>
-        <!-- <div class="music-timedata">
+    }
+
+    .music-time {
+      width: 30vw;
+      height: 1.5vw;
+      border-radius: 1.5vw;
+      background-color: #f3f3f3;
+      margin: 1vw auto;
+      overflow: hidden;
+    }
+
+    .music-time .inner {
+      width: 0;
+      height: 1.5vw;
+      border-radius: 1.5vw;
+      background-color: #333333;
+      transition: width 0.2s ease-in-out;
+    }
+
+    .music-btn {
+      cursor: pointer;
+      width: 10vw;
+      height: 10vw;
+      border-radius: 50%;
+      /* background-color: #333333; */
+      margin: 3vw auto 0;
+      text-align: center;
+      line-height: 10vw;
+      stroke: #333333;
+    }
+
+    .music-info {
+      text-align: left;
+      padding-bottom: 1vw;
+      width: 15vw;
+    }
+
+    .music-info h4,
+    .music-info p {
+      margin: 1vw 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .music-info p {
+      font-size: 14px;
+    }
+
+    .music-timedata {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+      color: #fff;
+    }
+
+    html[theme="dark"] .music-box {
+      background-color: rgba(255, 255, 255, .3);
+      backdrop-filter: blur(5vw);
+    }
+
+    html[theme="dark"] .music-btn {
+      stroke: #fff;
+    }
+
+    html[theme="dark"] .music-time {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    html[theme="dark"] .music-time .inner {
+      background-color: #ffffff;
+    }
+
+    html[theme="dark"] .music-pic {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="root" v-cloak>
+    <div class="music-box">
+      <div class="music-pic">
+        <img :src="music && music.picurl" :class="{'listener': status}" id="music-cover" />
+      </div>
+      <div class="music-info">
+        <h4 id="name">{{music.name}}</h4>
+        <p id="author">{{music.artistsname}}</p>
+      </div>
+      <div class="music-time">
+        <div class="inner" id="time" :style="{width: `${time_rate}%`}"></div>
+      </div>
+      <!-- <div class="music-timedata">
           <span>{{current_time | formatSecond}}</span>
           <span>{{(duration - current_time) | formatSecond}}</span>
         </div> -->
-        <div class="music-btn" id="btn" @click="setAudioStatus">
-          <template v-if="!status">
-            <?xml version="1.0" encoding="UTF-8"?><svg
-              width="35"
-              height="35"
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
-                fill="none"
-                stroke-width="3"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M20 24V17.0718L26 20.5359L32 24L26 27.4641L20 30.9282V24Z"
-                fill="none"
-                stroke-width="4"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </template>
-          <template v-else>
-            <?xml version="1.0" encoding="UTF-8"?><svg
-              width="35"
-              height="35"
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
-                fill="none"
-                stroke-width="3"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M19 18V30"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M29 18V30"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </template>
-        </div>
+      <div class="music-btn" id="btn" @click="setAudioStatus">
+        <template v-if="!status">
+          <?xml version="1.0" encoding="UTF-8"?><svg width="35" height="35" viewBox="0 0 48 48" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
+              fill="none" stroke-width="3" stroke-linejoin="round" />
+            <path d="M20 24V17.0718L26 20.5359L32 24L26 27.4641L20 30.9282V24Z" fill="none" stroke-width="4"
+              stroke-linejoin="round" />
+          </svg>
+        </template>
+        <template v-else>
+          <?xml version="1.0" encoding="UTF-8"?><svg width="35" height="35" viewBox="0 0 48 48" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
+              fill="none" stroke-width="3" stroke-linejoin="round" />
+            <path d="M19 18V30" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M29 18V30" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </template>
       </div>
     </div>
-  </body>
-  <script src="../lib/vue@2.js"></script>
-  <script src="../lib/axios.min.js"></script>
+  </div>
+</body>
+<script src="../lib/vue@2.js"></script>
+<script src="../lib/axios.min.js"></script>
 
-  <script>
-    new Vue({
-      el: "#root",
-      data() {
-        return {
-          music: {},
-          duration: 0,
-          current_time: 0,
-          time_rate: 0,
-          _audio: null,
-          status: 0,
-        };
+<script>
+  new Vue({
+    el: "#root",
+    data() {
+      return {
+        music: {},
+        duration: 0,
+        current_time: 0,
+        time_rate: 0,
+        _audio: null,
+        status: 0,
+      };
+    },
+    filters: {
+      formatSecond(s) {
+        s = Math.round(s);
+        let m = Math.floor(s / 60);
+        s = s % 60;
+        return `${m >= 10 ? m : "0" + m}:${s >= 10 ? s : "0" + s}`;
       },
-      filters: {
-        formatSecond(s) {
-          s = Math.round(s);
-          let m = Math.floor(s / 60);
-          s = s % 60;
-          return `${m >= 10 ? m : "0" + m}:${s >= 10 ? s : "0" + s}`;
-        },
-      },
-      mounted() {
-        this.getMusic();
+    },
+    mounted() {
+      this.getMusic();
 
-        const params = getAllParams(CryptoJS);
-        handleDarkMode(params);
-      },
-      methods: {
-        getMusic() {
-          const _this = this;
-          let left = this.checkMusic();
-          if (!left) {
-            _this.music = JSON.parse(localStorage.left).music[
-              Math.floor(Math.random() * 10)
-            ];
-            return _this.setAudio();
-          }
-          axios
-            .get(
-              `https://api.uomg.com/api/rand.music?sort=%E7%83%AD%E6%AD%8C%E6%A6%9C&format=json`
-            )
-            .then((res) => {
-              let data = res.data.data;
-              _this.music = data;
-              _this.setAudio();
-              if (!localStorage.left) {
-                localStorage.left = JSON.stringify({
-                  time: new Date().getTime(),
-                  music: [data],
-                });
-              } else {
-                let l = JSON.parse(localStorage.left);
-                l.music.push(data);
-                localStorage.left = JSON.stringify({
-                  time: l.time,
-                  music: l.music,
-                });
-              }
-            });
-        },
-        setAudio() {
-          const _this = this;
-          this._audio = document.createElement("audio");
-          this._audio.src = _this.music.url;
-          this._audio.loop = true;
-          _this._audio.volume = 0.6;
-          this._audio.addEventListener("loadedmetadata", function () {
-            _this.duration = _this._audio.duration;
-          });
-          this._audio.addEventListener("timeupdate", function () {
-            _this.current_time = _this._audio.currentTime;
-            _this.time_rate = (_this.current_time / _this.duration) * 100;
-          });
-          //   this._audio.addEventListener("")
-        },
-        setAudioStatus() {
-          const _this = this;
-          if (_this.status === 0) {
-            _this._audio.play();
-            _this.status = 1;
-          } else {
-            _this._audio.pause();
-            _this.status = 0;
-          }
-        },
-        checkMusic() {
-          // true: 需要重新请求，false：读取缓存
-          const left = localStorage.left ? JSON.parse(localStorage.left) : null;
-          if (!left) return true;
-          let _time = parseInt(left.time);
-          const _now = new Date().getTime();
-          if (_now - _time < 12 * 60 * 60 * 1000) {
-            if (left.music.length < 10) {
-              return true;
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+    },
+    methods: {
+      getMusic() {
+        const _this = this;
+        let left = this.checkMusic();
+        if (!left) {
+          _this.music = JSON.parse(localStorage.left).music[
+            Math.floor(Math.random() * 10)
+          ];
+          return _this.setAudio();
+        }
+        axios
+          .get(
+            `https://api.uomg.com/api/rand.music?sort=%E7%83%AD%E6%AD%8C%E6%A6%9C&format=json`
+          )
+          .then((res) => {
+            let data = res.data.data;
+            _this.music = data;
+            _this.setAudio();
+            if (!localStorage.left) {
+              localStorage.left = JSON.stringify({
+                time: new Date().getTime(),
+                music: [data],
+              });
             } else {
-              return false;
+              let l = JSON.parse(localStorage.left);
+              l.music.push(data);
+              localStorage.left = JSON.stringify({
+                time: l.time,
+                music: l.music,
+              });
             }
-          } else {
-            localStorage.removeItem("left");
-            return true;
-          }
-        },
+          });
       },
-    });
-  </script>
+      setAudio() {
+        const _this = this;
+        this._audio = document.createElement("audio");
+        this._audio.src = _this.music.url;
+        this._audio.loop = true;
+        _this._audio.volume = 0.6;
+        this._audio.addEventListener("loadedmetadata", function () {
+          _this.duration = _this._audio.duration;
+        });
+        this._audio.addEventListener("timeupdate", function () {
+          _this.current_time = _this._audio.currentTime;
+          _this.time_rate = (_this.current_time / _this.duration) * 100;
+        });
+        //   this._audio.addEventListener("")
+      },
+      setAudioStatus() {
+        const _this = this;
+        if (_this.status === 0) {
+          _this._audio.play();
+          _this.status = 1;
+        } else {
+          _this._audio.pause();
+          _this.status = 0;
+        }
+      },
+      checkMusic() {
+        // true: 需要重新请求，false：读取缓存
+        const left = localStorage.left ? JSON.parse(localStorage.left) : null;
+        if (!left) return true;
+        let _time = parseInt(left.time);
+        const _now = new Date().getTime();
+        if (_now - _time < 12 * 60 * 60 * 1000) {
+          if (left.music.length < 10) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          localStorage.removeItem("left");
+          return true;
+        }
+      },
+    },
+  });
+</script>
+
 </html>

@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>桌面时钟</title>
     <script src="../flexibleMerge.js"></script>
-    <script src="../lib/global.js?v=20240307.1"></script>
+    <script src="../lib/global.js?v=20240312"></script>
     <script src="../lib/crypto-js.min.js"></script>
     <style>
         html,
@@ -37,14 +37,20 @@
             letter-spacing: .2rem;
             text-align: center;
         }
+
         /* @media (prefers-color-scheme: dark) {
             html, body { background: #191919;color: #ffffff;}
             #clock {color: #ffffff;}
         } */
-        html[theme="dark"], html[theme="dark"] body {
-            background: #191919;color: #ffffff;
+        html[theme="dark"],
+        html[theme="dark"] body {
+            background: #191919;
+            color: #ffffff;
         }
-        html[theme="dark"] #clock {color: #ffffff;}
+
+        html[theme="dark"] #clock {
+            color: #ffffff;
+        }
     </style>
 </head>
 
@@ -53,8 +59,8 @@
 </body>
 <script>
     window.onload = function () {
-      const params = getAllParams(CryptoJS);
-      handleDarkMode(params);
+        const params = getAllParams(CryptoJS);
+        handleDarkMode(params);
 
         showClock();
 
@@ -62,7 +68,9 @@
 
         function showClock() {
             let cur_time = new Date();
-            let hour = cur_time.getHours(), minute = cur_time.getMinutes(), second = cur_time.getSeconds();
+            let hour = cur_time.getHours(),
+                minute = cur_time.getMinutes(),
+                second = cur_time.getSeconds();
             hour = hour < 10 ? `0${hour}` : hour;
             minute = minute < 10 ? `0${minute}` : minute;
             second = second < 10 ? `0${second}` : second;

@@ -8,123 +8,142 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calendar</title>
-    <script src="./lib/global.js?v=20240307.1"></script>
-    <style>
-      @font-face {
-        font-family: "Klee-One";
-        src: url("./fonts/Klee_One/KleeOne-Regular.ttf");
-      }
-      html,
-      body {
-        background-color: #ffffff;
-        font-family: "Klee-One";
-      }
-      .container {
-        width: 280px;
-        margin: 0 auto;
-        text-align: center;
-      }
-      #month {
-        font-family: "Klee-One";
-        font-weight: bold;
-      }
-      .week-days {
-        width: 100%;
-        display: flex;
-        align-items: center;
-      }
-      .week-days.head {
-        font-weight: bold;
-        font-size: 16px;
-        margin-bottom: 5px;
-      }
-      .week-days.week {
-        margin-bottom: 3px;
-      }
-      .week-days span {
-        line-height: 40px;
-        font-size: 14px;
-        width: 40px;
-        height: 40px;
-        display: inline-block;
-        text-align: center;
-      }
-      .start,
-      .active,
-      .end {
-        background-color: rgba(119, 172, 152, 0.2);
-        border-radius: 50%;
-      }
-        html[theme="dark"], html[theme="dark"] body {background-color:#191919; color:#ffffff;}
-        html[theme="dark"] .active {background-color:rgba(35, 119, 164, .5);}
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="inner">
-        <h2 id="month"></h2>
-        <div class="days"></div>
-        <div class="week-days head">
-          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span
-          ><span>S</span><span>S</span>
-        </div>
-        <div id="content"></div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendar</title>
+  <script src="./lib/global.js?v=20240312"></script>
+  <style>
+    @font-face {
+      font-family: "Klee-One";
+      src: url("./fonts/Klee_One/KleeOne-Regular.ttf");
+    }
+
+    html,
+    body {
+      background-color: #ffffff;
+      font-family: "Klee-One";
+    }
+
+    .container {
+      width: 280px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    #month {
+      font-family: "Klee-One";
+      font-weight: bold;
+    }
+
+    .week-days {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .week-days.head {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .week-days.week {
+      margin-bottom: 3px;
+    }
+
+    .week-days span {
+      line-height: 40px;
+      font-size: 14px;
+      width: 40px;
+      height: 40px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .start,
+    .active,
+    .end {
+      background-color: rgba(119, 172, 152, 0.2);
+      border-radius: 50%;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+      color: #ffffff;
+    }
+
+    html[theme="dark"] .active {
+      background-color: rgba(35, 119, 164, .5);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="inner">
+      <h2 id="month"></h2>
+      <div class="days"></div>
+      <div class="week-days head">
+        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
       </div>
+      <div id="content"></div>
     </div>
-  </body>
-  <script type="text/javascript">
-    let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    const months = [
-      " ",
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    window.onload = function () {
-      let cur_date = new Date(),
-        _year;
-      _year = cur_date.getFullYear();
-      if (_year % 4 === 0 && _year % 100 != 0) {
-        // 闰年
-        days[2] = 29;
-      }
-      let cur_month = cur_date.getMonth() + 1,
-        cur_d = cur_date.getDate();
-      let month_first_day = cur_date,
-        first_day;
-      month_first_day.setDate(1);
-      first_day = month_first_day.getDay() || 7;
-      let _html = '<div class="week-days">', _fd = first_day;
-      for (let i = 1; i <= days[cur_month]; i++) {
-        if (i === 1) {
-          while (_fd-- > 1) {
-            _html += "<span></span>";
-          }
-        }
-        if(((i - 1) % 7) === (8 - first_day)) {
-            _html += '<div class="week-days">';
-        }
-        _html += `<span ${i === cur_d ? ' class="active"' : ""}>${i}</span>`;
-        if((i % 7) === (8 - first_day)) {
-            _html += "</div>"
+  </div>
+</body>
+<script type="text/javascript">
+  let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const months = [
+    " ",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  window.onload = function () {
+    let cur_date = new Date(),
+      _year;
+    _year = cur_date.getFullYear();
+    if (_year % 4 === 0 && _year % 100 != 0) {
+      // 闰年
+      days[2] = 29;
+    }
+    let cur_month = cur_date.getMonth() + 1,
+      cur_d = cur_date.getDate();
+    let month_first_day = cur_date,
+      first_day;
+    month_first_day.setDate(1);
+    first_day = month_first_day.getDay() || 7;
+    let _html = '<div class="week-days">',
+      _fd = first_day;
+    for (let i = 1; i <= days[cur_month]; i++) {
+      if (i === 1) {
+        while (_fd-- > 1) {
+          _html += "<span></span>";
         }
       }
-      document.getElementById('month').innerHTML = months[cur_month];
-      document.getElementById('content').innerHTML = _html;
-    };
-  </script>
+      if (((i - 1) % 7) === (8 - first_day)) {
+        _html += '<div class="week-days">';
+      }
+      _html += `<span ${i === cur_d ? ' class="active"' : ""}>${i}</span>`;
+      if ((i % 7) === (8 - first_day)) {
+        _html += "</div>"
+      }
+    }
+    document.getElementById('month').innerHTML = months[cur_month];
+    document.getElementById('content').innerHTML = _html;
+  };
+</script>
+
 </html>
