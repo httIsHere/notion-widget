@@ -1,0 +1,302 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2024-03-12 12:41:16
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-03-12 13:10:37
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>访客</title>
+  <script src="../lib/global.js?v=20240307.1"></script>
+  <script src="../lib/lunar.js?v=20220910"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: monospace;
+    }
+
+    .container {
+      border-radius: 2vw;
+      width: 100%;
+      /* background-image: url(../assets/Welcome.png); */
+      background-size: 100%;
+      background-origin: center;
+      padding-top: 20px;
+      box-sizing: border-box;
+    }
+
+    .music-box {
+      /* background-color: rgba(255, 255, 255, .2); */
+      backdrop-filter: blur(5vw);
+      /* background-image: url(../assets/Welcome.png);
+      background-size: 100% 100%;
+      background-origin: center; */
+      width: 80vw;
+      min-height: 30vw;
+      margin: 0 auto;
+      border-radius: 3vw;
+      /* margin-top: 10vw; */
+      box-shadow: 0 0 5vw 0 rgb(0 0 0 / 10%);
+      position: relative;
+      z-index: 10;
+      padding: 2vw 3vw 3vw 3vw;
+      box-sizing: border-box;
+      color: #333;
+      position: relative;
+    }
+
+    @keyframes rotating {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .music-time {
+      width: 70vw;
+      height: 1.5vw;
+      border-radius: 1.5vw;
+      background-color: #f3f3f3;
+      margin: 1vw auto;
+      overflow: hidden;
+    }
+
+    .music-time .inner {
+      width: 0;
+      height: 1.5vw;
+      border-radius: 1.5vw;
+      background-color: #333333;
+      transition: width 0.2s ease-in-out;
+    }
+
+    .music-btn {
+      cursor: pointer;
+      width: 8vw;
+      height: 8vw;
+      border-radius: 50%;
+      /* background-color: #333333; */
+      margin: 0 auto 0;
+      text-align: center;
+      line-height: 10vw;
+      color: #333333;
+      stroke: #333333;
+    }
+
+    .music-btn svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .music-info {
+      text-align: center;
+      padding-bottom: 1vw;
+    }
+
+    .music-info h4,
+    .music-info p {
+      margin: 1vw 0;
+    }
+
+    .music-info p {
+      font-size: 14px;
+    }
+
+    .music-timedata {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+      color: #ffffff;
+    }
+
+    html[theme="dark"] .music-pic {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    html[theme="dark"] .music-box {
+      /* background-color: rgba(57, 57, 57, .2); */
+      box-shadow: 0 0 5vw 0 rgb(255 255 255 / 40%);
+      color: white;
+    }
+
+    .music-box .avatar {
+      position: absolute;
+      width: 15vw;
+      height: 15vw;
+      border-radius: 15vw;
+      margin-top: -7.5vw;
+      box-shadow: 0 0 5vw 0 rgb(255 255 255 / 10%);
+    }
+
+    .music-box h2 {
+      /* margin-top: 8vw; */
+      margin: 2vw 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .weather {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: .7rem;
+    }
+
+    .time {
+      font-size: 12px;
+      /* padding-bottom: 5vw; */
+      display: flex;
+      align-items: center;
+      margin-top: .5rem;
+    }
+
+    .time>span,
+    h2>div {
+      text-align: center;
+      width: 15%;
+      display: inline-block;
+      background-color: #333;
+      color: #ffffff;
+      border-radius: .2rem;
+      margin-right: 5%;
+    }
+
+    h2>div {
+      width: auto;
+      margin-left: .5rem;
+      padding: .3rem;
+      font-size: 12px;
+    }
+
+    #bar {
+      width: 80%;
+      /* height: 0.4rem; */
+      /* background: rgba(0, 0, 0, 0.1); */
+      border-radius: 0.2rem;
+      overflow: hidden;
+      /* margin-bottom: 0.5rem; */
+      border: 1px solid #333;
+      padding: .1rem;
+      /* margin-left: .3rem; */
+    }
+
+    #inner-bar {
+      border-radius: 0.15rem;
+      height: 0.5rem;
+      background: #333;
+      width: 0;
+    }
+
+    html[theme="dark"] #inner-bar,
+    html[theme="dark"] .time>span,
+    html[theme="dark"] h2>div {
+      background: #ffffff;
+      color: #333;
+    }
+
+    html[theme="dark"] #bar {
+      border-color: #ffffff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="root" v-cloak>
+    <div class="music-box">
+      <!-- <img class="avatar" src="../assets/avatar.png" /> -->
+      <h2>Welcome to 阿汪's Space<div>No.<span id="busuanzi_value_page_pv">00066</span></div>
+      </h2>
+      <p>来自{{music?.location?.replace("-", "")}}的朋友，{{music?.tip}}</p>
+      <div class="weather">
+        <div>{{music?.low}} - {{music?.high}}</div>
+        <div>「{{music?.tq}}」｜{{music?.fl}}</div>
+        <div>{{music?.time?.substring(5, 16)}}</div>
+      </div>
+      <div class="time">
+        <span>{{music?.week}}</span>
+        <div id="bar">
+          <div id="inner-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="../lib/vue@2.js"></script>
+<script src="../lib/axios.min.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script>
+  new Vue({
+    el: "#root",
+    data() {
+      return {
+        music: {},
+        duration: 0,
+        current_time: 0,
+        time_rate: 0,
+        _audio: null,
+        status: 0,
+      };
+    },
+    mounted() {
+      this.getMusic();
+      this.getTime();
+
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+    },
+    methods: {
+      getMusic() {
+        const _this = this;
+        if (sessionStorage.visitor) {
+          _this.music = JSON.parse(sessionStorage.visitor)
+          return
+        }
+
+        axios
+          .get(
+            `https://api.vvhan.com/api/visitor.info`
+          )
+          .then((res) => {
+            let data = res.data;
+            _this.music = data
+            sessionStorage.visitor = JSON.stringify(data)
+          });
+      },
+      getTime() {
+        const day_secs = 24 * 60 * 60;
+        let cur_date = new Date();
+        let hours = cur_date.getHours(),
+          mins = cur_date.getMinutes(),
+          secs = cur_date.getSeconds();
+        let total = hours * 60 * 60 + mins * 60 + secs;
+        let date = `${cur_date.getFullYear()}-${cur_date.getMonth() + 1}-${cur_date.getDate()}`;
+        let day = cur_date.getDay();
+        document.getElementById("inner-bar").style.width = `${
+      (total * 100) / day_secs
+    }%`;
+      }
+    },
+  });
+</script>
+
+</html>
