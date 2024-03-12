@@ -1,0 +1,249 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2024-03-12 11:10:46
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-03-12 12:33:22
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>访客</title>
+  <script src="../lib/global.js?v=20240307.1"></script>
+  <script src="../lib/lunar.js?v=20220910"></script>
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      border-radius: 2vw;
+      width: 100%;
+      /* background-image: url(../assets/Welcome.png); */
+      background-size: 100%;
+      background-origin: center;
+      /* padding-top: 40px; */
+      box-sizing: border-box;
+      margin-top: 5vw;
+      overflow: hidden;
+    }
+
+    .music-pic {
+      width: 40vw;
+      height: 40vw;
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 3vw solid #333333;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .music-pic img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      /* background-color: #f3f3f3; */
+    }
+
+    .music-pic img.listener {
+      animation: rotating 10s linear infinite forwards;
+    }
+
+    .music-box {
+      /* background-color: rgba(255, 255, 255, .2); */
+      backdrop-filter: blur(5vw);
+      background-image: url(../assets/Welcome.png);
+      background-size: 100% 100%;
+      background-origin: center;
+      width: 80vw;
+      min-height: 30vw;
+      margin: 0 auto;
+      border-radius: 3vw;
+      margin-top: 10vw;
+      /* box-shadow: 0 0 5vw 0 rgb(255 255 255 / 10%); */
+      position: relative;
+      z-index: 10;
+      padding: 2vw 3vw 5vw 3vw;
+      box-sizing: border-box;
+      color: #888F47;
+      position: relative;
+    }
+
+    @keyframes rotating {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .music-time {
+      width: 70vw;
+      height: 1.5vw;
+      border-radius: 1.5vw;
+      background-color: #f3f3f3;
+      margin: 1vw auto;
+      overflow: hidden;
+    }
+
+    .music-time .inner {
+      width: 0;
+      height: 1.5vw;
+      border-radius: 1.5vw;
+      background-color: #333333;
+      transition: width 0.2s ease-in-out;
+    }
+
+    .music-btn {
+      cursor: pointer;
+      width: 8vw;
+      height: 8vw;
+      border-radius: 50%;
+      /* background-color: #333333; */
+      margin: 0 auto 0;
+      text-align: center;
+      line-height: 10vw;
+      color: #333333;
+      stroke: #333333;
+    }
+
+    .music-btn svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .music-info {
+      text-align: center;
+      padding-bottom: 1vw;
+    }
+
+    .music-info h4,
+    .music-info p {
+      margin: 1vw 0;
+    }
+
+    .music-info p {
+      font-size: 14px;
+    }
+
+    .music-timedata {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+      color: #ffffff;
+    }
+
+    html[theme="dark"] .music-pic {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    html[theme="dark"] .music-box {
+      /* background-color: rgba(57, 57, 57, .2); */
+      /* box-shadow: 0 0 5vw 0 rgb(255 255 255 / 40%); */
+      color: white;
+    }
+
+    .music-box .avatar {
+      position: absolute;
+      width: 15vw;
+      height: 15vw;
+      border-radius: 15vw;
+      margin-top: -7.5vw;
+      box-shadow: 0 0 5vw 0 rgb(255 255 255 / 10%);
+    }
+
+    .music-box h2 {
+      margin-top: 8vw;
+    }
+
+    .weather {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .time {
+      text-align: right;
+      font-size: 12px;
+      /* padding-bottom: 5vw; */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="root" v-cloak>
+    <div class="music-box">
+      <img class="avatar" src="../assets/avatar.png" />
+      <h2>Welcome to 阿汪同学's Blog</h2>
+      <p>来自{{music?.location?.replace("-", "")}}的朋友，{{music?.tip}}</p>
+      <div class="weather">
+        <div>最高：{{music?.high}}</div>
+        <div>最低：{{music?.low}}</div>
+        <div>「{{music?.tq}}」｜{{music?.fl}}</div>
+      </div>
+      <p class="time">{{music?.time}}</p>
+    </div>
+  </div>
+</body>
+<script src="../lib/vue@2.js"></script>
+<script src="../lib/axios.min.js"></script>
+
+<script>
+  new Vue({
+    el: "#root",
+    data() {
+      return {
+        music: {},
+        duration: 0,
+        current_time: 0,
+        time_rate: 0,
+        _audio: null,
+        status: 0,
+      };
+    },
+    mounted() {
+      this.getMusic();
+
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+    },
+    methods: {
+      getMusic() {
+        const _this = this;
+        if (sessionStorage.visitor) {
+          _this.music = JSON.parse(sessionStorage.visitor)
+          return
+        }
+
+        axios
+          .get(
+            `https://api.vvhan.com/api/visitor.info`
+          )
+          .then((res) => {
+            let data = res.data;
+            _this.music = data
+            sessionStorage.visitor = JSON.stringify(data)
+          });
+      },
+    },
+  });
+</script>
+
+</html>
