@@ -1,10 +1,9 @@
 <!--
- * @Author: your name
- * @Date: 2021-12-23 11:43:48
- * @LastEditTime: 2022-12-29 15:50:53
+ * @Author: Tina Huang
+ * @Date: 2024-03-22 09:04:14
  * @LastEditors: Tina Huang
- * @Description: 显示当前日历
- * @FilePath: /notion/calender.html
+ * @LastEditTime: 2024-03-22 09:09:30
+ * @Description: 
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -13,87 +12,101 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calendar</title>
-  <script src="../flexibleMerge.js"></script>
+  <title>Photo Month</title>
   <script src="../lib/global.js?v=20240313"></script>
   <script src="../lib/crypto-js.min.js"></script>
   <style>
+    @font-face {
+      font-family: "Klee-One";
+      src: url("../fonts/Dancing_Script/DancingScript-VariableFont_wght.ttf");
+    }
+
     html,
     body {
-      background-color: #ffffff;
-      font-family: serif;
-      margin: 0;
+      /* background-color: #ffffff; */
+      font-family: "Klee-One";
       padding: 0;
+      margin: 0;
     }
 
     .container {
-      width: 9.2rem;
+      width: 90vw;
+      padding: 20px;
+      box-sizing: border-box;
       margin: 0 auto;
       text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: url(../assets/snow.jpeg) no-repeat;
-      background-size: 100% 100%;
-      color: #ffffff;
-      border-radius: 0.4rem;
-      box-sizing: border-box;
-      padding: 0.4rem;
+      /* border: 1px solid #333333; */
+      border-radius: 10px;
+      background-color: #D7DBC9;
+      color: #6B744C;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .container .top-img {
+      width: 50%;
+      display: block;
+      margin: 0 auto;
+      margin-bottom: 10px;
+    }
+
+    .inner {
+      width: 100%;
     }
 
     #month {
       font-weight: bold;
-      font-size: 0.6rem;
-      text-align: right;
+      font-size: 28px;
       margin: 0;
+      margin-bottom: 10px;
     }
 
     .week-days {
       width: 100%;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-weight: bold;
+      position: relative;
+      z-index: 1;
     }
 
     .week-days.head {
       font-weight: bold;
-      font-size: 0.426667rem;
-      margin-bottom: 0.133333rem;
+      font-size: 20px;
+      margin-bottom: 5px;
     }
 
     .week-days.week {
-      margin-bottom: 0.066667rem;
+      margin-bottom: 3px;
     }
 
     .week-days span {
-      line-height: 0.6rem;
-      font-size: 0.373333rem;
-      width: 0.6rem;
-      height: 0.6rem;
+      line-height: 20px;
+      font-size: 16px;
+      width: 20px;
+      height: 20px;
       display: inline-block;
       text-align: center;
     }
 
-    .start,
-    .active,
-    .end {
-      background-color: rgba(255, 255, 255, 0.8);
+    .active {
+      background-color: #6B744C;
       border-radius: 50%;
-      color: #7FA2BE;
-      font-weight: bold;
+      color: #ffffff;
     }
 
-    #d-day {
-      width: 2.666667rem;
-    }
-
-    #d-day h3 {
-      font-size: 0.64rem;
-      margin: 0.266667rem 0 0 0;
-    }
-
-    #d-day h1 {
-      font-size: 1.92rem;
-      margin: 0.3rem 0;
+    .active-week::after {
+      content: "";
+      width: 102%;
+      background-color: #6B744C;
+      opacity: .3;
+      border-radius: 24px;
+      position: absolute;
+      height: 24px;
+      z-index: -1;
+      margin-left: -1%;
     }
 
     html[theme="dark"],
@@ -106,10 +119,10 @@
 
 <body>
   <div class="container">
-    <div id="d-day"></div>
+    <!-- <img class="top-img" id="cover" src="../assets/bao-food-1.png" alt="" /> -->
     <div class="inner">
       <h2 id="month"></h2>
-      <!-- <div class="days"></div> -->
+      <div class="days"></div>
       <div class="week-days head" id="week-head"></div>
       <div id="content">
         <div class="week-days" id="week-days_1">
@@ -140,10 +153,11 @@
     </div>
   </div>
 </body>
+
 <script type="text/javascript">
+  handleDarkMode();
   let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const week_day_en = ["S", "M", "T", "W", "T", "F", "S"];
-  const week_day = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
   const months = [
     " ",
     "January",
@@ -161,7 +175,9 @@
   ];
   window.onload = function () {
     const params = getAllParams(CryptoJS);
+    const nocover = getQueryString('nocover')
     handleDarkMode(params);
+    if (nocover) document.getElementById('cover').style.display = 'none'
     let start_param = getStartSunday(params);
     let cur_date = new Date(),
       _year;
@@ -188,19 +204,27 @@
       let _label = i === 7 ? week_day_en[0] : week_day_en[i];
       label_html += `<span>${_label}</span>`;
     }
+    // main
     for (let i = 1; i <= days[cur_month]; i++) {
-      if (i === cur_d) {
-        document.getElementById(`d-${i + first_day - 2}`).className =
-          "active";
+      let date_num = i + first_day - 2;
+      // weekend?? -> 0 & 7
+      let cur_week = (i + first_day - 2 + start_type) % 7;
+      if (cur_week === 0 || cur_week === 6) {
+        document.getElementById(`d-${date_num}`).className = "weekend";
       }
-      document.getElementById(`d-${i + first_day - 2}`).innerHTML = i;
+      if (i === cur_d) {
+        document.getElementById(`d-${date_num}`).className = "active";
+        let _week = parseInt(date_num / 7) + 1;
+        document.getElementById(`week-days_${_week}`).classList.add("active-week")
+      } else if (i <= cur_d) {
+        document.getElementById(`d-${date_num}`).className = "pass";
+      }
+
+      document.getElementById(`d-${date_num}`).innerHTML = i;
     }
-    document.getElementById('week-head').innerHTML = label_html;
+    document.getElementById("week-head").innerHTML = label_html;
     document.getElementById("month").innerHTML = months[cur_month];
-    document.getElementById(
-      "d-day"
-    ).innerHTML = `<h3>${week_day[cur_week_d]}</h3><h1>${cur_d}</h1>`;
-    // document.getElementById('d-content').innerHTML = _html;
+    // document.getElementById('content').innerHTML = _html;
   };
 </script>
 

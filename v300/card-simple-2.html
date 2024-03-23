@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2024-03-12 17:06:49
  * @LastEditors: Tina Huang
- * @LastEditTime: 2024-03-12 17:32:59
+ * @LastEditTime: 2024-03-13 10:49:22
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -13,7 +13,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>访客</title>
-  <script src="../lib/global.js?v=20240312"></script>
+  <script src="../lib/global.js?v=20240313"></script>
   <script src="../lib/lunar.js?v=20220910"></script>
   <script src="../lib/crypto-js.min.js"></script>
   <style>
@@ -56,6 +56,7 @@
       box-sizing: border-box;
       color: #333;
       position: relative;
+      background-color: #ffffff;
     }
 
     @keyframes rotating {
@@ -267,7 +268,6 @@
 
       const params = getAllParams(CryptoJS);
       handleDarkMode(params);
-      console.log(params)
       if (params.name) this.name = params.name;
       if (params.bg_color) {
         document.getElementById('main').style.backgroundColor = hexToRgba(params.bg_color).rgba
