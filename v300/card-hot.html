@@ -1,8 +1,8 @@
 <!--
  * @Author: Tina Huang
  * @Date: 2024-03-12 13:22:57
- * @LastEditors: Tina Huang
- * @LastEditTime: 2024-03-12 18:00:24
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @LastEditTime: 2024-03-23 16:39:51
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -321,7 +321,7 @@
 
         axios
           .get(
-            `https://api.vvhan.com/api/hotlist?type=${_this.type}`
+            `https://api.vvhan.com/api/hotlist/${_this.type}`
           )
           .then((res) => {
             let data = res.data.data.slice(0, 10);
