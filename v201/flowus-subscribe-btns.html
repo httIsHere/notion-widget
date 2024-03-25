@@ -1,8 +1,8 @@
 <!--
  * @Author: Tina Huang
- * @Date: 2022-12-27 15:28:11
+ * @Date: 2024-03-25 17:16:36
  * @LastEditors: Tina Huang
- * @LastEditTime: 2024-03-25 17:12:21
+ * @LastEditTime: 2024-03-25 17:22:02
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -28,11 +28,11 @@
       width: fit-content;
       height: 30px;
       border-radius: 15px;
-      background-color: #ecebe8;
+      background-color: #DC7EBD;
       border-color: transparent;
       outline: none;
       text-decoration: none;
-      color: #333;
+      color: #ffffff;
       padding: 0 10px;
       line-height: 30px;
       display: flex;
@@ -67,12 +67,13 @@
 </head>
 
 <body>
-  <a href="" id="btn" target="_blank">
-    <img class="icon" id="icon" src="./logos/github.png"></img>
-    <span class="label" id="label">Github</span>
+  <a href="" id="btn" target="_blank" class="large">
+    <img class="icon" id="icon" src="./logos/flowus.png"></img>
+    <span class="label" id="label">我要订阅</span>
   </a>
   <script>
     const params = getAllParams(CryptoJS);
+    if (!params) return
     handleDarkMode(params);
     console.log(params)
     let url = params.link,
