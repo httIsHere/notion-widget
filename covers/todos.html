@@ -1,0 +1,48 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2024-04-09 13:15:42
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-04-10 09:01:50
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      /* perspective: 2200px; */
+      -webkit-perspective: 1200px;
+      position: relative;
+      perspective-origin: 100%;
+      background-color: #F1EEDF;
+    }
+
+    #big {
+      width: 90%;
+      transform: rotateY(15deg);
+      transform-origin: 50%;
+      margin-left: 90px;
+      /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); */
+    }
+
+    #small {
+      position: absolute;
+      width: 40%;
+      top: 600px;
+      left: 40px;
+      transform: rotateY(18deg);
+      /* box-shadow: 0 0 40px rgba(0, 0, 0, 0.2); */
+    }
+  </style>
+</head>
+
+<body>
+  <img id="big" src="../assets/covers/0409.png" alt="">
+  <img id="small" src="../assets/covers/0409.3.png" alt="">
+</body>
+
+</html>
