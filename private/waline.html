@@ -1,0 +1,18 @@
+<head>
+  <!-- ... -->
+  <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+  <!-- ... -->
+</head>
+
+<body>
+  <!-- ... -->
+  <div id="waline"></div>
+  <script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+
+    init({
+      el: '#waline',
+      serverURL: 'https://waline-1-x3506913.deta.app/',
+    });
+  </script>
+</body>
