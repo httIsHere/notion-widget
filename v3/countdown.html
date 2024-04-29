@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tomato</title>
+  <script src="../flexibleMerge.js"></script>
+  <!-- <script src="../lib/global.js?v=20240313"></script> -->
+  <script src="../lib/crypto-js.min.js"></script>
+  <style>
+    html,
+    body,
+    p {
+      padding: 0;
+      margin: 0;
+      background-color: #000;
+    }
+
+    .container {
+      width: 100%;
+      min-width: 100px;
+      box-sizing: border-box;
+      padding: 0 0.5rem;
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      width: 100vw;
+      justify-content: center;
+      /* position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      transform: translate(-50% 50%); */
+    }
+
+    #remain {
+      font-size: 4rem;
+      color: rgb(255, 0, 0);
+      margin: 0;
+    }
+
+    #mins {
+      display: block;
+      /* width: 80%; */
+      /* margin: 0 auto; */
+      height: .8rem;
+      box-sizing: border-box;
+      padding: 0 0.8rem;
+      border-radius: 1.2rem;
+      outline: none;
+      max-width: 8.5rem;
+      font-size: 0.5rem;
+      margin-right: .3rem;
+      background-color: transparent;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+    }
+
+    #start {
+      font-size: .5rem;
+      /* margin-top: 0.5rem; */
+      cursor: pointer;
+      color: #ffffff;
+    }
+
+    #de {
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: .2rem;
+      width: 100%;
+      justify-content: center;
+    }
+
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+      color: #ffffff;
+    }
+
+    html[theme="dark"] #mins {
+      background-color: unset;
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+
+    html[theme="dark"] #inner-bar {
+      background: rgba(255, 255, 255, 0.8);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 id="remain">05:00:000</h1>
+    <div id="de">
+      <input type="number" id="mins" placeholder="时间（分钟）" />
+      <div id="start">开始计时</div>
+    </div>
+  </div>
+</body>
+<script>
+  const nums = ["𝟘", "𝟙", "𝟚", "𝟛", "𝟜", "𝟝", "𝟞", "𝟟", "𝟠", "𝟡"];
+  let remain = 5 * 60 * 1000,
+    minsInterval;
+  const _start = "开始计时",
+    _pause = "结束计时",
+    _reset = "重置计时";
+  let status = 0, // 1: 进行中，0: 未开始，-1: 重置
+    start_t = 0,
+    end_t = 0;
+  document.getElementById("start").addEventListener("click", function () {
+    let mins = document.getElementById("mins").value || 5;
+    if (status === 1) {
+      // pause
+      return stopRemain();
+    } else if (status === -1) {
+      status = 0;
+      document.getElementById("start").innerHTML = _start;
+      document.getElementById("remain").innerHTML = `${getNum(mins)}:00:000`
+      return
+    }
+    status = 1;
+    clearInterval(minsInterval);
+    document.getElementById("start").innerHTML = _pause;
+    if (mins) {
+      remain = mins * 60 * 1000;
+    }
+    start_t = new Date().getTime(),
+      end_t = start_t + remain;
+    setRemain();
+    minsInterval = setInterval(setRemain, 50);
+    document.getElementById("mins").value = null;
+  });
+
+  function setRemain() {
+    let _remain = new Date().getTime() > end_t ? 0 : end_t - new Date().getTime();
+    // console.log(_remain)
+    // let _remain = remain
+    if (_remain === 0) {
+      document.getElementById("remain").innerHTML = "✅";
+      stopRemain();
+      return;
+    }
+    let ms = _remain % 1000,
+      secs = parseInt((_remain / 1000) % 60),
+      mins = parseInt((_remain / 1000 / 60));
+    document.getElementById("remain").innerHTML = `${getNum(mins)}:${getNum(
+        secs
+      )}:${getNum(ms, 3)}`;
+    // remain--;
+  }
+
+  function stopRemain() {
+    status = -1; // 
+    clearInterval(minsInterval);
+    document.getElementById("start").innerHTML = _reset;
+    // document.getElementById("mins").value = null;
+    // remain = 5 * 60 * 1000;
+    // setRemain();
+  }
+
+  function getNum(num, w = 2) {
+    if (w === 2) {
+      return `${num<10?'0':''}${num}`
+    } else {
+      return `${num<10?'00':(num<100?"0":"")}${num}`
+    }
+  }
+</script>
+
+</html>
