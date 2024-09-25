@@ -179,7 +179,7 @@
           created = new Date(this.created).getTime(),
           list = [];
         _msg.forEach((item) => {
-          let _arr = item.split("-");
+          let _arr = item.split("#");
           let _date = new Date(_arr[1]),
             _time = _date.getTime();
           let ttime = _time - cur_time,
@@ -191,7 +191,7 @@
           }
           list.push({
             key: _arr[0],
-            value: _arr[1],
+            value: _arr[1].substring(0, 10),
             remain: days,
             total: t_days,
           });
@@ -206,7 +206,7 @@
         this.created = params.created;
         let _msg = [];
         params.tasks.map((task) => {
-          _msg.push(`${task.name}-${task.day}`);
+          _msg.push(`${task.name}#${task.day}`);
         });
         this.msg = _msg.join(",");
       } else {

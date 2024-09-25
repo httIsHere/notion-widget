@@ -1,16 +1,10 @@
 <!--
- * @Author: Tina Huang
- * @Date: 2024-01-29 12:29:51
- * @LastEditors: Tina Huang
- * @LastEditTime: 2024-01-29 12:29:53
- * @Description: 
--->
-<!--
- * @Author: Tina Huang
- * @Date: 2023-12-18 12:40:17
- * @LastEditors: Tina Huang
- * @LastEditTime: 2023-12-18 12:40:30
- * @Description: 
+ * @Author: HTT httishere0728@gmail.com
+ * @Date: 2024-07-30 21:00:56
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @LastEditTime: 2024-07-30 21:01:29
+ * @FilePath: /notion/counts/count-template-2024-august.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +13,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Count</title>
+    <title>🔥 8月自律计划</title>
     <style type="text/css">
         .box {
             width: 100%;
@@ -45,13 +39,22 @@
             color: #795a5f;
             text-decoration: none;
         }
+
+        strong {
+            display: inline-block;
+            padding: 0 7px;
+            background-color: rgba(105, 126, 94, 1);
+            border-radius: 5px;
+            margin: 0 2px;
+            color: #d6e1ce;
+        }
     </style>
 </head>
 
 <body>
     <div class="box">
-        <span id="busuanzi_container_page_pv">🎉 你是第 <span id="busuanzi_value_page_pv"></span> 位<span
-                id="label"></span>，感谢关注<span id="name">「阿汪同学」</span></span>
+        <span id="busuanzi_container_page_pv">🎉 你是「<strong id="template"></strong>」的第 <span
+                id="busuanzi_value_page_pv"></span> 位<span id="label"></span>，感谢关注<span id="name">「阿汪同学」</span></span>
         <p id="contact"><span>小红书：<a target="blank"
                     href="https://www.xiaohongshu.com/user/profile/5c049fc9000000000800af53?xhsshare=WeixinSession&appuid=5c049fc9000000000800af53&apptime=1664074455">@肥汪卷</a></span>
             | <span>B站：<a href="https://space.bilibili.com/19225439?spm_id_from=333.1007.0.0"
@@ -70,6 +73,7 @@
     }
     const label = getQueryString('label') || '访问者'
     document.getElementById('label').innerHTML = label;
+    document.getElementById('template').innerHTML = document.title;
 </script>
 
 </html>

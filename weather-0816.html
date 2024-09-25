@@ -1,0 +1,35 @@
+<!--
+ * @Author: Tina Huang
+ * @Date: 2024-08-16 12:38:28
+ * @LastEditors: Tina Huang
+ * @LastEditTime: 2024-08-16 12:38:45
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>weather</title>
+  <script src="../lib/global.js?v=20240313"></script>
+</head>
+
+<body>
+  <a class="weatherwidget-io" href="https://forecast7.com/en/30d27120d16/hangzhou/" data-label_1="HANGZHOU"
+    data-font="Roboto Slab" data-theme="beige">HANGZHOU</a>
+  <script>
+    ! function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (!d.getElementById(id)) {
+        js = d.createElement(s);
+        js.id = id;
+        js.src = 'https://weatherwidget.io/js/widget.min.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }
+    }(document, 'script', 'weatherwidget-io-js');
+  </script>
+</body>
+
+</html>
