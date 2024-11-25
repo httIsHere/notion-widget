@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2024-09-25 12:03:47
  * @LastEditors: Tina Huang
- * @LastEditTime: 2024-09-25 12:38:58
+ * @LastEditTime: 2024-11-25 10:08:46
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -143,11 +143,15 @@
       const params = getAllParams(CryptoJS);
       handleDarkMode(params);
       console.log(params)
+      const noew_date = new Date();
+      const _date = `${noew_date.getFullYear}/${noew_date.getMonth+1}/${noew_date.getDate()} 00:00`
+      console.log(_date)
       let _now = new Date();
+      _now.setHours(0), _now.setMinutes(0), _now.setSeconds(0), _now.setMilliseconds(0);
       let name = getQueryString("name") || params.name || "在一起已经";
       let day =
         getQueryString("day") || params.day || `${_now.getFullYear()}/12/31`;
-      let target_date = new Date(`${day} 23:59`);
+      let target_date = new Date(`${day} 00:00`);
       let passed = target_date.getTime() - _now.getTime();
       let seconds = (passed / 1000) % 60,
         minutes = (passed / (60 * 1000)) % 60,

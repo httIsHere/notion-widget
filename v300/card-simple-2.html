@@ -2,7 +2,7 @@
  * @Author: Tina Huang
  * @Date: 2024-03-12 17:06:49
  * @LastEditors: Tina Huang
- * @LastEditTime: 2024-03-13 10:49:22
+ * @LastEditTime: 2024-11-19 16:59:04
  * @Description: 
 -->
 <!DOCTYPE html>
@@ -293,7 +293,8 @@
             `https://api.vvhan.com/api/visitor.info`
           )
           .then((res) => {
-            let data = res.data;
+            const data = res.data;
+            console.log('visitor info', data)
             _this.music = data
             sessionStorage.visitor = JSON.stringify(data)
           });
