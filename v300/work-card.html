@@ -1,0 +1,171 @@
+<!--
+ * @Author: HTT httishere0728@gmail.com
+ * @Date: 2025-08-01 16:39:34
+ * @LastEditors: HTT httishere0728@gmail.com
+ * @LastEditTime: 2025-08-01 17:21:48
+ * @FilePath: /notion/v300/work-card.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <style>
+        .main-box {
+            background-color: #f3f3f3;
+            border-radius: 10px;
+            width: 100%;
+            height: 14vw;
+            box-sizing: border-box;
+            padding: 0 5vw;
+            color: black;
+            font-family: monospace;
+            position: relative;
+            margin-top: 2vw;
+            display: flex;
+            align-items: center;
+        }
+
+        h2 {
+            margin: 0;
+        }
+        img {
+            position: absolute;
+            width: 16vw;
+            bottom: 0;
+            right: 5vw;
+        }
+        .p-box {
+            display: flex;
+            align-items: center;
+        }
+
+        .progress-container {
+            width: 25vw;
+            height: 1vw;
+            background-color: #ddd;
+            border-radius: 1vw;
+            /* margin-top: 1vw; */
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #000, #999);
+            width: 0%;
+            border-radius: 1vw;
+            transition: width 1s linear;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            /* margin-top: 0.5vw; */
+            font-size: 1vw;
+            margin-left: 10px;
+        }
+        #progress-percent {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <div class="main-box">
+        <div>
+        <h2>Welcome to Widverse</h2>
+        <h3>It's <strong id="now_time"></strong>. Let’s make it a productive day!</h3>
+        <div class="p-box">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="time-info">
+            <span id="progress-percent">0%</span><span id="time-left"></span>
+        </div>
+        </div>
+        </div>
+        <img src="./worker.png" />
+    </div>
+    <script>
+        const now = new Date();
+        const options = {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        };
+        const now_time = (now.toLocaleString('en-US', options));
+        document.getElementById('now_time').innerText = now_time
+         // Work hours (9:00 AM - 6:00 PM)
+        const WORK_START_HOUR = 9;
+        const WORK_END_HOUR = 18;
+        const TOTAL_WORK_SECONDS = (WORK_END_HOUR - WORK_START_HOUR) * 3600;
+        
+        function updateTime() {
+            
+            // Calculate work progress
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentSecond = now.getSeconds();
+            
+            let secondsPassed = 0;
+            
+            if (currentHour >= WORK_START_HOUR && currentHour < WORK_END_HOUR) {
+                // During work hours
+                secondsPassed = (currentHour - WORK_START_HOUR) * 3600 + 
+                                currentMinute * 60 + 
+                                currentSecond;
+            } else if (currentHour >= WORK_END_HOUR) {
+                // After work hours
+                secondsPassed = TOTAL_WORK_SECONDS;
+            }
+            // Before work hours, secondsPassed remains 0
+            
+            const progress = (secondsPassed / TOTAL_WORK_SECONDS) * 100;
+            document.getElementById("progress-bar").style.width = progress + "%";
+            document.getElementById("progress-percent").textContent = Math.min(100, Math.round(progress)) + "% ➜ ";
+            
+            // Calculate remaining time
+            let timeLeft = TOTAL_WORK_SECONDS - secondsPassed;
+            if (timeLeft < 0) timeLeft = 0;
+            
+            const hoursLeft = Math.floor(timeLeft / 3600);
+            const minutesLeft = Math.floor((timeLeft % 3600) / 60);
+            const secondsLeft = timeLeft % 60;
+            
+            let timeLeftText;
+            if (currentHour < WORK_START_HOUR) {
+                timeLeftText = "Not yet work time";
+            } else if (timeLeft <= 0) {
+                timeLeftText = "🎉 Time to go home!";
+            } else {
+                timeLeftText = `[${hoursLeft>0?hoursLeft+"h ":""}${minutesLeft}m ${secondsLeft}s] to freedom!`;
+            }
+            
+            document.getElementById("time-left").textContent = timeLeftText;
+        }
+        
+        // Initial update
+        updateTime();
+        // Update every second
+        setInterval(updateTime, 60000);
+    </script>
+</body>
+
+</html>
