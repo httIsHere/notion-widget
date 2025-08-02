@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 11:43:48
- * @LastEditTime: 2022-09-11 17:44:19
- * @LastEditors: Tina Huang
+ * @LastEditTime: 2025-08-02 16:17:02
+ * @LastEditors: HTT httishere0728@gmail.com
  * @Description: 显示当前日历
  * @FilePath: /notion/calender.html
 -->
@@ -104,7 +104,7 @@
 </head>
 
 <body>
-  <div class="container">
+  <div class="container" id="box">
     <div id="d-day"></div>
     <div class="inner">
       <h2 id="month"></h2>
@@ -142,7 +142,9 @@
 <script type="text/javascript">
   let days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const week_day_en = ["S", "M", "T", "W", "T", "F", "S"];
+  const week_day_cn = ["日", "一", "二", "三", "四", "五", "六"];
   const week_day = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+  const week_day_enl = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const months = [
     " ",
     "January",
@@ -158,9 +160,29 @@
     "November",
     "December",
   ];
+  const months_cn = [
+    " ",
+    "一月",
+    "二月",
+    "三月",
+    "四月",
+    "五月",
+    "六月",
+    "七月",
+    "八月",
+    "九月",
+    "十月",
+    "十一月",
+    "十二月",
+  ];
   window.onload = function () {
     const params = getAllParams(CryptoJS);
     handleDarkMode(params);
+    const lng = params?.lng || 'en';
+    const {bg_color, font_color} = params
+    const _box = document.getElementById('box')
+    bg_color && (_box.style.backgroundColor = bg_color)
+    font_color && (_box.style.color = font_color)
     let start_param = getStartSunday(params);
     let cur_date = new Date(),
       _year;
@@ -184,7 +206,7 @@
       label_html = "";
     let start_type = start_param ? 0 : 1; // 周几开始
     for (let i = start_type; i <= 6 + start_type; i++) {
-      let _label = i === 7 ? week_day_en[0] : week_day_en[i];
+      let _label = i === 7 ? (lng == 'cn' ? week_day_cn[0] : week_day_en[0]) : ((lng == 'cn' ? week_day_cn[i] : week_day_en[i]));
       label_html += `<span>${_label}</span>`;
     }
     for (let i = 1; i <= days[cur_month]; i++) {
@@ -195,11 +217,15 @@
       document.getElementById(`d-${i + first_day - 2}`).innerHTML = i;
     }
     document.getElementById('week-head').innerHTML = label_html;
-    document.getElementById("month").innerHTML = months[cur_month];
+    document.getElementById("month").innerHTML = lng === 'cn' ? months_cn[cur_month]: months[cur_month];
     document.getElementById(
       "d-day"
-    ).innerHTML = `<h3>${week_day[cur_week_d]}</h3><h1>${cur_d}</h1>`;
+    ).innerHTML = `<h3>${lng === 'cn' ? week_day[cur_week_d]:week_day_enl[cur_week_d]}</h3><h1>${cur_d}</h1>`;
     // document.getElementById('d-content').innerHTML = _html;
+
+    const _active = document.getElementsByClassName('active')[0]
+    bg_color && (_active.style.color = bg_color)
+    font_color && (_active.style.backgroundColor = `${font_color}`)
   };
 </script>
 
