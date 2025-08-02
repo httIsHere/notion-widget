@@ -2,7 +2,7 @@
  * @Author: HTT httishere0728@gmail.com
  * @Date: 2025-08-01 16:39:34
  * @LastEditors: HTT httishere0728@gmail.com
- * @LastEditTime: 2025-08-01 17:30:02
+ * @LastEditTime: 2025-08-02 15:45:15
  * @FilePath: /notion/v300/work-card.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -20,6 +20,8 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="">
+    <script src="../lib/global.js?v=20240313"></script>
+    <script src="../lib/crypto-js.min.js"></script>
     <style>
         .main-box {
             background-color: #f3f3f3;
@@ -39,12 +41,14 @@
         h2 {
             margin: 0;
         }
+
         img {
             position: absolute;
             width: 16vw;
             bottom: 0;
             right: 5vw;
         }
+
         .p-box {
             display: flex;
             align-items: center;
@@ -58,7 +62,7 @@
             /* margin-top: 1vw; */
             overflow: hidden;
         }
-        
+
         .progress-bar {
             height: 100%;
             background: linear-gradient(to right, #000, #999);
@@ -66,7 +70,7 @@
             border-radius: 1vw;
             transition: width 1s linear;
         }
-        
+
         .time-info {
             display: flex;
             justify-content: space-between;
@@ -74,6 +78,7 @@
             font-size: 1.4vw;
             margin-left: 10px;
         }
+
         #progress-percent {
             margin-left: 10px;
         }
@@ -84,87 +89,130 @@
     <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-    <div class="main-box">
+    <div class="main-box" id="box">
         <div>
-        <h2>Welcome to Widverse</h2>
-        <h3>It's <strong id="now_time"></strong>.</h3>
-        <div class="p-box">
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div class="time-info">
-            <span id="progress-percent">0%</span><span id="time-left"></span>
-        </div>
-        </div>
+            <h2 id="welcome">Welcome to Widverse</h2>
+            <h3><span id="lng_txt">It's </span> <strong id="now_time"></strong>.</h3>
+            <div class="p-box">
+                <div class="progress-container" id="p-box">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="time-info">
+                    <span id="progress-percent">0%</span><span id="time-left"></span>
+                </div>
+            </div>
         </div>
         <img src="./worker.png" />
     </div>
     <script>
-        const now = new Date();
-        const options = {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-        };
-        const now_time = (now.toLocaleString('en-US', options));
-        document.getElementById('now_time').innerText = now_time
-         // Work hours (9:00 AM - 6:00 PM)
-        const WORK_START_HOUR = 9;
-        const WORK_END_HOUR = 18;
-        const TOTAL_WORK_SECONDS = (WORK_END_HOUR - WORK_START_HOUR) * 3600;
-        
-        function updateTime() {
-            
-            // Calculate work progress
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-            const currentSecond = now.getSeconds();
-            
-            let secondsPassed = 0;
-            
-            if (currentHour >= WORK_START_HOUR && currentHour < WORK_END_HOUR) {
-                // During work hours
-                secondsPassed = (currentHour - WORK_START_HOUR) * 3600 + 
-                                currentMinute * 60 + 
-                                currentSecond;
-            } else if (currentHour >= WORK_END_HOUR) {
-                // After work hours
-                secondsPassed = TOTAL_WORK_SECONDS;
-            }
-            // Before work hours, secondsPassed remains 0
-            
-            const progress = (secondsPassed / TOTAL_WORK_SECONDS) * 100;
-            document.getElementById("progress-bar").style.width = progress + "%";
-            document.getElementById("progress-percent").textContent = Math.min(100, Math.round(progress)) + "% ➜ ";
-            
-            // Calculate remaining time
-            let timeLeft = TOTAL_WORK_SECONDS - secondsPassed;
-            if (timeLeft < 0) timeLeft = 0;
-            
-            const hoursLeft = Math.floor(timeLeft / 3600);
-            const minutesLeft = Math.floor((timeLeft % 3600) / 60);
-            const secondsLeft = timeLeft % 60;
-            
-            let timeLeftText;
-            if (currentHour < WORK_START_HOUR) {
-                timeLeftText = "Not yet work time";
-            } else if (timeLeft <= 0) {
-                timeLeftText = "🎉 Time to go home!";
-            } else {
-                timeLeftText = `[${hoursLeft>0?hoursLeft+"h ":""}${minutesLeft}m ${secondsLeft}s] to freedom!`;
-            }
-            
-            document.getElementById("time-left").textContent = timeLeftText;
+        function calculateHours(txt) {
+            if(!txt) return
+            const _h = txt?.split(':')[0], _m = txt?.split(':')[1]
+            return Number(_h) + (Number(_m)/60)
         }
-        
-        // Initial update
-        updateTime();
-        // Update every second
-        setInterval(updateTime, 60000);
+        window.onload = function () {
+            const params = getAllParams(CryptoJS);
+            console.log(params)
+            const {lng = 'en', welcome, bg_color, font_color, freedom_pro} = params
+            const contents = {
+                'cn': {
+                    time: '现在是',
+                    down: '后可获得自由！',
+                    work: '还没到上班时间～',
+                    home: '🎉 到下班的时间咯～'
+                },
+                'en': {
+                    time: "It's ",
+                    down: ' to freedom!',
+                    work: "Not yet work time",
+                    home: "🎉 Time to go home!"
+                }
+            }
+            const _format = lng === 'cn'?'zh-CN':'en-US'
+            document.getElementById('welcome').innerText = welcome
+            document.getElementById('lng_txt').innerText = contents[lng]?.time
+            const _box = document.getElementById('box')
+            bg_color && (_box.style.backgroundColor = bg_color)
+            font_color && (_box.style.color = font_color)
+            if(font_color) {
+                const p_box = document.getElementById('p-box'), p_bar = document.getElementById('progress-bar')
+                const p_bg1 = `${font_color}20`, p_bg2 = `${font_color}40`
+                p_box.style.backgroundColor = p_bg1
+                p_bar.style.background = `linear-gradient(to right, ${font_color}, ${p_bg2})`
+            }
+
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            };
+            const now_time = (now.toLocaleString(_format, options));
+            document.getElementById('now_time').innerText = now_time
+            // Work hours (9:00 AM - 6:00 PM)
+            let WORK_START_HOUR = 9;
+            let WORK_END_HOUR = 18;
+            if(freedom_pro) {
+                let _s = freedom_pro?.split('-')[0], _e = freedom_pro?.split('-')[1]
+                console.log(_s, _e)
+                WORK_START_HOUR = calculateHours(_s)
+                WORK_END_HOUR = calculateHours(_e)
+            }
+            const TOTAL_WORK_SECONDS = (WORK_END_HOUR - WORK_START_HOUR) * 3600;
+
+            function updateTime() {
+
+                // Calculate work progress
+                const currentHour = now.getHours();
+                const currentMinute = now.getMinutes();
+                const currentSecond = now.getSeconds();
+
+                let secondsPassed = 0;
+
+                if (currentHour >= WORK_START_HOUR && currentHour < WORK_END_HOUR) {
+                    // During work hours
+                    secondsPassed = (currentHour - WORK_START_HOUR) * 3600 +
+                        currentMinute * 60 +
+                        currentSecond;
+                } else if (currentHour >= WORK_END_HOUR) {
+                    // After work hours
+                    secondsPassed = TOTAL_WORK_SECONDS;
+                }
+                // Before work hours, secondsPassed remains 0
+
+                const progress = (secondsPassed / TOTAL_WORK_SECONDS) * 100;
+                document.getElementById("progress-bar").style.width = progress + "%";
+                document.getElementById("progress-percent").textContent = Math.min(100, Math.round(progress)) + "% ➜ ";
+
+                // Calculate remaining time
+                let timeLeft = TOTAL_WORK_SECONDS - secondsPassed;
+                if (timeLeft < 0) timeLeft = 0;
+
+                const hoursLeft = Math.floor(timeLeft / 3600);
+                const minutesLeft = Math.floor((timeLeft % 3600) / 60);
+                const secondsLeft = timeLeft % 60;
+
+                let timeLeftText;
+                if (currentHour < WORK_START_HOUR) {
+                    timeLeftText = contents[lng]?.work;
+                } else if (timeLeft <= 0) {
+                    timeLeftText = contents[lng]?.home;
+                } else {
+                    timeLeftText = `[${hoursLeft > 0 ? hoursLeft + "h " : ""}${minutesLeft}m ${secondsLeft}s]${contents[lng]?.down}`;
+                }
+
+                document.getElementById("time-left").textContent = timeLeftText;
+            }
+
+            // Initial update
+            updateTime();
+            // Update every second
+            setInterval(updateTime, 60000);
+        }
     </script>
 </body>
 
