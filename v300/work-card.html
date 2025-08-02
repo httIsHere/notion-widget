@@ -2,7 +2,7 @@
  * @Author: HTT httishere0728@gmail.com
  * @Date: 2025-08-01 16:39:34
  * @LastEditors: HTT httishere0728@gmail.com
- * @LastEditTime: 2025-08-02 15:45:15
+ * @LastEditTime: 2025-08-02 15:48:15
  * @FilePath: /notion/v300/work-card.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -129,8 +129,8 @@
                 }
             }
             const _format = lng === 'cn'?'zh-CN':'en-US'
-            document.getElementById('welcome').innerText = welcome
-            document.getElementById('lng_txt').innerText = contents[lng]?.time
+            welcome && (document.getElementById('welcome').innerText = welcome)
+            (document.getElementById('lng_txt').innerText = contents[lng]?.time)
             const _box = document.getElementById('box')
             bg_color && (_box.style.backgroundColor = bg_color)
             font_color && (_box.style.color = font_color)
