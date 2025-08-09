@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-11 09:39:22
- * @LastEditTime: 2025-08-09 12:34:18
+ * @LastEditTime: 2025-08-09 12:41:59
  * @LastEditors: HTT httishere0728@gmail.com
  * @Description: 选择周
  * @FilePath: /notion/new/highlight-week.html
@@ -77,6 +77,12 @@
     html[theme="dark"] h3 {
       color: rgba(170, 151, 191, 1);
     }
+
+    @media(prefers-color-scheme: dark) {
+      h3 {
+        color: rgba(170, 151, 191, 1);
+      }
+    }
   </style>
 </head>
 
@@ -141,16 +147,16 @@
       _time = start_date.getTime(),
       s_m = start_date.getMonth() + 1,
       s_day = start_param ?
-      start_date.getDay() + 1 :
-      start_date.getDay() || 7;
+        start_date.getDay() + 1 :
+        start_date.getDay() || 7;
     let real_s = _time - (s_day - 1) * 24 * 60 * 60 * 1000,
       real_s_m = new Date(real_s).getMonth() + 1;
     let end_date = new Date(_time + (7 - s_day) * 24 * 60 * 60 * 1000),
       e_m = end_date.getMonth() + 1;
     document.getElementById("month").innerHTML =
       real_s_m !== e_m ?
-      `${months[real_s_m]} - ${months[e_m]}` :
-      months[real_s_m];
+        `${months[real_s_m]} - ${months[e_m]}` :
+        months[real_s_m];
     document.getElementById(`day-${s_day}`).innerHTML = start_date.getDate();
     for (let i = 0; i < 7; i++) {
       let step = start_param ? i - s_day : i - s_day + 1;
