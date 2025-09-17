@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汪汪抽奖</title>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fffdf5 0%, #fff9e6 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #FFFBCC 0%, #FFF0B3 100%);
+            color: #6D5D34;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .emoji {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.7;
+            z-index: 1;
+        }
+        
+        .emoji-1 { top: 20px; left: 50px; animation: float 6s ease-in-out infinite; }
+        .emoji-2 { bottom: 20px; right: 50px; animation: float 7s ease-in-out infinite; }
+        .emoji-3 { top: 40px; right: 100px; animation: float 5s ease-in-out infinite; }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        
+        .content {
+            display: flex;
+            padding: 0;
+        }
+        
+        .left-panel {
+            flex: 1;
+            padding: 30px;
+            background: #fffef7;
+            border-right: 1px solid #f5e8c6;
+        }
+        
+        .right-panel {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #feffef;
+        }
+        
+        .upload-area {
+            border: 2px dashed #FFE57F;
+            border-radius: 18px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            background: rgba(255, 229, 127, 0.1);
+            position: relative;
+        }
+        
+        .upload-area:hover {
+            background: rgba(255, 229, 127, 0.15);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #D4BC5E;
+            margin-bottom: 15px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, #FFE57F 0%, #FFD54F 100%);
+            color: #6D5D34;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 229, 127, 0.3);
+        }
+        
+        .file-info {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255, 229, 127, 0.2);
+            border-radius: 10px;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            color: #6D5D34;
+            margin-bottom: 10px;
+        }
+        
+        .reupload-btn {
+            background: #C5E1A5;
+            color: #55693C;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .reupload-btn:hover {
+            background: #AED581;
+        }
+        
+        .prize-settings {
+            margin-top: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: #6D5D34;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #FFE57F;
+        }
+        
+        .prize-form {
+            background: white;
+            padding: 20px;
+            border-radius: 18px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #6D5D34;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #FFE57F;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #fffef7;
+        }
+        
+        .add-prize-btn {
+            background: linear-gradient(135deg, #C5E1A5 0%, #AED581 100%);
+            color: #55693C;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .add-prize-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(197, 225, 165, 0.3);
+        }
+        
+        .prize-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .prize-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .prize-list::-webkit-scrollbar-thumb {
+            background: #FFE57F;
+            border-radius: 3px;
+        }
+        
+        .prize-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+            border-left: 4px solid #C5E1A5;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .prize-name {
+            font-weight: 600;
+            color: #6D5D34;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .prize-count {
+            color: #AED581;
+            font-weight: 700;
+        }
+        
+        .delete-btn {
+            color: #ef9a9a;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .draw-area {
+            text-align: center;
+            width: 100%;
+        }
+        
+        .draw-title {
+            font-size: 1.8rem;
+            color: #6D5D34;
+            margin-bottom: 30px;
+        }
+        
+        .draw-box {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 40px;
+            background: linear-gradient(135deg, #FFFBCC 0%, #FFF0B3 100%);
+            border-radius: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #6D5D34;
+            font-size: 2rem;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(255, 229, 127, 0.3);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .draw-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 229, 127, 0.4);
+        }
+        
+        .draw-box.completed {
+            background: linear-gradient(135deg, #C5E1A5 0%, #AED581 100%);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        
+        .draw-content {
+            text-align: center;
+            z-index: 2;
+        }
+        
+        .draw-name {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            min-height: 60px;
+        }
+        
+        .draw-prize {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        .draw-btn {
+            background: linear-gradient(135deg, #C5E1A5 0%, #AED581 100%);
+            color: #55693C;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-bottom: 30px;
+        }
+        
+        .draw-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(197, 225, 165, 0.4);
+        }
+        
+        .draw-btn:disabled {
+            background: #E0E0E0;
+            color: #9E9E9E;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .results-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 700px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalAppear 0.5s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .modal-title {
+            font-size: 2rem;
+            color: #6D5D34;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #D4BC5E;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #FFF0B3;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-btn:hover {
+            color: #6D5D34;
+            transform: rotate(90deg);
+        }
+        
+        .results-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #FFFBCC 0%, #FFF0B3 100%);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            animation: cardAppear 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #FFD54F, #C5E1A5, #AED581);
+        }
+        
+        .winner-emoji {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .result-name {
+            font-weight: 700;
+            color: #6D5D34;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .result-prize {
+            color: #AED581;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .export-btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(135deg, #FFE57F 0%, #FFD54F 100%);
+            color: #6D5D34;
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 229, 127, 0.3);
+        }
+        
+        .excel-btn {
+            background: linear-gradient(135deg, #C5E1A5 0%, #AED581 100%);
+            color: #55693C;
+        }
+        
+        .excel-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(197, 225, 165, 0.3);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FFE57F;
+            opacity: 0;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #D4BC5E;
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes drawAnimation {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .draw-animation {
+            animation: drawAnimation 0.5s ease-in-out infinite;
+        }
+        
+        @media (max-width: 900px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #f5e8c6;
+            }
+            
+            .results-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="emoji emoji-1">🎁</div>
+            <div class="emoji emoji-2">🎉</div>
+            <div class="emoji emoji-3">🏆</div>
+            <h1>汪汪抽奖</h1>
+            <p class="subtitle">@阿汪同学｜小红书：肥汪卷｜B站：阿汪同学｜公众号：汪汪汪世界｜邮箱：httishere0728@gmail.com</p>
+        </header>
+        
+        <div class="content">
+            <div class="left-panel">
+                <div class="upload-area" id="dropArea">
+                    <i class="upload-icon fas fa-file-csv"></i>
+                    <h3>上传CSV文件</h3>
+                    <p>支持.csv格式，必须包含Name字段</p>
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">选择文件</button>
+                    <input type="file" id="fileInput" class="file-input" accept=".csv" onchange="handleFile(this.files)">
+                    
+                    <div class="file-info" id="fileInfo">
+                        <div class="file-name" id="fileName"></div>
+                        <!-- <button class="reupload-btn" onclick="resetUpload()">
+                            <i class="fas fa-sync-alt"></i> 重新上传
+                        </button> -->
+                    </div>
+                </div>
+                
+                <div class="prize-settings">
+                    <h3 class="section-title">奖品设置</h3>
+                    
+                    <div class="prize-form">
+                        <div class="form-group">
+                            <label for="prizeName">奖品名称</label>
+                            <input type="text" id="prizeName" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="prizeCount">奖品数量</label>
+                            <input type="number" id="prizeCount" placeholder="" min="1">
+                        </div>
+                        <button class="add-prize-btn" onclick="addPrize()">
+                            <i class="fas fa-plus"></i> 添加奖品
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="draw-area">
+                    <h2 class="draw-title"></h2>
+                    
+                    <div class="prize-list" id="prizeList">
+                        <div class="empty-state">
+                            <i class="fas fa-gift"></i>
+                            <p>暂无奖品，请添加奖品</p>
+                        </div>
+                    </div>
+                    <div class="draw-box" id="drawBox">
+                        <div class="draw-content">
+                            <div class="draw-name" id="drawName">等待开始</div>
+                            <div class="draw-prize" id="drawPrize">抽奖</div>
+                        </div>
+                    </div>
+                    <button class="draw-btn" id="drawButton" disabled>开始抽奖</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-modal" id="resultsModal">
+        <div class="modal-content" id="modalContent">
+            <span class="close-btn" id="closeModal">
+                <i class="fas fa-times"></i>
+            </span>
+            <h2 class="modal-title">
+                <i class="fas fa-trophy"></i> 抽奖结果
+            </h2>
+            
+            <div class="results-container" id="resultsContainer">
+                <!-- 结果卡片将通过JS动态生成 -->
+            </div>
+            
+            <div class="export-buttons">
+                <button class="export-btn copy-btn" id="copyResults">
+                    <i class="fas fa-copy"></i> 复制到剪切板
+                </button>
+                <button class="export-btn excel-btn" id="exportExcel">
+                    <i class="fas fa-file-excel"></i> 导出Excel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 存储数据
+        let participants = [];
+        let prizes = [];
+        let results = [];
+        let currentFileName = "";
+        
+        // DOM元素
+        const fileInput = document.getElementById('fileInput');
+        const dropArea = document.getElementById('dropArea');
+        const drawButton = document.getElementById('drawButton');
+        const drawBox = document.getElementById('drawBox');
+        const drawName = document.getElementById('drawName');
+        const drawPrize = document.getElementById('drawPrize');
+        const prizeList = document.getElementById('prizeList');
+        const prizeNameInput = document.getElementById('prizeName');
+        const prizeCountInput = document.getElementById('prizeCount');
+        const resultsModal = document.getElementById('resultsModal');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const closeModal = document.getElementById('closeModal');
+        const copyResults = document.getElementById('copyResults');
+        const exportExcel = document.getElementById('exportExcel');
+        const modalContent = document.getElementById('modalContent');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 添加一些示例confetti效果
+            createConfetti();
+            
+            // 绑定事件
+            closeModal.addEventListener('click', () => {
+                resultsModal.style.display = 'none';
+            });
+            
+            copyResults.addEventListener('click', copyToClipboard);
+            exportExcel.addEventListener('click', exportToExcel);
+            
+            // 添加点击抽奖盒子查看结果的功能
+            drawBox.addEventListener('click', function() {
+                if (results.length > 0) {
+                    renderResultsCards();
+                    resultsModal.style.display = 'flex';
+                }
+            });
+        });
+        
+        // 添加奖品
+        function addPrize() {
+            const name = prizeNameInput.value.trim();
+            const count = parseInt(prizeCountInput.value);
+            
+            if (!name || isNaN(count) || count <= 0) {
+                alert('请输入有效的奖品名称和数量');
+                return;
+            }
+            
+            const newPrize = { name, count };
+            prizes.push(newPrize);
+            renderPrizeItem(newPrize);
+            
+            // 清空输入框
+            prizeNameInput.value = '';
+            prizeCountInput.value = '';
+            
+            // 移除空状态提示（如果有）
+            const emptyState = prizeList.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+        }
+        
+        // 渲染奖品项
+        function renderPrizeItem(prize) {
+            const prizeItem = document.createElement('div');
+            prizeItem.className = 'prize-item';
+            
+            // 奖品emoji映射
+            const prizeEmojis = {
+                "一等奖": "🥇",
+                "二等奖": "🥈", 
+                "三等奖": "🥉",
+                "特等奖": "🏆",
+                "参与奖": "🎁"
+            };
+            
+            // 获取对应的emoji，如果没有匹配则使用默认emoji
+            const emoji = prizeEmojis[prize.name] || "🎁";
+            
+            prizeItem.innerHTML = `
+                <div>
+                    <span class="prize-name">${emoji} ${prize.name}</span>
+                </div>
+                <div>
+                    <span class="prize-count">${prize.count}份</span>
+                    <span class="delete-btn" onclick="removePrize('${prize.name}')">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                </div>
+            `;
+            prizeList.appendChild(prizeItem);
+        }
+        
+        // 移除奖品
+        function removePrize(name) {
+            prizes = prizes.filter(prize => prize.name !== name);
+            renderPrizeList();
+            
+            // 如果没有奖品了，显示空状态
+            if (prizes.length === 0) {
+                prizeList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-gift"></i>
+                        <p>暂无奖品，请添加奖品</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // 重新渲染奖品列表
+        function renderPrizeList() {
+            prizeList.innerHTML = '';
+            prizes.forEach(prize => renderPrizeItem(prize));
+        }
+        
+        // 渲染结果卡片
+        function renderResultsCards() {
+            resultsContainer.innerHTML = '';
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-gift"></i>
+                        <p>暂无抽奖结果</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 奖品emoji映射
+            const prizeEmojis = {
+                "一等奖": "🥇",
+                "二等奖": "🥈", 
+                "三等奖": "🥉",
+                "特等奖": "🏆",
+                "参与奖": "🎁"
+            };
+            
+            results.forEach((result, index) => {
+                // 为每个结果添加一点延迟出现的效果
+                setTimeout(() => {
+                    const resultCard = document.createElement('div');
+                    resultCard.className = 'result-card';
+                    
+                    // 获取对应的emoji，如果没有匹配则使用默认emoji
+                    const emoji = prizeEmojis[result.prize] || "🎉";
+                    
+                    resultCard.innerHTML = `
+                        <span class="winner-emoji">${emoji}</span>
+                        <div class="result-name">${result.name}</div>
+                        <div class="result-prize">${result.prize}</div>
+                    `;
+                    
+                    resultsContainer.appendChild(resultCard);
+                }, index * 100);
+            });
+        }
+        
+        // 重置上传
+        function resetUpload() {
+            fileInput.value = '';
+            fileInfo.style.display = 'none';
+            participants = [];
+            drawButton.disabled = true;
+            currentFileName = "";
+        }
+        
+        // 拖放功能
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropArea.style.backgroundColor = 'rgba(255, 229, 127, 0.2)';
+        }
+        
+        function unhighlight() {
+            dropArea.style.backgroundColor = 'rgba(255, 229, 127, 0.1)';
+        }
+        
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFile(files);
+        }
+        
+        // 处理上传的CSV文件
+        function handleFile(files) {
+            if (files.length === 0) return;
+            
+            const file = files[0];
+            currentFileName = file.name;
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const csvData = e.target.result;
+                
+                // 使用PapaParse解析CSV
+                Papa.parse(csvData, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        if (results.errors.length > 0) {
+                            alert('解析CSV文件时出错: ' + results.errors[0].message);
+                            return;
+                        }
+                        
+                        // 检查是否有Name字段
+                        if (results.data.length > 0 && !results.data[0].Name) {
+                            alert('CSV文件中必须包含Name字段');
+                            return;
+                        }
+                        
+                        // 提取姓名
+                        participants = results.data.map(row => row.Name).filter(name => name);
+                        
+                        if (participants.length > 0) {
+                            // 显示文件信息
+                            fileName.textContent = currentFileName;
+                            fileInfo.style.display = 'block';
+                            
+                            alert(`成功导入 ${participants.length} 名参与者`);
+                            drawButton.disabled = false;
+                        } else {
+                            alert('未找到参与者数据，请检查CSV格式');
+                        }
+                    }
+                });
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        // 抽奖功能
+        drawButton.addEventListener('click', startDraw);
+        
+        function startDraw() {
+            if (participants.length === 0) {
+                alert('请先上传参与者名单');
+                return;
+            }
+            
+            if (prizes.length === 0) {
+                alert('请至少添加一个奖品');
+                return;
+            }
+            
+            // 计算奖品总数
+            const totalPrizes = prizes.reduce((sum, prize) => sum + prize.count, 0);
+            
+            if (participants.length < totalPrizes) {
+                alert('参与者数量少于奖品总数，请增加参与者或减少奖品数量');
+                return;
+            }
+            
+            // 禁用按钮
+            drawButton.disabled = true;
+            
+            // 复制参与者数组用于抽奖
+            let availableParticipants = [...participants];
+            
+            // 清空之前的结果
+            results = [];
+            
+            // 抽奖动画
+            let animationCount = 0;
+            const animationDuration = 4000; // 4秒动画
+            const animationInterval = 100; // 每100ms切换一次名字
+            
+            const animation = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * availableParticipants.length);
+                drawName.textContent = availableParticipants[randomIndex];
+                drawPrize.textContent = "抽奖中...";
+                
+                animationCount += animationInterval;
+                if (animationCount >= animationDuration) {
+                    clearInterval(animation);
+                    
+                    // 抽取所有奖品
+                    prizes.forEach(prize => {
+                        for (let i = 0; i < prize.count; i++) {
+                            if (availableParticipants.length === 0) break;
+                            
+                            const winnerIndex = Math.floor(Math.random() * availableParticipants.length);
+                            const winner = availableParticipants[winnerIndex];
+                            
+                            // 添加到结果列表
+                            results.push({
+                                name: winner,
+                                prize: prize.name
+                            });
+                            
+                            // 从可用参与者中移除
+                            availableParticipants.splice(winnerIndex, 1);
+                        }
+                    });
+                    
+                    // 显示结果
+                    drawName.textContent = "抽奖完成";
+                    drawPrize.textContent = `共抽出${results.length}个奖项`;
+                    
+                    // 添加完成状态的样式
+                    drawBox.classList.add('completed');
+                    
+                    // 渲染结果卡片并显示弹窗
+                    renderResultsCards();
+                    resultsModal.style.display = 'flex';
+                    
+                    // 启用按钮
+                    drawButton.disabled = false;
+                }
+            }, animationInterval);
+        }
+        
+        // 复制到剪切板
+        function copyToClipboard() {
+            if (results.length === 0) {
+                alert('没有抽奖结果可复制');
+                return;
+            }
+            
+            // 格式化结果文本
+            let text = "抽奖结果\n";
+            text += "姓名\t奖品\n";
+            text += "----------------\n";
+            
+            results.forEach(result => {
+                text += `${result.name}\t${result.prize}\n`;
+            });
+            
+            // 复制到剪切板
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    alert('抽奖结果已复制到剪切板');
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    alert('复制失败，请重试');
+                });
+        }
+        
+        // 导出到Excel
+        function exportToExcel() {
+            if (results.length === 0) {
+                alert('没有抽奖结果可导出');
+                return;
+            }
+            
+            // 创建工作簿
+            const wb = XLSX.utils.book_new();
+            
+            // 准备数据
+            const data = [['姓名', '奖品']];
+            results.forEach(result => {
+                data.push([result.name, result.prize]);
+            });
+            
+            // 创建工作表
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            
+            // 将工作表添加到工作簿
+            XLSX.utils.book_append_sheet(wb, ws, '抽奖结果');
+            
+            // 生成Excel文件并下载
+            XLSX.writeFile(wb, '抽奖结果.xlsx');
+        }
+        
+        function createConfetti() {
+            const drawBox = document.querySelector('.draw-box');
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = ['#FFE57F', '#FFD54F', '#C5E1A5', '#AED581', '#FFCC80'][Math.floor(Math.random() * 5)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.borrowRadius = Math.random() > 0.5 ? '50%' : '0';
+                drawBox.appendChild(confetti);
+                
+                // 动画
+                animateConfetti(confetti);
+            }
+        }
+        
+        function animateConfetti(element) {
+            const duration = Math.random() * 2000 + 1000;
+            const yDistance = Math.random() * 50 + 20;
+            
+            const animation = element.animate([
+                { transform: 'translateY(0)', opacity: 0 },
+                { transform: `translateY(-${yDistance}px)`, opacity: 1 },
+                { transform: `translateY(-${yDistance/2}px)`, opacity: 0 }
+            ], {
+                duration: duration,
+                iterations: Infinity,
+                easing: 'ease-in-out'
+            });
+        }
+    </script>
+</body>
+</html>

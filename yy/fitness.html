@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康追踪 | 饮食运动记录</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #7f8c8d;
+            --text-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-title button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        
+        .card-title button:hover {
+            background: var(--secondary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.3s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+        
+        .entries {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .entry {
+            padding: 12px;
+            border-radius: 8px;
+            background: var(--light-color);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .entry-date {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+        }
+        
+        .entry-content {
+            flex-grow: 1;
+            margin-left: 15px;
+        }
+        
+        .entry-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .entry-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-top: 15px;
+        }
+        
+        .weight-display {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .current-weight {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .weight-change {
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
+        
+        .positive {
+            color: #e74c3c;
+        }
+        
+        .negative {
+            color: #27ae60;
+        }
+        
+        .neutral {
+            color: var(--accent-color);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--accent-color);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>健康追踪记录</h1>
+            <p class="subtitle">记录每日饮食、运动与体重变化</p>
+        </header>
+        
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-title">
+                    <span>记录饮食</span>
+                </div>
+                <div class="form-group">
+                    <label for="food-date">日期</label>
+                    <input type="date" id="food-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="food-time">时间</label>
+                    <select id="food-time">
+                        <option value="早餐">早餐</option>
+                        <option value="午餐">午餐</option>
+                        <option value="晚餐">晚餐</option>
+                        <option value="零食">零食</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="food-content">饮食内容</label>
+                    <textarea id="food-content" placeholder="例如：燕麦粥一碗，鸡蛋一个，牛奶一杯" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="food-calories">预估热量 (卡路里)</label>
+                    <input type="number" id="food-calories" placeholder="例如：350">
+                </div>
+                <button class="btn" id="add-food">添加饮食记录</button>
+                
+                <div class="card-title" style="margin-top: 20px;">
+                    <span>近期饮食记录</span>
+                </div>
+                <div class="entries" id="food-entries">
+                    <div class="empty-state">暂无饮食记录</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    <span>记录运动</span>
+                </div>
+                <div class="form-group">
+                    <label for="exercise-date">日期</label>
+                    <input type="date" id="exercise-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="exercise-type">运动类型</label>
+                    <input type="text" id="exercise-type" placeholder="例如：跑步、瑜伽、重量训练" required>
+                </div>
+                <div class="form-group">
+                    <label for="exercise-duration">持续时间 (分钟)</label>
+                    <input type="number" id="exercise-duration" placeholder="例如：30" required>
+                </div>
+                <div class="form-group">
+                    <label for="exercise-calories">消耗热量 (卡路里)</label>
+                    <input type="number" id="exercise-calories" placeholder="例如：250">
+                </div>
+                <button class="btn" id="add-exercise">添加运动记录</button>
+                
+                <div class="card-title" style="margin-top: 20px;">
+                    <span>近期运动记录</span>
+                </div>
+                <div class="entries" id="exercise-entries">
+                    <div class="empty-state">暂无运动记录</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">
+                <span>体重追踪</span>
+                <button id="add-weight-btn">记录体重</button>
+            </div>
+            
+            <div class="weight-display">
+                <div class="current-weight" id="current-weight">--</div>
+                <div class="weight-change" id="weight-change">暂无变化记录</div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="weight-chart"></canvas>
+            </div>
+        </div>
+        
+        <div class="card" id="weight-form" style="display: none; margin-top: 20px;">
+            <div class="card-title">
+                <span>记录体重</span>
+            </div>
+            <div class="form-group">
+                <label for="weight-date">日期</label>
+                <input type="date" id="weight-date" required>
+            </div>
+            <div class="form-group">
+                <label for="weight-value">体重 (kg)</label>
+                <input type="number" id="weight-value" step="0.1" placeholder="例如：65.5" required>
+            </div>
+            <button class="btn" id="save-weight">保存体重记录</button>
+        </div>
+        
+        <footer>
+            <p>健康追踪记录器 &copy; 2023 | 数据存储在本地浏览器中</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化数据
+            let foodEntries = JSON.parse(localStorage.getItem('foodEntries')) || [];
+            let exerciseEntries = JSON.parse(localStorage.getItem('exerciseEntries')) || [];
+            let weightEntries = JSON.parse(localStorage.getItem('weightEntries')) || [];
+            
+            // 获取当前日期作为默认值
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('food-date').value = today;
+            document.getElementById('exercise-date').value = today;
+            document.getElementById('weight-date').value = today;
+            
+            // 图表实例
+            let weightChart = null;
+            
+            // 初始化界面
+            renderFoodEntries();
+            renderExerciseEntries();
+            renderWeightChart();
+            updateWeightDisplay();
+            
+            // 添加饮食记录
+            document.getElementById('add-food').addEventListener('click', function() {
+                const date = document.getElementById('food-date').value;
+                const time = document.getElementById('food-time').value;
+                const content = document.getElementById('food-content').value;
+                const calories = document.getElementById('food-calories').value;
+                
+                if (!date || !content) {
+                    alert('请填写日期和饮食内容');
+                    return;
+                }
+                
+                foodEntries.unshift({
+                    date,
+                    time,
+                    content,
+                    calories: calories || '未记录',
+                    id: Date.now()
+                });
+                
+                localStorage.setItem('foodEntries', JSON.stringify(foodEntries));
+                renderFoodEntries();
+                
+                // 清空表单
+                document.getElementById('food-content').value = '';
+                document.getElementById('food-calories').value = '';
+            });
+            
+            // 添加运动记录
+            document.getElementById('add-exercise').addEventListener('click', function() {
+                const date = document.getElementById('exercise-date').value;
+                const type = document.getElementById('exercise-type').value;
+                const duration = document.getElementById('exercise-duration').value;
+                const calories = document.getElementById('exercise-calories').value;
+                
+                if (!date || !type || !duration) {
+                    alert('请填写日期、运动类型和持续时间');
+                    return;
+                }
+                
+                exerciseEntries.unshift({
+                    date,
+                    type,
+                    duration,
+                    calories: calories || '未记录',
+                    id: Date.now()
+                });
+                
+                localStorage.setItem('exerciseEntries', JSON.stringify(exerciseEntries));
+                renderExerciseEntries();
+                
+                // 清空表单
+                document.getElementById('exercise-type').value = '';
+                document.getElementById('exercise-duration').value = '';
+                document.getElementById('exercise-calories').value = '';
+            });
+            
+            // 显示体重表单
+            document.getElementById('add-weight-btn').addEventListener('click', function() {
+                document.getElementById('weight-form').style.display = 'block';
+            });
+            
+            // 保存体重记录
+            document.getElementById('save-weight').addEventListener('click', function() {
+                const date = document.getElementById('weight-date').value;
+                const weight = document.getElementById('weight-value').value;
+                
+                if (!date || !weight) {
+                    alert('请填写日期和体重');
+                    return;
+                }
+                
+                // 检查是否已存在该日期的记录
+                const existingIndex = weightEntries.findIndex(entry => entry.date === date);
+                if (existingIndex !== -1) {
+                    weightEntries[existingIndex].weight = weight;
+                } else {
+                    weightEntries.push({ date, weight: parseFloat(weight) });
+                }
+                
+                // 按日期排序
+                weightEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
+                
+                localStorage.setItem('weightEntries', JSON.stringify(weightEntries));
+                renderWeightChart();
+                updateWeightDisplay();
+                
+                // 隐藏表单并清空
+                document.getElementById('weight-form').style.display = 'none';
+                document.getElementById('weight-value').value = '';
+            });
+            
+            // 渲染饮食记录
+            function renderFoodEntries() {
+                const container = document.getElementById('food-entries');
+                
+                if (foodEntries.length === 0) {
+                    container.innerHTML = '<div class="empty-state">暂无饮食记录</div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                foodEntries.slice(0, 5).forEach(entry => {
+                    const entryEl = document.createElement('div');
+                    entryEl.className = 'entry';
+                    entryEl.innerHTML = `
+                        <div class="entry-date">${entry.date} ${entry.time}</div>
+                        <div class="entry-content">${entry.content}</div>
+                        <div>${entry.calories} 卡</div>
+                        <div class="entry-actions">
+                            <button onclick="deleteFoodEntry(${entry.id})">×</button>
+                        </div>
+                    `;
+                    container.appendChild(entryEl);
+                });
+            }
+            
+            // 渲染运动记录
+            function renderExerciseEntries() {
+                const container = document.getElementById('exercise-entries');
+                
+                if (exerciseEntries.length === 0) {
+                    container.innerHTML = '<div class="empty-state">暂无运动记录</div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                exerciseEntries.slice(0, 5).forEach(entry => {
+                    const entryEl = document.createElement('div');
+                    entryEl.className = 'entry';
+                    entryEl.innerHTML = `
+                        <div class="entry-date">${entry.date}</div>
+                        <div class="entry-content">${entry.type} - ${entry.duration} 分钟</div>
+                        <div>${entry.calories} 卡</div>
+                        <div class="entry-actions">
+                            <button onclick="deleteExerciseEntry(${entry.id})">×</button>
+                        </div>
+                    `;
+                    container.appendChild(entryEl);
+                });
+            }
+            
+            // 渲染体重图表
+            function renderWeightChart() {
+                const ctx = document.getElementById('weight-chart').getContext('2d');
+                
+                if (weightChart) {
+                    weightChart.destroy();
+                }
+                
+                if (weightEntries.length === 0) {
+                    document.getElementById('weight-chart').innerHTML = `
+                        <div class="empty-state">暂无体重记录，请添加记录以生成图表</div>
+                    `;
+                    return;
+                }
+                
+                const labels = weightEntries.map(entry => {
+                    const date = new Date(entry.date);
+                    return `${date.getMonth() + 1}/${date.getDate()}`;
+                });
+                
+                const data = weightEntries.map(entry => entry.weight);
+                
+                weightChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '体重 (kg)',
+                            data: data,
+                            borderColor: '#2c3e50',
+                            backgroundColor: 'rgba(44, 62, 80, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            pointBackgroundColor: '#2c3e50',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // 更新体重显示
+            function updateWeightDisplay() {
+                const currentWeightEl = document.getElementById('current-weight');
+                const weightChangeEl = document.getElementById('weight-change');
+                
+                if (weightEntries.length === 0) {
+                    currentWeightEl.textContent = '--';
+                    weightChangeEl.textContent = '暂无变化记录';
+                    return;
+                }
+                
+                const latestWeight = weightEntries[weightEntries.length - 1];
+                currentWeightEl.textContent = `${latestWeight.weight} kg`;
+                
+                if (weightEntries.length > 1) {
+                    const previousWeight = weightEntries[weightEntries.length - 2];
+                    const change = latestWeight.weight - previousWeight.weight;
+                    const absChange = Math.abs(change);
+                    
+                    if (change > 0) {
+                        weightChangeEl.innerHTML = `<span class="positive">↑ 增加了 ${absChange.toFixed(1)} kg</span>`;
+                    } else if (change < 0) {
+                        weightChangeEl.innerHTML = `<span class="negative">↓ 减少了 ${absChange.toFixed(1)} kg</span>`;
+                    } else {
+                        weightChangeEl.innerHTML = `<span class="neutral">没有变化</span>`;
+                    }
+                } else {
+                    weightChangeEl.textContent = '暂无变化记录';
+                }
+            }
+            
+            // 删除饮食记录（全局函数，用于HTML中的onclick）
+            window.deleteFoodEntry = function(id) {
+                foodEntries = foodEntries.filter(entry => entry.id !== id);
+                localStorage.setItem('foodEntries', JSON.stringify(foodEntries));
+                renderFoodEntries();
+            };
+            
+            // 删除运动记录（全局函数，用于HTML中的onclick）
+            window.deleteExerciseEntry = function(id) {
+                exerciseEntries = exerciseEntries.filter(entry => entry.id !== id);
+                localStorage.setItem('exerciseEntries', JSON.stringify(exerciseEntries));
+                renderExerciseEntries();
+            };
+        });
+    </script>
+</body>
+</html>

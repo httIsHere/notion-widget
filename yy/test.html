@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汪汪抽奖</title>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 孟菲斯风格变量定义 */
+        :root {
+            --memphis-yellow: #FFD166;
+            --memphis-pink: #FF6B6B;
+            --memphis-blue: #118AB2;
+            --memphis-green: #06D6A0;
+            --memphis-purple: #9D4EDD;
+            --memphis-orange: #FB5607;
+            --memphis-black: #2D2D2A;
+            --memphis-white: #FFFCF9;
+            
+            --pattern-color-1: #FFD166;
+            --pattern-color-2: #FF6B6B;
+            --pattern-color-3: #118AB2;
+            --pattern-color-4: #06D6A0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background-color: var(--memphis-white);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            /* 孟菲斯背景图案 */
+            background-image: 
+                radial-gradient(circle at 5% 10%, var(--pattern-color-1) 4%, transparent 8%),
+                radial-gradient(circle at 15% 40%, var(--pattern-color-2) 3%, transparent 7%),
+                radial-gradient(circle at 95% 5%, var(--pattern-color-3) 4%, transparent 8%),
+                radial-gradient(circle at 85% 85%, var(--pattern-color-4) 3%, transparent 7%),
+                linear-gradient(45deg, transparent 49%, var(--pattern-color-1) 49%, var(--pattern-color-1) 51%, transparent 51%),
+                linear-gradient(-45deg, transparent 49%, var(--pattern-color-2) 49%, var(--pattern-color-2) 51%, transparent 51%);
+            background-size: 300px 300px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 0; /* 孟菲斯风格常用直角 */
+            box-shadow: 10px 10px 0 var(--memphis-black), 15px 15px 0 var(--memphis-yellow), 20px 20px 0 var(--memphis-pink);
+            overflow: visible;
+            display: flex;
+            flex-direction: column;
+            margin: 30px;
+            border: 4px solid var(--memphis-black);
+            position: relative;
+        }
+        
+        /* 装饰性几何图形 */
+        .geo-shape {
+            position: absolute;
+            z-index: 0;
+        }
+        
+        .geo-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--memphis-yellow);
+            top: -30px;
+            right: 50px;
+            border: 4px solid var(--memphis-black);
+        }
+        
+        .geo-triangle {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 52px solid var(--memphis-pink);
+            bottom: -30px;
+            left: 70px;
+            transform: rotate(15deg);
+        }
+        
+        .geo-square {
+            width: 40px;
+            height: 40px;
+            background-color: var(--memphis-blue);
+            transform: rotate(15deg);
+            top: 50%;
+            right: -20px;
+            border: 4px solid var(--memphis-black);
+        }
+        
+        .geo-zigzag {
+            position: absolute;
+            bottom: -15px;
+            right: 100px;
+            width: 80px;
+            height: 30px;
+            background: 
+                linear-gradient(135deg, transparent 50%, var(--memphis-green) 50%) 0 0,
+                linear-gradient(225deg, transparent 50%, var(--memphis-green) 50%) 0 0;
+            background-size: 20px 30px;
+            background-repeat: repeat-x;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--memphis-yellow) 0%, var(--memphis-orange) 100%);
+            color: var(--memphis-black);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid var(--memphis-black);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 3px 3px 0 var(--memphis-white);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            background-color: var(--memphis-white);
+            display: inline-block;
+            padding: 5px 15px;
+            border: 2px solid var(--memphis-black);
+            box-shadow: 3px 3px 0 var(--memphis-black);
+        }
+        
+        .emoji {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.9;
+            z-index: 1;
+            text-shadow: 2px 2px 0 var(--memphis-white);
+        }
+        
+        .emoji-1 { top: 20px; left: 50px; animation: memphisBounce 6s ease-in-out infinite; }
+        .emoji-2 { bottom: 20px; right: 50px; animation: memphisBounce 7s ease-in-out infinite 0.5s; }
+        .emoji-3 { top: 40px; right: 100px; animation: memphisBounce 5s ease-in-out infinite 1s; }
+        
+        @keyframes memphisBounce {
+            0% { transform: translateY(0) rotate(0deg); }
+            20% { transform: translateY(-20px) rotate(10deg); }
+            40% { transform: translateY(0) rotate(-5deg); }
+            60% { transform: translateY(-15px) rotate(8deg); }
+            80% { transform: translateY(0) rotate(-3deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        
+        .content {
+            display: flex;
+            padding: 0;
+        }
+        
+        .left-panel {
+            flex: 1;
+            padding: 30px;
+            background: var(--memphis-white);
+            border-right: 4px dashed var(--memphis-black);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .right-panel {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--memphis-white);
+            position: relative;
+        }
+        
+        /* 孟菲斯风格的图案背景 */
+        .left-panel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 40%, rgba(255,107,107,0.1) 40%, rgba(255,107,107,0.1) 60%, transparent 60%),
+                linear-gradient(-45deg, transparent 40%, rgba(17,138,178,0.1) 40%, rgba(17,138,178,0.1) 60%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .upload-area {
+            border: 4px dashed var(--memphis-blue);
+            border-radius: 0;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+            position: relative;
+            z-index: 2;
+            box-shadow: 5px 5px 0 var(--memphis-black);
+        }
+        
+        .upload-area:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 8px 8px 0 var(--memphis-black);
+        }
+        
+        .upload-icon {
+            font-size: 3.5rem;
+            color: var(--memphis-blue);
+            margin-bottom: 15px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: var(--memphis-blue);
+            color: var(--memphis-white);
+            border: 3px solid var(--memphis-black);
+            padding: 12px 25px;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: 3px 3px 0 var(--memphis-black);
+        }
+        
+        .upload-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 var(--memphis-black);
+        }
+        
+        .file-info {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: var(--memphis-yellow);
+            border-radius: 0;
+            border: 2px solid var(--memphis-black);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .file-name {
+            font-weight: 700;
+            color: var(--memphis-black);
+            margin-bottom: 10px;
+        }
+        
+        .reupload-btn {
+            background: var(--memphis-green);
+            color: var(--memphis-black);
+            border: 2px solid var(--memphis-black);
+            padding: 8px 15px;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 2px 2px 0 var(--memphis-black);
+        }
+        
+        .reupload-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--memphis-black);
+        }
+        
+        .prize-settings {
+            margin-top: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--memphis-black);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 4px dotted var(--memphis-pink);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .prize-form {
+            background: var(--memphis-white);
+            padding: 20px;
+            border-radius: 0;
+            box-shadow: 5px 5px 0 var(--memphis-black);
+            margin-bottom: 20px;
+            border: 3px solid var(--memphis-black);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--memphis-black);
+            font-size: 1.1rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 3px solid var(--memphis-black);
+            border-radius: 0;
+            font-size: 1rem;
+            background: var(--memphis-white);
+            box-shadow: 3px 3px 0 var(--memphis-yellow);
+        }
+        
+        .add-prize-btn {
+            background: var(--memphis-pink);
+            color: var(--memphis-white);
+            border: 3px solid var(--memphis-black);
+            padding: 12px 20px;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 3px 3px 0 var(--memphis-black);
+        }
+        
+        .add-prize-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 var(--memphis-black);
+        }
+        
+        .prize-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .prize-list::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .prize-list::-webkit-scrollbar-thumb {
+            background: var(--memphis-yellow);
+            border: 2px solid var(--memphis-black);
+            border-radius: 0;
+        }
+        
+        .prize-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: var(--memphis-white);
+            border-radius: 0;
+            box-shadow: 4px 4px 0 var(--memphis-black);
+            border: 3px solid var(--memphis-black);
+            animation: memphisSlideIn 0.3s ease-out;
+            position: relative;
+        }
+        
+        @keyframes memphisSlideIn {
+            from { opacity: 0; transform: translateX(-20px) rotate(-5deg); }
+            to { opacity: 1; transform: translateX(0) rotate(0); }
+        }
+        
+        .prize-name {
+            font-weight: 700;
+            color: var(--memphis-black);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .prize-count {
+            color: var(--memphis-blue);
+            font-weight: 700;
+            background: var(--memphis-white);
+            padding: 3px 8px;
+            border: 2px solid var(--memphis-black);
+        }
+        
+        .delete-btn {
+            color: var(--memphis-pink);
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+        
+        .delete-btn:hover {
+            transform: scale(1.2) rotate(15deg);
+        }
+        
+        .draw-area {
+            text-align: center;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .draw-title {
+            font-size: 2rem;
+            color: var(--memphis-black);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 0 var(--memphis-yellow);
+        }
+        
+        .draw-box {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 40px;
+            background: linear-gradient(135deg, var(--memphis-yellow) 0%, var(--memphis-orange) 100%);
+            border-radius: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--memphis-black);
+            font-size: 2.2rem;
+            font-weight: 900;
+            box-shadow: 8px 8px 0 var(--memphis-black);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 4px solid var(--memphis-black);
+        }
+        
+        .draw-box:hover {
+            transform: translate(-5px, -5px);
+            box-shadow: 13px 13px 0 var(--memphis-black);
+        }
+        
+        .draw-box.completed {
+            background: linear-gradient(135deg, var(--memphis-green) 0%, var(--memphis-blue) 100%);
+            animation: memphisPulse 2s infinite;
+        }
+        
+        @keyframes memphisPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05) rotate(2deg); }
+            100% { transform: scale(1); }
+        }
+        
+        .draw-content {
+            text-align: center;
+            z-index: 2;
+        }
+        
+        .draw-name {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            min-height: 60px;
+            text-shadow: 2px 2px 0 var(--memphis-white);
+        }
+        
+        .draw-prize {
+            font-size: 1.7rem;
+            opacity: 0.9;
+            font-weight: 700;
+        }
+        
+        .draw-btn {
+            background: var(--memphis-purple);
+            color: var(--memphis-white);
+            border: 3px solid var(--memphis-black);
+            padding: 15px 40px;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: all 0.3s;
+            margin-bottom: 30px;
+            box-shadow: 4px 4px 0 var(--memphis-black);
+        }
+        
+        .draw-btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 7px 7px 0 var(--memphis-black);
+        }
+        
+        .draw-btn:disabled {
+            background: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 4px 4px 0 #666666;
+            border-color: #666666;
+        }
+        
+        .results-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: var(--memphis-white);
+            border-radius: 0;
+            width: 90%;
+            max-width: 700px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 15px 15px 0 var(--memphis-black);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: memphisModalAppear 0.5s ease-out;
+            border: 4px solid var(--memphis-black);
+        }
+        
+        @keyframes memphisModalAppear {
+            from { opacity: 0; transform: scale(0.9) translateY(-30px) rotate(-5deg); }
+            to { opacity: 1; transform: scale(1) translateY(0) rotate(0); }
+        }
+        
+        .modal-title {
+            font-size: 2.5rem;
+            color: var(--memphis-black);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-shadow: 2px 2px 0 var(--memphis-yellow);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--memphis-black);
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--memphis-pink);
+            width: 40px;
+            height: 40px;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--memphis-black);
+            box-shadow: 2px 2px 0 var(--memphis-black);
+        }
+        
+        .close-btn:hover {
+            color: var(--memphis-white);
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 3px 3px 0 var(--memphis-black);
+        }
+        
+        .results-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, var(--memphis-yellow) 0%, var(--memphis-orange) 100%);
+            padding: 20px;
+            border-radius: 0;
+            box-shadow: 5px 5px 0 var(--memphis-black);
+            text-align: center;
+            animation: memphisCardAppear 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid var(--memphis-black);
+        }
+        
+        @keyframes memphisCardAppear {
+            from { opacity: 0; transform: translateY(30px) rotate(-10deg); }
+            to { opacity: 1; transform: translateY(0) rotate(0); }
+        }
+        
+        .result-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--memphis-yellow), var(--memphis-pink), var(--memphis-blue), var(--memphis-green), var(--memphis-purple));
+        }
+        
+        .winner-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+            text-shadow: 2px 2px 0 var(--memphis-white);
+        }
+        
+        .result-name {
+            font-weight: 900;
+            color: var(--memphis-black);
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .result-prize {
+            color: var(--memphis-white);
+            font-weight: 700;
+            background: var(--memphis-black);
+            padding: 5px 15px;
+            border-radius: 0;
+            display: inline-block;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .export-btn {
+            padding: 12px 25px;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 3px solid var(--memphis-black);
+            box-shadow: 3px 3px 0 var(--memphis-black);
+        }
+        
+        .copy-btn {
+            background: var(--memphis-yellow);
+            color: var(--memphis-black);
+        }
+        
+        .copy-btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--memphis-black);
+        }
+        
+        .excel-btn {
+            background: var(--memphis-green);
+            color: var(--memphis-black);
+        }
+        
+        .excel-btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--memphis-black);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--memphis-yellow);
+            opacity: 0;
+            border: 2px solid var(--memphis-black);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--memphis-black);
+            grid-column: 1 / -1;
+            background: var(--memphis-white);
+            border: 3px dashed var(--memphis-black);
+        }
+        
+        .empty-state i {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes drawAnimation {
+            0% { transform: scale(0.9) rotate(-5deg); opacity: 0.5; }
+            50% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+        
+        .draw-animation {
+            animation: drawAnimation 0.5s ease-in-out infinite;
+        }
+        
+        @media (max-width: 900px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                border-right: none;
+                border-bottom: 4px dashed var(--memphis-black);
+            }
+            
+            .results-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .geo-square, .geo-triangle, .geo-zigzag {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 几何装饰元素 -->
+        <div class="geo-shape geo-circle"></div>
+        <div class="geo-shape geo-triangle"></div>
+        <div class="geo-shape geo-square"></div>
+        <div class="geo-shape geo-zigzag"></div>
+        
+        <header>
+            <div class="emoji emoji-1">🎁</div>
+            <div class="emoji emoji-2">🎉</div>
+            <div class="emoji emoji-3">🏆</div>
+            <h1>汪汪抽奖</h1>
+            <p class="subtitle">@阿汪同学｜小红书：肥汪卷｜B站：阿汪同学｜公众号：汪汪汪世界｜邮箱：httishere0728@gmail.com</p>
+        </header>
+        
+        <div class="content">
+            <div class="left-panel">
+                <div class="upload-area" id="dropArea">
+                    <i class="upload-icon fas fa-file-csv"></i>
+                    <h3>上传CSV文件</h3>
+                    <p>支持.csv格式，必须包含Name字段</p>
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">选择文件</button>
+                    <input type="file" id="fileInput" class="file-input" accept=".csv" onchange="handleFile(this.files)">
+                    
+                    <div class="file-info" id="fileInfo">
+                        <div class="file-name" id="fileName"></div>
+                        <!-- <button class="reupload-btn" onclick="resetUpload()">
+                            <i class="fas fa-sync-alt"></i> 重新上传
+                        </button> -->
+                    </div>
+                </div>
+                
+                <div class="prize-settings">
+                    <h3 class="section-title">奖品设置</h3>
+                    
+                    <div class="prize-form">
+                        <div class="form-group">
+                            <label for="prizeName">奖品名称</label>
+                            <input type="text" id="prizeName" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="prizeCount">奖品数量</label>
+                            <input type="number" id="prizeCount" placeholder="" min="1">
+                        </div>
+                        <button class="add-prize-btn" onclick="addPrize()">
+                            <i class="fas fa-plus"></i> 添加奖品
+                        </button>
+                    </div>
+                    
+                    <div class="prize-list" id="prizeList">
+                        <div class="empty-state">
+                            <i class="fas fa-gift"></i>
+                            <p>暂无奖品，请添加奖品</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="draw-area">
+                    <h2 class="draw-title"></h2>
+                    
+                    <div class="draw-box" id="drawBox">
+                        <div class="draw-content">
+                            <div class="draw-name" id="drawName">等待开始</div>
+                            <div class="draw-prize" id="drawPrize">抽奖</div>
+                        </div>
+                    </div>
+                    <button class="draw-btn" id="drawButton" disabled>开始抽奖</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-modal" id="resultsModal">
+        <div class="modal-content" id="modalContent">
+            <span class="close-btn" id="closeModal">
+                <i class="fas fa-times"></i>
+            </span>
+            <h2 class="modal-title">
+                <i class="fas fa-trophy"></i> 抽奖结果
+            </h2>
+            
+            <div class="results-container" id="resultsContainer">
+                <!-- 结果卡片将通过JS动态生成 -->
+            </div>
+            
+            <div class="export-buttons">
+                <button class="export-btn copy-btn" id="copyResults">
+                    <i class="fas fa-copy"></i> 复制到剪切板
+                </button>
+                <button class="export-btn excel-btn" id="exportExcel">
+                    <i class="fas fa-file-excel"></i> 导出Excel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 存储数据
+        let participants = [];
+        let prizes = [];
+        let results = [];
+        let currentFileName = "";
+        
+        // DOM元素
+        const fileInput = document.getElementById('fileInput');
+        const dropArea = document.getElementById('dropArea');
+        const drawButton = document.getElementById('drawButton');
+        const drawBox = document.getElementById('drawBox');
+        const drawName = document.getElementById('drawName');
+        const drawPrize = document.getElementById('drawPrize');
+        const prizeList = document.getElementById('prizeList');
+        const prizeNameInput = document.getElementById('prizeName');
+        const prizeCountInput = document.getElementById('prizeCount');
+        const resultsModal = document.getElementById('resultsModal');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const closeModal = document.getElementById('closeModal');
+        const copyResults = document.getElementById('copyResults');
+        const exportExcel = document.getElementById('exportExcel');
+        const modalContent = document.getElementById('modalContent');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 添加一些示例confetti效果
+            createConfetti();
+            
+            // 绑定事件
+            closeModal.addEventListener('click', () => {
+                resultsModal.style.display = 'none';
+            });
+            
+            copyResults.addEventListener('click', copyToClipboard);
+            exportExcel.addEventListener('click', exportToExcel);
+            
+            // 添加点击抽奖盒子查看结果的功能
+            drawBox.addEventListener('click', function() {
+                if (results.length > 0) {
+                    renderResultsCards();
+                    resultsModal.style.display = 'flex';
+                }
+            });
+        });
+        
+        // 添加奖品
+        function addPrize() {
+            const name = prizeNameInput.value.trim();
+            const count = parseInt(prizeCountInput.value);
+            
+            if (!name || isNaN(count) || count <= 0) {
+                alert('请输入有效的奖品名称和数量');
+                return;
+            }
+            
+            const newPrize = { name, count };
+            prizes.push(newPrize);
+            renderPrizeItem(newPrize);
+            
+            // 清空输入框
+            prizeNameInput.value = '';
+            prizeCountInput.value = '';
+            
+            // 移除空状态提示（如果有）
+            const emptyState = prizeList.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+        }
+        
+        // 渲染奖品项
+        function renderPrizeItem(prize) {
+            const prizeItem = document.createElement('div');
+            prizeItem.className = 'prize-item';
+            
+            // 奖品emoji映射
+            const prizeEmojis = {
+                "一等奖": "🥇",
+                "二等奖": "🥈", 
+                "三等奖": "🥉",
+                "特等奖": "🏆",
+                "参与奖": "🎁"
+            };
+            
+            // 获取对应的emoji，如果没有匹配则使用默认emoji
+            const emoji = prizeEmojis[prize.name] || "🎁";
+            
+            prizeItem.innerHTML = `
+                <div>
+                    <span class="prize-name">${emoji} ${prize.name}</span>
+                </div>
+                <div>
+                    <span class="prize-count">${prize.count}份</span>
+                    <span class="delete-btn" onclick="removePrize('${prize.name}')">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                </div>
+            `;
+            prizeList.appendChild(prizeItem);
+        }
+        
+        // 移除奖品
+        function removePrize(name) {
+            prizes = prizes.filter(prize => prize.name !== name);
+            renderPrizeList();
+            
+            // 如果没有奖品了，显示空状态
+            if (prizes.length === 0) {
+                prizeList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-gift"></i>
+                        <p>暂无奖品，请添加奖品</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // 重新渲染奖品列表
+        function renderPrizeList() {
+            prizeList.innerHTML = '';
+            prizes.forEach(prize => renderPrizeItem(prize));
+        }
+        
+        // 渲染结果卡片
+        function renderResultsCards() {
+            resultsContainer.innerHTML = '';
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-gift"></i>
+                        <p>暂无抽奖结果</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 奖品emoji映射
+            const prizeEmojis = {
+                "一等奖": "🥇",
+                "二等奖": "🥈", 
+                "三等奖": "🥉",
+                "特等奖": "🏆",
+                "参与奖": "🎁"
+            };
+            
+            results.forEach((result, index) => {
+                // 为每个结果添加一点延迟出现的效果
+                setTimeout(() => {
+                    const resultCard = document.createElement('div');
+                    resultCard.className = 'result-card';
+                    
+                    // 获取对应的emoji，如果没有匹配则使用默认emoji
+                    const emoji = prizeEmojis[result.prize] || "🎉";
+                    
+                    resultCard.innerHTML = `
+                        <span class="winner-emoji">${emoji}</span>
+                        <div class="result-name">${result.name}</div>
+                        <div class="result-prize">${result.prize}</div>
+                    `;
+                    
+                    resultsContainer.appendChild(resultCard);
+                }, index * 100);
+            });
+        }
+        
+        // 重置上传
+        function resetUpload() {
+            fileInput.value = '';
+            fileInfo.style.display = 'none';
+            participants = [];
+            drawButton.disabled = true;
+            currentFileName = "";
+        }
+        
+        // 拖放功能
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropArea.style.backgroundColor = 'rgba(17, 138, 178, 0.2)';
+        }
+        
+        function unhighlight() {
+            dropArea.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+        }
+        
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFile(files);
+        }
+        
+        // 处理上传的CSV文件
+        function handleFile(files) {
+            if (files.length === 0) return;
+            
+            const file = files[0];
+            currentFileName = file.name;
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const csvData = e.target.result;
+                
+                // 使用PapaParse解析CSV
+                Papa.parse(csvData, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        if (results.errors.length > 0) {
+                            alert('解析CSV文件时出错: ' + results.errors[0].message);
+                            return;
+                        }
+                        
+                        // 检查是否有Name字段
+                        if (results.data.length > 0 && !results.data[0].Name) {
+                            alert('CSV文件中必须包含Name字段');
+                            return;
+                        }
+                        
+                        // 提取姓名
+                        participants = results.data.map(row => row.Name).filter(name => name);
+                        
+                        if (participants.length > 0) {
+                            // 显示文件信息
+                            fileName.textContent = currentFileName;
+                            fileInfo.style.display = 'block';
+                            
+                            alert(`成功导入 ${participants.length} 名参与者`);
+                            drawButton.disabled = false;
+                        } else {
+                            alert('未找到参与者数据，请检查CSV格式');
+                        }
+                    }
+                });
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        // 抽奖功能
+        drawButton.addEventListener('click', startDraw);
+        
+        function startDraw() {
+            if (participants.length === 0) {
+                alert('请先上传参与者名单');
+                return;
+            }
+            
+            if (prizes.length === 0) {
+                alert('请至少添加一个奖品');
+                return;
+            }
+            
+            // 计算奖品总数
+            const totalPrizes = prizes.reduce((sum, prize) => sum + prize.count, 0);
+            
+            if (participants.length < totalPrizes) {
+                alert('参与者数量少于奖品总数，请增加参与者或减少奖品数量');
+                return;
+            }
+            
+            // 禁用按钮
+            drawButton.disabled = true;
+            
+            // 复制参与者数组用于抽奖
+            let availableParticipants = [...participants];
+            
+            // 清空之前的结果
+            results = [];
+            
+            // 抽奖动画
+            let animationCount = 0;
+            const animationDuration = 4000; // 4秒动画
+            const animationInterval = 100; // 每100ms切换一次名字
+            
+            const animation = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * availableParticipants.length);
+                drawName.textContent = availableParticipants[randomIndex];
+                drawPrize.textContent = "抽奖中...";
+                
+                animationCount += animationInterval;
+                if (animationCount >= animationDuration) {
+                    clearInterval(animation);
+                    
+                    // 抽取所有奖品
+                    prizes.forEach(prize => {
+                        for (let i = 0; i < prize.count; i++) {
+                            if (availableParticipants.length === 0) break;
+                            
+                            const winnerIndex = Math.floor(Math.random() * availableParticipants.length);
+                            const winner = availableParticipants[winnerIndex];
+                            
+                            // 添加到结果列表
+                            results.push({
+                                name: winner,
+                                prize: prize.name
+                            });
+                            
+                            // 从可用参与者中移除
+                            availableParticipants.splice(winnerIndex, 1);
+                        }
+                    });
+                    
+                    // 显示结果
+                    drawName.textContent = "抽奖完成";
+                    drawPrize.textContent = `共抽出${results.length}个奖项`;
+                    
+                    // 添加完成状态的样式
+                    drawBox.classList.add('completed');
+                    
+                    // 渲染结果卡片并显示弹窗
+                    renderResultsCards();
+                    resultsModal.style.display = 'flex';
+                    
+                    // 启用按钮
+                    drawButton.disabled = false;
+                }
+            }, animationInterval);
+        }
+        
+        // 复制到剪切板
+        function copyToClipboard() {
+            if (results.length === 0) {
+                alert('没有抽奖结果可复制');
+                return;
+            }
+            
+            // 格式化结果文本
+            let text = "抽奖结果\n";
+            text += "姓名\t奖品\n";
+            text += "----------------\n";
+            
+            results.forEach(result => {
+                text += `${result.name}\t${result.prize}\n`;
+            });
+            
+            // 复制到剪切板
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    alert('抽奖结果已复制到剪切板');
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    alert('复制失败，请重试');
+                });
+        }
+        
+        // 导出到Excel
+        function exportToExcel() {
+            if (results.length === 0) {
+                alert('没有抽奖结果可导出');
+                return;
+            }
+            
+            // 创建工作簿
+            const wb = XLSX.utils.book_new();
+            
+            // 准备数据
+            const data = [['姓名', '奖品']];
+            results.forEach(result => {
+                data.push([result.name, result.prize]);
+            });
+            
+            // 创建工作表
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            
+            // 将工作表添加到工作簿
+            XLSX.utils.book_append_sheet(wb, ws, '抽奖结果');
+            
+            // 生成Excel文件并下载
+            XLSX.writeFile(wb, '抽奖结果.xlsx');
+        }
+        
+        function createConfetti() {
+            const drawBox = document.querySelector('.draw-box');
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = ['#FFD166', '#FF6B6B', '#118AB2', '#06D6A0', '#9D4EDD'][Math.floor(Math.random() * 5)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.borrowRadius = Math.random() > 0.5 ? '50%' : '0';
+                drawBox.appendChild(confetti);
+                
+                // 动画
+                animateConfetti(confetti);
+            }
+        }
+        
+        function animateConfetti(element) {
+            const duration = Math.random() * 2000 + 1000;
+            const yDistance = Math.random() * 50 + 20;
+            
+            const animation = element.animate([
+                { transform: 'translateY(0)', opacity: 0 },
+                { transform: `translateY(-${yDistance}px)`, opacity: 1 },
+                { transform: `translateY(-${yDistance/2}px)`, opacity: 0 }
+            ], {
+                duration: duration,
+                iterations: Infinity,
+                easing: 'ease-in-out'
+            });
+        }
+    </script>
+</body>
+</html>
