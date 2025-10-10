@@ -2,7 +2,7 @@
  * @Author: HTT httishere0728@gmail.com
  * @Date: 2025-08-01 16:39:34
  * @LastEditors: HTT httishere0728@gmail.com
- * @LastEditTime: 2025-08-03 00:13:02
+ * @LastEditTime: 2025-10-10 09:15:17
  * @FilePath: /notion/v300/work-card.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -107,14 +107,14 @@
     </div>
     <script>
         function calculateHours(txt) {
-            if(!txt) return
+            if (!txt) return
             const _h = txt?.split(':')[0], _m = txt?.split(':')[1]
-            return Number(_h) + (Number(_m)/60)
+            return Number(_h) + (Number(_m) / 60)
         }
         window.onload = function () {
             const params = getAllParams(CryptoJS);
             console.log(params)
-            const {lng = 'en', welcome, bg_color, font_color, freedom_pro} = params
+            const { lng = 'en', welcome, bg_color, font_color, freedom_pro } = params
             const contents = {
                 'cn': {
                     time: '现在是',
@@ -129,20 +129,19 @@
                     home: "🎉 Time to go home!"
                 }
             }
-            const _format = lng === 'cn'?'zh-CN':'en-US'
+            const _format = lng === 'cn' ? 'zh-CN' : 'en-US'
             welcome && (document.getElementById('welcome').innerText = welcome)
             document.getElementById('lng_txt').innerText = contents[lng]?.time
             const _box = document.getElementById('box')
             bg_color && (_box.style.backgroundColor = bg_color)
             font_color && (_box.style.color = font_color)
-            if(font_color) {
+            if (font_color) {
                 const p_box = document.getElementById('p-box'), p_bar = document.getElementById('progress-bar')
                 const p_bg1 = `${font_color}20`, p_bg2 = `${font_color}40`
                 p_box.style.backgroundColor = p_bg1
                 p_bar.style.background = `linear-gradient(to right, ${font_color}, ${p_bg2})`
             }
 
-            const now = new Date();
             const options = {
                 weekday: 'long',
                 month: 'long',
@@ -152,12 +151,10 @@
                 minute: '2-digit',
                 hour12: true
             };
-            const now_time = (now.toLocaleString(_format, options));
-            document.getElementById('now_time').innerText = now_time
             // Work hours (9:00 AM - 6:00 PM)
             let WORK_START_HOUR = 9;
             let WORK_END_HOUR = 18;
-            if(freedom_pro) {
+            if (freedom_pro) {
                 let _s = freedom_pro?.split('-')[0], _e = freedom_pro?.split('-')[1]
                 console.log(_s, _e)
                 WORK_START_HOUR = calculateHours(_s)
@@ -166,6 +163,11 @@
             const TOTAL_WORK_SECONDS = (WORK_END_HOUR - WORK_START_HOUR) * 3600;
 
             function updateTime() {
+                const now = new Date();
+                const now_time = (now.toLocaleString(_format, options));
+                document.getElementById('now_time').innerText = now_time
+
+                console.log('updating')
 
                 // Calculate work progress
                 const currentHour = now.getHours();
@@ -186,8 +188,6 @@
                 // Before work hours, secondsPassed remains 0
 
                 const progress = (secondsPassed / TOTAL_WORK_SECONDS) * 100;
-                document.getElementById("progress-bar").style.width = progress + "%";
-                document.getElementById("progress-percent").textContent = Math.min(100, Math.round(progress)) + "% ➜ ";
 
                 // Calculate remaining time
                 let timeLeft = TOTAL_WORK_SECONDS - secondsPassed;
@@ -205,14 +205,17 @@
                 } else {
                     timeLeftText = `[${hoursLeft > 0 ? hoursLeft + "h " : ""}${minutesLeft}m ${secondsLeft}s]${contents[lng]?.down}`;
                 }
+                console.log('updating', timeLeftText)
 
                 document.getElementById("time-left").textContent = timeLeftText;
+                document.getElementById("progress-bar").style.width = progress + "%";
+                document.getElementById("progress-percent").textContent = Math.min(100, Math.round(progress)) + "% ➜ ";
             }
 
             // Initial update
             updateTime();
             // Update every second
-            setInterval(updateTime, 60000);
+            setInterval(updateTime, 5000);
         }
     </script>
 </body>
