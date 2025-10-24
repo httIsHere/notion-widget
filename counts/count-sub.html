@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加微信操作引导</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        :root {
+            --primary-color: #4caf50;
+            --primary-light: #8bc34a;
+            --primary-bg: #f9fbf8;
+            --accent-color: #81c784;
+            --text-color: #4a4a4a;
+            --text-light: #666;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --border-radius: 16px;
+        }
+        
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(var(--accent-color) 1px, transparent 1px),
+                radial-gradient(var(--primary-light) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary-color));
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary-color));
+            border-radius: 3px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+        
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            background-color: var(--primary-bg);
+            border-left: 4px solid var(--primary-light);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.05) 0%, rgba(76, 175, 80, 0.05) 100%);
+            z-index: 0;
+        }
+        
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .step-number {
+            background-color: var(--primary-color);
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+            font-weight: bold;
+            font-size: 18px;
+            z-index: 1;
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+        }
+        
+        .step-content {
+            flex: 1;
+            z-index: 1;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .step-icon {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+        
+        .step-description {
+            color: var(--text-light);
+            font-size: 15px;
+        }
+        
+        .qrcode-section {
+            text-align: center;
+            padding: 30px;
+            background-color: #f1f8e9;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            border: 1px dashed var(--primary-light);
+            position: relative;
+        }
+        
+        .qrcode-title {
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .qrcode-container {
+            display: inline-block;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .qrcode-container::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px dashed var(--primary-light);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+        
+        .qrcode {
+            width: 200px;
+            height: 200px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .qrcode::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 49%, var(--primary-light) 49%, var(--primary-light) 51%, transparent 51%),
+                linear-gradient(-45deg, transparent 49%, var(--primary-light) 49%, var(--primary-light) 51%, transparent 51%);
+            background-size: 20px 20px;
+            opacity: 0.1;
+        }
+        
+        .qrcode img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        
+        .qrcode-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .qrcode-placeholder i {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .wechat-id {
+            background: var(--white);
+            padding: 12px 20px;
+            border-radius: 30px;
+            /* display: inline-block; */
+            margin-top: 15px;
+            font-weight: 500;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-light);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .notes {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff8e1;
+            border-radius: var(--border-radius);
+            border-left: 4px solid #ffd54f;
+        }
+        
+        .notes-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #ff9800;
+            display: flex;
+            align-items: center;
+        }
+        
+        .notes-title i {
+            margin-right: 8px;
+        }
+        
+        .notes ul {
+            padding-left: 20px;
+            color: var(--text-light);
+        }
+        
+        .notes li {
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-light);
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px 20px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .step {
+                padding: 20px 15px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .qrcode {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .qrcode-container {
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+            }
+            
+            .step {
+                padding: 15px 12px;
+            }
+            
+            .step-title {
+                font-size: 16px;
+            }
+            
+            .step-description {
+                font-size: 14px;
+            }
+            
+            .qrcode {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .qrcode-title {
+                font-size: 18px;
+            }
+            
+            .wechat-id {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step, .qrcode-section, .notes {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .step:nth-child(1) { animation-delay: 0.1s; }
+        .step:nth-child(2) { animation-delay: 0.2s; }
+        .step:nth-child(3) { animation-delay: 0.3s; }
+        .qrcode-section { animation-delay: 0.4s; }
+        .notes { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>订阅库操作引导</h1>
+            <p class="subtitle">请按照以下步骤完成微信添加，确保备注订单号</p>
+        </div>
+        
+        <div class="steps">            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">
+                        <i class="fas fa-qrcode step-icon"></i>
+                        扫描二维码添加微信
+                    </div>
+                    <div class="step-description">
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">
+                        <i class="fas fa-sticky-note step-icon"></i>
+                        备注订单号
+                    </div>
+                    <div class="step-description">
+                        在添加好友的验证信息中，请务必填写您的订单号，如：DD20240520001。这是我们处理您请求的重要依据。
+                    </div>
+                </div>
+            </div>          
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">
+                        <i class="fas fa-qrcode step-icon"></i>
+                        进入群聊，通过群公告获取订阅库模版
+                    </div>
+                    <div class="step-description">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="qrcode-section">
+            <div class="qrcode-title">
+                <i class="fas fa-qrcode"></i>
+                添加阿汪小助理
+            </div>
+            <div class="qrcode-container">
+                <div class="qrcode">
+                    <img src="./httkhuntoria.jpg" />
+                </div>
+            </div>
+            <div class="wechat-id">
+                <i class="fas fa-user-circle"></i>
+                微信号：httkhuntoria
+            </div>
+        </div>
+        
+        <div class="notes">
+            <div class="notes-title">
+                <i class="fas fa-lightbulb"></i>
+                重要提示
+            </div>
+            <ul>
+                <li>请确保在添加好友时准确备注您的订单号，以便我们快速处理您的请求</li>
+                <li>添加成功后，我们的小助理将在24小时内与您联系</li>
+                <li>如遇到任何问题，请通过B站小店客服渠道联系我们</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 阿汪同学｜Notion模版永久订阅库</p>
+        </div>
+    </div>
+
+    <script>
+        // 简单的交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为步骤添加点击效果
+            const steps = document.querySelectorAll('.step');
+            steps.forEach(step => {
+                step.addEventListener('click', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-5px)';
+                    }, 150);
+                });
+            });
+            
+            // 二维码区域的悬停效果
+            const qrSection = document.querySelector('.qrcode-section');
+            qrSection.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.01)';
+            });
+            
+            qrSection.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
