@@ -2,7 +2,9 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>倒计时卡片</title>
+  <title>自适应倒计时卡片</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
     * {
       box-sizing: border-box;
@@ -16,7 +18,7 @@
       justify-content: center;
       align-items: center;
       padding: 16px;
-      /* background: linear-gradient(135deg, #fdfbfb, #ebedee); */
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
     }
 
     /* 卡片容器 */
@@ -38,7 +40,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 26px;
+      padding: 16px;
     }
 
     .card-image img {
@@ -67,23 +69,21 @@
     }
 
     .countdown {
-      /* display: grid;
+      display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px; */
+      gap: 10px;
     }
 
     .time-box {
       background: #eaf4f4;
       border-radius: 14px;
-      padding: 5px;
-      min-width: 100%;
+      padding: 10px 0;
     }
 
     .time-number {
-      font-size: clamp(78px, 5vw, 72px);
+      font-size: clamp(18px, 5vw, 22px);
       font-weight: bold;
       color: #355f5b;
-      letter-spacing: 10px;
     }
 
     .time-label {
@@ -115,25 +115,25 @@
     }
   </style>
 </head>
+
 <body>
 
 <div class="countdown-card">
-  <!-- 左侧图片 -->
+  <!-- 图片 -->
   <div class="card-image">
-    <!-- <img src="https://picsum.photos/300/300?random=1" alt="可爱图片"> -->
-     <img src="../assets/card-countdown/2.png" alt="">
+    <img src="https://picsum.photos/300/300?random=2" alt="可爱插画">
   </div>
 
-  <!-- 右侧内容 -->
+  <!-- 倒计时 -->
   <div class="card-content">
-    <div class="title">2027全国硕士研究生入学考试</div>
+    <div class="title">距离目标日还有</div>
 
     <div class="countdown">
       <div class="time-box">
         <div class="time-number" id="days">0</div>
+        <div class="time-label">天</div>
       </div>
-        <!-- <div class="time-label">天</div> -->
-      <!-- <div class="time-box">
+      <div class="time-box">
         <div class="time-number" id="hours">0</div>
         <div class="time-label">时</div>
       </div>
@@ -144,37 +144,30 @@
       <div class="time-box">
         <div class="time-number" id="seconds">0</div>
         <div class="time-label">秒</div>
-      </div> -->
+      </div>
     </div>
 
-    <div class="tip">✨ 每一天都在靠近目标 ✨</div>
+    <div class="tip">🌱 慢慢来，也是在前进</div>
   </div>
 </div>
 
 <script>
-  // ===== 设置你的目标时间 =====
-  const targetDate = new Date("2026-12-10").getTime();
+  const targetDate = new Date("2026-12-31 00:00:00").getTime();
 
   function updateCountdown() {
-    const now = new Date().getTime();
+    const now = Date.now();
     const diff = targetDate - now;
 
-    if (diff <= 0) {
-      document.querySelector(".title").innerText = "目标时间已到达 🎉";
-        document.getElementById("days").innerText = "D-DAY";
-        document.getElementById("days").style.fontSize = '56px'
-      return;
-    }
+    if (diff <= 0) return;
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
-
-    document.getElementById("days").innerText = days;
-    // document.getElementById("hours").innerText = hours;
-    // document.getElementById("minutes").innerText = minutes;
-    // document.getElementById("seconds").innerText = seconds;
+    document.getElementById("days").innerText =
+      Math.floor(diff / (1000 * 60 * 60 * 24));
+    document.getElementById("hours").innerText =
+      Math.floor((diff / (1000 * 60 * 60)) % 24);
+    document.getElementById("minutes").innerText =
+      Math.floor((diff / (1000 * 60)) % 60);
+    document.getElementById("seconds").innerText =
+      Math.floor((diff / 1000) % 60);
   }
 
   updateCountdown();
