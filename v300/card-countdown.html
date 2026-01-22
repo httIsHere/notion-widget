@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>倒计时卡片</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+    }
+
+    .countdown-card {
+      width: 520px;
+      height: 260px;
+      display: flex;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    /* 左侧图片 */
+    .card-image {
+      width: 45%;
+      background-color: #ca9d3c10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-image img {
+      width: 80%;
+      border-radius: 16px;
+    }
+
+    /* 右侧倒计时 */
+    .card-content {
+      width: 55%;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 18px;
+      color: #ca9d3c;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .time-box {
+      /* width: 60px; */
+      background: #f8e9bb;
+      border-radius: 14px;
+      padding: 5px;
+    }
+
+    .time-number {
+      font-size: 76px;
+      font-weight: bold;
+      color: #ca9d3c;
+      letter-spacing: 10px;
+      text-align: center;
+      min-width: 220px;
+    }
+
+    .time-label {
+      font-size: 12px;
+      color: #6b9080;
+      margin-top: 4px;
+    }
+
+    .tip {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #ca9d3c;
+    }
+  </style>
+</head>
+<body>
+
+<div class="countdown-card">
+  <!-- 左侧图片 -->
+  <div class="card-image">
+    <!-- <img src="https://picsum.photos/300/300?random=1" alt="可爱图片"> -->
+     <img src="../assets/card-countdown/1.png" alt="">
+  </div>
+
+  <!-- 右侧内容 -->
+  <div class="card-content">
+    <div class="title">2027全国硕士研究生入学考试</div>
+
+    <div class="countdown">
+      <div class="time-box">
+        <div class="time-number" id="days">0</div>
+      </div>
+        <!-- <div class="time-label">天</div> -->
+      <!-- <div class="time-box">
+        <div class="time-number" id="hours">0</div>
+        <div class="time-label">时</div>
+      </div>
+      <div class="time-box">
+        <div class="time-number" id="minutes">0</div>
+        <div class="time-label">分</div>
+      </div>
+      <div class="time-box">
+        <div class="time-number" id="seconds">0</div>
+        <div class="time-label">秒</div>
+      </div> -->
+    </div>
+
+    <div class="tip">✨ 每一天都在靠近目标 ✨</div>
+  </div>
+</div>
+
+<script>
+  // ===== 设置你的目标时间 =====
+  const targetDate = new Date("2026-12-10").getTime();
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      document.querySelector(".title").innerText = "目标时间已到达 🎉";
+        document.getElementById("days").innerText = "D-DAY";
+        document.getElementById("days").style.fontSize = '56px'
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("days").innerText = days;
+    // document.getElementById("hours").innerText = hours;
+    // document.getElementById("minutes").innerText = minutes;
+    // document.getElementById("seconds").innerText = seconds;
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>
