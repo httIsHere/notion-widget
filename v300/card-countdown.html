@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8" />
   <title>倒计时卡片</title>
+  <script src="../lib/global.js?v=20260129"></script>
+  <script src="../lib/crypto-js.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -115,25 +118,26 @@
     }
   </style>
 </head>
+
 <body>
 
-<div class="countdown-card">
-  <!-- 左侧图片 -->
-  <div class="card-image">
-    <!-- <img src="https://picsum.photos/300/300?random=1" alt="可爱图片"> -->
-     <img src="../assets/card-countdown/2.png" alt="">
-  </div>
+  <div class="countdown-card">
+    <!-- 左侧图片 -->
+    <div class="card-image">
+      <!-- <img src="https://picsum.photos/300/300?random=1" alt="可爱图片"> -->
+      <img id="cover" src="../assets/card-countdown/2.png" alt="">
+    </div>
 
-  <!-- 右侧内容 -->
-  <div class="card-content">
-    <div class="title">2027全国硕士研究生入学考试</div>
+    <!-- 右侧内容 -->
+    <div class="card-content">
+      <div class="title" id="day-title">2027全国硕士研究生入学考试</div>
 
-    <div class="countdown">
-      <div class="time-box">
-        <div class="time-number" id="days">0</div>
-      </div>
+      <div class="countdown">
+        <div class="time-box">
+          <div class="time-number" id="days">0</div>
+        </div>
         <!-- <div class="time-label">天</div> -->
-      <!-- <div class="time-box">
+        <!-- <div class="time-box">
         <div class="time-number" id="hours">0</div>
         <div class="time-label">时</div>
       </div>
@@ -145,41 +149,58 @@
         <div class="time-number" id="seconds">0</div>
         <div class="time-label">秒</div>
       </div> -->
+      </div>
+
+      <div class="tip" id="tip">✨ 每一天都在靠近目标 ✨</div>
     </div>
-
-    <div class="tip">✨ 每一天都在靠近目标 ✨</div>
   </div>
-</div>
 
-<script>
-  // ===== 设置你的目标时间 =====
-  const targetDate = new Date("2026-12-10").getTime();
+  <script>
+    // ===== 设置你的目标时间 =====
 
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const diff = targetDate - now;
-
-    if (diff <= 0) {
-      document.querySelector(".title").innerText = "目标时间已到达 🎉";
-        document.getElementById("days").innerText = "D-DAY";
-        document.getElementById("days").style.fontSize = '56px'
-      return;
+    let targetDate = new Date("2026-12-10").getTime();
+    window.onload = function () {
+      const params = getAllParams(CryptoJS);
+      console.log(params)
+      params.day && (targetDate = new Date(params.day))
+      const color = params.font_color;
+      params.name && (document.querySelector(".title").innerText = params.name)
+      params.msg && (document.getElementById('tip').innerText = params.msg)
+      params.cover == '0' && (document.getElementById('cover').setAttribute('src', 'https://picsum.photos/300/300?random=1'))
+      updateCountdown();
+      setInterval(updateCountdown, 60000);
+      document.getElementsByClassName('card-image')[0].style.backgroundColor = `${color}30`
+      document.getElementsByClassName('time-box')[0].style.backgroundColor = `${color}50`
+      document.getElementsByClassName('title')[0].style.color = color
+      document.getElementsByClassName('time-number')[0].style.color = color
+      document.getElementById('tip').style.color = color
+      document.getElementById('watermark').style.display = 'none'
     }
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
 
-    document.getElementById("days").innerText = days;
-    // document.getElementById("hours").innerText = hours;
-    // document.getElementById("minutes").innerText = minutes;
-    // document.getElementById("seconds").innerText = seconds;
-  }
+      if (diff <= 0) {
+        document.querySelector(".title").innerText = "目标时间已到达 🎉";
+        document.getElementById("days").innerText = "D-DAY";
+        document.getElementById("days").style.fontSize = '56px'
+        return;
+      }
 
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-</script>
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("days").innerText = days;
+      // document.getElementById("hours").innerText = hours;
+      // document.getElementById("minutes").innerText = minutes;
+      // document.getElementById("seconds").innerText = seconds;
+    }
+
+  </script>
 
 </body>
+
 </html>
