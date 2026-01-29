@@ -37,7 +37,7 @@
     /* 左侧图片 */
     .card-image {
       flex: 1;
-      background: #f6f9f8;
+      background: rgba(53, 95, 91, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -76,7 +76,7 @@
     }
 
     .time-box {
-      background: #eaf4f4;
+      background: rgba(53, 95, 91, 0.15);
       border-radius: 14px;
       padding: 5px;
       min-width: 100%;
@@ -169,8 +169,8 @@
       params.cover == '0' && (document.getElementById('cover').setAttribute('src', 'https://picsum.photos/300/300?random=1'))
       updateCountdown();
       setInterval(updateCountdown, 60000);
-      document.getElementsByClassName('card-image')[0].style.backgroundColor = `${color}30`
-      document.getElementsByClassName('time-box')[0].style.backgroundColor = `${color}50`
+      document.getElementsByClassName('card-image')[0].style.backgroundColor = `${color}10`
+      document.getElementsByClassName('time-box')[0].style.backgroundColor = `${color}20`
       document.getElementsByClassName('title')[0].style.color = color
       document.getElementsByClassName('time-number')[0].style.color = color
       document.getElementById('tip').style.color = color
