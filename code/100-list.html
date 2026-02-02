@@ -406,7 +406,12 @@
             border-top: 3px dashed #ffd3b6;
             color: #7a9a7a;
             font-size: 1rem;
-            position: relative;
+            /* position: relative; */
+            position: absolute;
+            bottom: 30px;
+            /* left: 50%; */
+            /* transform: translateX(-50%); */
+            width: 100%;
         }
 
         footer::before {
@@ -416,7 +421,7 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 1.5rem;
-            background-color: #fff9f5;
+            background-color: #fcf5ea;
             padding: 0 20px;
         }
 
@@ -836,7 +841,7 @@
                 counter++;
 
                 // 最后几次减慢速度
-                if(infinite && counter > totalIterations) {
+                if (infinite && counter > totalIterations) {
                     counter = 0
                 } else if (!infinite && counter > totalIterations - 8) {
                     clearInterval(interval);
