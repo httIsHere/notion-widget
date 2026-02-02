@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无聊时可做的100件小事 - 可爱抽取器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fff9f5;
+            color: #5a5a5a;
+            line-height: 1.6;
+            padding: 20px;
+            /* background-image: radial-gradient(#ffe8e8 2px, transparent 2px); */
+            background-size: 30px 30px;
+            min-height: 100vh;
+            background: url(../assets/100-list/bg-2.jpg);
+            background-size: 100% 100%;
+            /* background-origin: ; */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            /* padding: 20px; */
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, #e4f9f1 0%, #dcedc1 100%);
+            color: #5a7d5a;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(168, 230, 207, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-decoration {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .decoration-1 {
+            top: 15px;
+            left: 30px;
+        }
+
+        .decoration-2 {
+            top: 10px;
+            right: 40px;
+        }
+
+        .decoration-3 {
+            bottom: 15px;
+            left: 50px;
+        }
+
+        .decoration-4 {
+            bottom: 10px;
+            right: 30px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            /* text-shadow: 2px 2px 0 #ffd3b6; */
+            color: #698474;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            color: #7a9a7a;
+            font-weight: 500;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        @media (min-width: 992px) {
+            .main-content {
+                flex-direction: row;
+            }
+        }
+
+        .left-panel {
+            flex: 1;
+            background-color: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(255, 214, 175, 0.3);
+            border: 3px solid #698474;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffd3b6' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: -1;
+            border-radius: 30px;
+        }
+
+        .right-panel {
+            flex: 1;
+            background-color: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(255, 214, 175, 0.3);
+            border: 3px solid #ffd3b6;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .right-panel::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffd3b6' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: -1;
+            border-radius: 30px;
+        }
+
+        .draw-area {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .result-box {
+            background-color: #fff9f530;
+            border-radius: 20px;
+            padding: 35px 25px;
+            margin-bottom: 25px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 4px dashed #698474;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-box::before {
+            content: "✨";
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .result-box::after {
+            content: "🎈";
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .result-box.active {
+            border-color: #698474;
+            box-shadow: 0 0 25px #69847410;
+            background-color: #e9f7ee;
+        }
+
+        .result-text {
+            font-size: 2.2rem;
+            color: #698474;
+            font-weight: 700;
+            padding: 0 20px;
+            text-align: center;
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
+        }
+
+        .draw-button {
+            /* background: linear-gradient(135deg, #698474 0%, #95e6b6 100%); */
+            color: #698474;
+            border: none;
+            padding: 20px 45px;
+            font-size: 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            /* box-shadow: 0 8px 0 #bfead0; */
+            margin-bottom: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 0 auto 20px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #5a7d5a;
+            background-color: #ffffff;
+            padding: 5px;
+        }
+
+        .draw-button div {
+            background-color: #bad5c5;
+            border: 3px dashed #5a7d5a;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .draw-button:hover {
+            transform: translateY(-5px);
+            /* box-shadow: 0 13px 0 #75e2a1; */
+        }
+
+        .draw-button:active {
+            transform: translateY(2px);
+            /* box-shadow: 0 6px 0 #d6fae5; */
+        }
+
+        .draw-button:disabled {
+            /* background: linear-gradient(135deg, #cccccc 0%, #aaaaaa 100%); */
+            cursor: not-allowed;
+            /* box-shadow: 0 8px 0 #999999; */
+            transform: none;
+            background-color: #f3f3f3;
+            border-color: #ddd;
+            color: #bbb;
+        }
+
+        .counter {
+            font-size: 1.2rem;
+            color: #698474;
+            margin-bottom: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .instructions {
+            font-size: 1.1rem;
+            color: #7a9a7a;
+            text-align: center;
+            margin-top: 20px;
+            background-color: #f9fff9;
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px dashed #a8e6cf;
+        }
+
+        .things-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .things-list h3 {
+            font-size: 1.8rem;
+            color: #698474;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px dotted #ffd3b6;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .list-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+        }
+
+        .thing-item {
+            background-color: #fff9f5;
+            padding: 18px;
+            border-radius: 15px;
+            border-left: 5px solid #ffd3b6;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thing-item::before {
+            content: "🌼";
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.9rem;
+            opacity: 0.3;
+        }
+
+        .thing-item:hover {
+            background-color: #fff0f0;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(255, 139, 148, 0.15);
+            border-left-color: #698474;
+        }
+
+        .thing-number {
+            background-color: #698474;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 0 #e67a83;
+        }
+
+        .thing-text {
+            flex: 1;
+            font-size: 1.05rem;
+            color: #5a5a5a;
+        }
+
+        .completed {
+            border-left-color: #a8e6cf;
+            background-color: #f9fff9;
+        }
+
+        .completed .thing-number {
+            background-color: #a8e6cf;
+            box-shadow: 0 4px 0 #8cd4b9;
+        }
+
+        .completed::before {
+            content: "✅";
+            opacity: 0.5;
+        }
+
+        .history {
+            margin-top: 35px;
+            background-color: #f9fff9;
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px solid #dcedc1;
+        }
+
+        .history h3 {
+            font-size: 1.6rem;
+            color: #7a9a7a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .history-item {
+            background-color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            border: 2px solid #ffd3b6;
+            box-shadow: 0 3px 0 #ffd3b6;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 3px dashed #ffd3b6;
+            color: #7a9a7a;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        footer::before {
+            content: "🎨 🎈 ✨";
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            background-color: #fff9f5;
+            padding: 0 20px;
+        }
+
+        .highlight {
+            color: #698474;
+            font-weight: 700;
+        }
+
+        /* 小插图样式 */
+        .illustration {
+            position: absolute;
+            z-index: 0;
+            font-size: 4rem;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .illustration-1 {
+            top: 10%;
+            left: 5%;
+        }
+
+        .illustration-2 {
+            top: 15%;
+            right: 7%;
+        }
+
+        .illustration-3 {
+            bottom: 20%;
+            left: 8%;
+        }
+
+        .illustration-4 {
+            bottom: 10%;
+            right: 5%;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            /* .result-text {
+                font-size: 5rem;
+            } */
+            .result-text {
+                font-size: 1.8rem;
+            }
+
+            .list-container {
+                grid-template-columns: 1fr;
+            }
+
+            .draw-button {
+                padding: 10px 18px;
+                font-size: 1.3rem;
+            }
+
+            .illustration {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes highlight {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .highlight-animation {
+            animation: highlight 0.5s ease;
+        }
+
+        @keyframes drawAnimation {
+            0% {
+                opacity: 0.3;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .draw-animation {
+            animation: drawAnimation 0.8s ease-out;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* 滚动条样式 */
+        .things-list::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .things-list::-webkit-scrollbar-track {
+            background: #fff0f0;
+            border-radius: 10px;
+        }
+
+        .things-list::-webkit-scrollbar-thumb {
+            background: #ffaaa5;
+            border-radius: 10px;
+        }
+
+        .things-list::-webkit-scrollbar-thumb:hover {
+            background: #698474;
+        }
+
+        /* 完成进度条 */
+        .progress-container {
+            width: 100%;
+            background-color: #ffe8e8;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+            height: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #a8e6cf 0%, #dcedc1 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 背景小插图 -->
+        <!-- <div class="illustration illustration-1 float-animation">🌸</div>
+        <div class="illustration illustration-2 float-animation" style="animation-delay: 0.5s;">🍄</div>
+        <div class="illustration illustration-3 float-animation" style="animation-delay: 1s;">🌿</div>
+        <div class="illustration illustration-4 float-animation" style="animation-delay: 1.5s;">🐇</div> -->
+
+        <!-- <header>
+            
+            <h1><i class="fas fa-heart"></i> 100件小事</h1>
+            <p class="subtitle">当你感到无聊时，点击下方按钮随机抽取一件可爱的小事来做吧！</p>
+        </header> -->
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="draw-area">
+                    <div class="result-box" id="resultBox">
+                        <div class="result-text" id="resultText"><span style="font-size: 5rem;">?</span></div>
+                    </div>
+
+                    <button class="draw-button" id="drawButton">
+                        <div>
+                            <i class="fas fa-magic"></i> 随机抽取一件小事
+                        </div>
+                    </button>
+
+                    <div class="counter">
+                        <i class="fas fa-star"></i> 今日已抽取: <span id="drawCount">0</span> 次
+                    </div>
+
+                    <div class="progress-container" style="display: none;">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+
+                    <!-- <p class="instructions">
+                        <i class="fas fa-lightbulb"></i> 提示：点击抽取按钮后，系统会随机从100件小事中选择一件。<br>
+                        完成后可以标记为已完成，继续抽取下一件！
+                    </p> -->
+                </div>
+
+                <div class="history" style="display: none;">
+                    <h3><i class="fas fa-history"></i> 最近抽取记录</h3>
+                    <div class="history-list" id="historyList">
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel" style="display: none;">
+                <div class="things-list">
+                    <h3><i class="fas fa-list-ul"></i> 100件无聊时可做的小事</h3>
+                    <div class="list-container" id="thingsList">
+                        <!-- 100件小事会动态生成到这里 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 当你无聊时，总有新鲜事可以做</p>
+            <span style="display: none;"> | 已完成: <span id="completedCount">0</span>/100 件小事</span>
+            <!-- <p>设计灵感来源于生活中的小确幸与可爱事物</p> -->
+        </footer>
+    </div>
+
+    <script>
+        // 100件无聊时可以做的事（可爱版）
+        const thingsToDo = [
+            "给手机相册来一次大扫除，删除模糊照片",
+            "尝试做一道可爱的甜点，比如小饼干",
+            "给家里的植物宝宝浇浇水，和它们说说话",
+            "给很久没联系的朋友写一封手写信",
+            "整理书架，把书按照颜色排列成彩虹",
+            "学习一种新的纸牌玩法，教给家人",
+            "尝试用彩色铅笔画一幅简单的画",
+            "整理电脑桌面，换上可爱的壁纸",
+            "学习五个有趣的外语词汇，比如'小确幸'",
+            "给房间来一次彻底的清洁，边听音乐边打扫",
+            "尝试一种没喝过的花果茶",
+            "制作一周的小计划，用贴纸装饰",
+            "学习一个简单的小魔术，表演给朋友看",
+            "整理衣柜，把衣服叠成可爱的形状",
+            "尝试冥想5分钟，专注于呼吸",
+            "学习折纸，折一只可爱的小兔子",
+            "给家人做一次爱心早餐",
+            "整理手机通讯录，给朋友设置可爱备注",
+            "学唱一首可爱的儿歌或动画主题曲",
+            "尝试一种新的伸展运动",
+            "整理电子邮件，把重要邮件标记起来",
+            "给自己制定一个阅读挑战，读完一本书",
+            "尝试写一首可爱的小诗",
+            "学习几个简单的瑜伽姿势",
+            "整理家庭药箱，检查药品有效期",
+            "尝试修理家里的小物件，比如粘好杯子把手",
+            "给宠物拍一组可爱的照片，做成表情包",
+            "学习如何打一个漂亮的蝴蝶结",
+            "整理过去的照片，制作电子相册",
+            "尝试种一盆多肉植物或小绿植",
+            "学习一段可爱的舞蹈动作",
+            "整理购物清单，加入健康食材",
+            "尝试DIY一个小手工艺品，比如串珠",
+            "给房间换个布置，移动家具位置",
+            "学习如何泡一壶完美的花茶",
+            "整理旅行时的照片，写下回忆",
+            "尝试用非惯用手画画或写字",
+            "学习几个简单的手语表达",
+            "整理个人财务，记录一周开销",
+            "尝试做一份可爱的水果拼盘",
+            "学习如何拍出更好的自拍",
+            "整理汽车内部，挂上可爱的挂饰",
+            "尝试学习一种乐器的简单旋律",
+            "给朋友制作一个手工小礼物",
+            "学习如何系各种漂亮的绳结",
+            "整理手机应用，删除不常用的",
+            "尝试制作一个家庭照片墙",
+            "学习几个有趣的笑话，逗朋友开心",
+            "整理钥匙和零钱，放到可爱的小盒子里",
+            "尝试学习简单的编程，做一个 Hello World",
+            "给未来的自己写一封信，设定可爱目标",
+            "学习如何识别夜空中最亮的星星",
+            "整理工作或学习空间，摆上小绿植",
+            "尝试学习织一条简单的围巾",
+            "给社区做一次小小的志愿服务",
+            "学习如何更好地管理时间，使用番茄钟",
+            "整理食谱，标记想尝试的可爱料理",
+            "尝试写一个短篇小故事",
+            "学习一些基础的急救知识",
+            "整理家庭工具箱，摆放整齐",
+            "尝试学习书法，写几个漂亮的字",
+            "给家里添置一些可爱的装饰品",
+            "学习如何制作一个简单的短视频",
+            "整理音乐播放列表，创建心情歌单",
+            "尝试学习陶艺，捏一个小杯子",
+            "给家人准备一个小惊喜",
+            "学习如何修理自行车，给轮胎打气",
+            "整理浴室用品，换上可爱的毛巾",
+            "尝试学习插花，做一个小花束",
+            "给邻居送一些自制的小点心",
+            "学习如何做简单的预算规划",
+            "整理鞋柜，给鞋子拍个'全家福'",
+            "尝试学习摄影构图技巧",
+            "给朋友制作一张生日卡片",
+            "学习如何做家庭月度预算",
+            "整理旧衣物，尝试改造一件",
+            "尝试学习调制一款无酒精鸡尾酒",
+            "给自己制定一个简单的健身计划",
+            "学习如何识别可食用的野菜",
+            "整理家庭影集，分享回忆",
+            "尝试学习剪纸，剪出可爱图案",
+            "给环保做贡献，认真分类垃圾",
+            "学习如何做简单的肩颈按摩",
+            "整理个人简历，更新成就",
+            "尝试学习攀岩基础动作",
+            "给家里做一个节能小计划",
+            "学习如何制作简单的动画",
+            "整理收藏品，给每件写小故事",
+            "尝试学习木工，做一个小物件",
+            "给自己放一天'数字排毒'假",
+            "学习如何做果酱，送给朋友",
+            "整理旅行计划和梦想清单",
+            "尝试学习滑板基础，注意安全",
+            "给社区公园做一次小小清洁",
+            "学习如何做家庭急救包",
+            "整理童年回忆物品，拍照留念",
+            "尝试学习射箭，注意安全指导",
+            "给家人做一顿丰盛的晚餐",
+            "学习如何做家庭防火计划",
+            "整理联系人，发送问候消息",
+            "尝试学习编织一个小杯垫",
+            "给自己设立一个21天学习挑战",
+            "学习如何制定家庭清洁日程",
+            "整理个人目标清单，可视化呈现"
+        ];
+
+        // DOM元素
+        const drawButton = document.getElementById('drawButton');
+        const resultText = document.getElementById('resultText');
+        const resultBox = document.getElementById('resultBox');
+        const drawCountElement = document.getElementById('drawCount');
+        const historyList = document.getElementById('historyList');
+        const thingsList = document.getElementById('thingsList');
+        const completedCountElement = document.getElementById('completedCount');
+        const progressBar = document.getElementById('progressBar');
+
+        const result = new URLSearchParams(window.location.search);
+        const infinite = result.get('infinite') ? true : false;
+
+        // 状态变量
+        let drawCount = 0;
+        let completedCount = 0;
+        let isDrawing = false;
+        let drawHistory = [];
+        let completedItems = JSON.parse(localStorage.getItem('completedItems')) || [];
+
+        // 初始化页面
+        function initPage() {
+            // 生成100件小事的列表
+            thingsToDo.forEach((thing, index) => {
+                const thingElement = document.createElement('div');
+                thingElement.className = `thing-item ${completedItems.includes(index) ? 'completed' : ''}`;
+                thingElement.dataset.index = index;
+
+                thingElement.innerHTML = `
+                    <div class="thing-number">${index + 1}</div>
+                    <div class="thing-text">${thing}</div>
+                `;
+
+                // 点击标记为已完成/未完成
+                thingElement.addEventListener('click', () => {
+                    toggleCompleted(index, thingElement);
+                });
+
+                thingsList.appendChild(thingElement);
+            });
+
+            // 从本地存储加载抽取计数
+            const savedDrawCount = localStorage.getItem('drawCount');
+            if (savedDrawCount) {
+                drawCount = parseInt(savedDrawCount);
+                drawCountElement.textContent = drawCount;
+            }
+
+            // 从本地存储加载抽取历史
+            const savedHistory = localStorage.getItem('drawHistory');
+            if (savedHistory) {
+                drawHistory = JSON.parse(savedHistory);
+                updateHistoryDisplay();
+            }
+
+            // 更新完成计数和进度条
+            completedCount = completedItems.length;
+            completedCountElement.textContent = completedCount;
+            updateProgressBar();
+
+            infinite && drawRandomThing()
+        }
+
+        // 随机抽取函数
+        function drawRandomThing() {
+            if (isDrawing) return;
+
+            isDrawing = true;
+            drawButton.disabled = true;
+            drawButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 抽取中...';
+
+            // 清空结果框
+            resultText.textContent = '';
+            resultBox.classList.remove('active');
+
+            // 随机抽取动画
+            let counter = 0;
+            const totalIterations = infinite ? 100 : 35;
+            const interval = setInterval(() => {
+                // console.log(counter)
+                let randomIndex = 0
+                if (infinite) {
+                    resultText.textContent = thingsToDo[counter];
+                } else {
+                    // 随机显示一件小事
+                    randomIndex = Math.floor(Math.random() * thingsToDo.length);
+                    resultText.textContent = thingsToDo[randomIndex];
+                }
+
+                counter++;
+
+                // 最后几次减慢速度
+                if(infinite && counter > totalIterations) {
+                    counter = 0
+                } else if (!infinite && counter > totalIterations - 8) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        finishDrawing(randomIndex);
+                    }, 150);
+                }
+            }, 60);
+        }
+
+        // 完成抽取
+        function finishDrawing(index) {
+            // 设置最终结果
+            resultText.textContent = thingsToDo[index];
+
+            // 添加动画效果
+            resultBox.classList.add('active');
+            resultBox.classList.add('draw-animation');
+
+            // 更新抽取计数
+            drawCount++;
+            drawCountElement.textContent = drawCount;
+            localStorage.setItem('drawCount', drawCount);
+
+            // 添加到历史记录
+            const drawItem = {
+                index: index,
+                text: thingsToDo[index],
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            drawHistory.unshift(drawItem);
+            if (drawHistory.length > 5) {
+                drawHistory = drawHistory.slice(0, 5);
+            }
+
+            localStorage.setItem('drawHistory', JSON.stringify(drawHistory));
+            updateHistoryDisplay();
+
+            // 高亮对应的列表项
+            const thingElement = document.querySelector(`.thing-item[data-index="${index}"]`);
+            thingElement.classList.add('highlight-animation');
+
+            setTimeout(() => {
+                thingElement.classList.remove('highlight-animation');
+            }, 1000);
+
+            // 恢复按钮状态
+            setTimeout(() => {
+                isDrawing = false;
+                drawButton.disabled = false;
+                drawButton.innerHTML = '<i class="fas fa-magic"></i> 随机抽取一件小事';
+                resultBox.classList.remove('draw-animation');
+            }, 500);
+        }
+
+        // 更新历史记录显示
+        function updateHistoryDisplay() {
+            historyList.innerHTML = '';
+
+            drawHistory.forEach(item => {
+                const historyElement = document.createElement('div');
+                historyElement.className = 'history-item';
+                const shortText = item.text.length > 20 ? item.text.substring(0, 20) + '...' : item.text;
+                historyElement.innerHTML = `${shortText} <span style="color:#698474; font-size:0.8rem;">${item.timestamp}</span>`;
+                historyList.appendChild(historyElement);
+            });
+        }
+
+        // 切换完成状态
+        function toggleCompleted(index, element) {
+            if (completedItems.includes(index)) {
+                // 取消完成
+                completedItems = completedItems.filter(item => item !== index);
+                element.classList.remove('completed');
+                completedCount--;
+            } else {
+                // 标记完成
+                completedItems.push(index);
+                element.classList.add('completed');
+                completedCount++;
+            }
+
+            // 更新显示
+            completedCountElement.textContent = completedCount;
+            updateProgressBar();
+
+            // 保存到本地存储
+            localStorage.setItem('completedItems', JSON.stringify(completedItems));
+        }
+
+        // 更新进度条
+        function updateProgressBar() {
+            const progressPercentage = (completedCount / thingsToDo.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+
+        // 添加事件监听器
+        drawButton.addEventListener('click', drawRandomThing);
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', initPage);
+
+        // 添加键盘快捷键支持
+        document.addEventListener('keydown', (e) => {
+            // 按空格键或回车键触发抽取
+            if ((e.code === 'Space' || e.code === 'Enter') && !isDrawing) {
+                e.preventDefault();
+                drawRandomThing();
+            }
+        });
+
+        // 添加一些交互效果
+        document.querySelectorAll('.thing-item').forEach(item => {
+            item.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-5px)';
+            });
+
+            item.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+
+</html>
