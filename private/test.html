@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOURNAL - 完整导出版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700&family=Space+Mono&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F9F8F4; color: #1A1A1A; }
+        .serif { font-family: 'Playfair Display', serif; }
+        .mono { font-family: 'Space Mono', monospace; }
+        .receipt-container { background: white; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        /* 锯齿 */
+        .receipt-zigzag { position: absolute; left: 0; width: 100%; height: 8px; background-image: linear-gradient(135deg, #F9F8F4 4px, transparent 0), linear-gradient(-135deg, #F9F8F4 4px, transparent 0); background-size: 8px 8px; z-index: 10; }
+        .zigzag-top { top: 0; transform: rotate(180deg); }
+        .zigzag-bottom { bottom: 0; }
+        .task-done { text-decoration: line-through; opacity: 0.3; }
+        .editable:focus { outline: none; background: #eee; }
+        /* 导出专用强制样式 */
+        .export-mode { width: 400px !important; padding: 40px !important; }
+    </style>
+</head>
+<body class="min-h-screen p-6 md:p-12">
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <main class="lg:col-span-7">
+            <header class="mb-10 border-b-2 border-black pb-6 flex justify-between items-end">
+                <div>
+                    <h1 class="serif text-6xl italic font-bold">Journal.</h1>
+                    <p class="mono text-[10px] tracking-[3px] mt-2 uppercase opacity-50">Typography & Data</p>
+                </div>
+                <label class="cursor-pointer bg-black text-white px-4 py-2 text-xs font-bold hover:bg-gray-800 transition">
+                    导入 CSV
+                    <input type="file" id="csv-input" accept=".csv" class="hidden" onchange="handleCSV(event)">
+                </label>
+            </header>
+
+            <div id="task-list" class="space-y-6">
+                </div>
+        </main>
+
+        <aside class="lg:col-span-5 flex flex-col items-center">
+            <div id="capture-area" class="bg-[#F9F8F4] p-10">
+                <div id="receipt" class="receipt-container w-[320px] p-8 mono text-[12px] leading-relaxed text-gray-900">
+                    <div class="receipt-zigzag zigzag-top"></div>
+                    
+                    <div class="text-center border-b border-black border-double pb-6 mb-6">
+                        <p class="text-xl font-bold tracking-tighter serif italic">Daily Summary</p>
+                        <p class="mt-2 text-[10px] opacity-60" id="r-date"></p>
+                    </div>
+
+                    <div id="r-items" class="min-h-[100px] space-y-4">
+                        </div>
+
+                    <div class="border-t border-black border-dashed mt-10 pt-6">
+                        <div class="flex justify-between text-sm font-bold italic">
+                            <span>TOTAL TIME</span>
+                            <span id="r-total">0m</span>
+                        </div>
+                        <div class="mt-8 overflow-hidden">
+                            <div class="w-full h-8 bg-black mb-2" style="mask-image: linear-gradient(90deg, #000 1px, transparent 1px); mask-size: 4px 100%;"></div>
+                            <p class="text-[8px] text-center tracking-[0.3em]">PRINTED IN 2026</p>
+                        </div>
+                    </div>
+                    
+                    <div class="receipt-zigzag zigzag-bottom"></div>
+                </div>
+            </div>
+
+            <button onclick="safeDownload()" id="export-btn" class="mt-8 w-full bg-black text-white py-4 font-bold tracking-widest hover:bg-gray-900 active:scale-95 transition-all">
+                导出完整小票 (PNG)
+            </button>
+        </aside>
+    </div>
+
+    <script>
+        let tasks = [];
+
+        function timeToSeconds(timeStr) {
+            if (!timeStr) return 0;
+            const parts = timeStr.trim().split(':');
+            return (parseInt(parts[0]) || 0) * 3600 + (parseInt(parts[1]) || 0) * 60;
+        }
+
+        function handleCSV(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => parseCSV(e.target.result);
+            reader.readAsText(file, "UTF-8");
+        }
+
+        function parseCSV(text) {
+            const lines = text.split(/\r?\n/);
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                const [name, start, end, status] = lines[i].split(',').map(c => c.trim());
+                let duration = timeToSeconds(end) - timeToSeconds(start);
+                tasks.push({
+                    id: Date.now() + Math.random(),
+                    name: name || "Untitled Task",
+                    elapsed: duration > 0 ? duration : 0,
+                    isRunning: false,
+                    isDone: status?.includes("完成")
+                });
+            }
+            render();
+        }
+
+        function editField(id, field, value) {
+            const task = tasks.find(t => t.id === id);
+            if (field === 'name') task.name = value;
+            if (field === 'time') task.elapsed = (parseInt(value) || 0) * 60;
+            renderReceipt();
+        }
+
+        function render() {
+            const listEl = document.getElementById('task-list');
+            listEl.innerHTML = tasks.map(t => `
+                <div class="bg-white p-6 border-l-8 ${t.isDone ? 'border-gray-200' : 'border-black'} shadow-sm">
+                    <div class="text-2xl font-medium editable outline-none mb-2" contenteditable="true" onblur="editField(${t.id}, 'name', this.innerText)">${t.name}</div>
+                    <div class="flex items-center gap-4 mono text-xs opacity-50">
+                        <span>时长(分):</span>
+                        <span class="font-bold border-b border-black/20 editable outline-none" contenteditable="true" onblur="editField(${t.id}, 'time', this.innerText)">${Math.floor(t.elapsed / 60)}</span>
+                        <button onclick="tasks=tasks.filter(x=>x.id!=${t.id});render();" class="ml-auto text-red-500 font-bold hover:underline">删除</button>
+                    </div>
+                </div>
+            `).join('');
+            renderReceipt();
+        }
+
+        function renderReceipt() {
+            document.getElementById('r-date').innerText = new Date().toLocaleString();
+            const rItems = document.getElementById('r-items');
+            let total = 0;
+
+            rItems.innerHTML = tasks.map(t => {
+                total += t.elapsed;
+                return `
+                    <div class="flex justify-between items-start gap-4">
+                        <span class="break-words uppercase leading-tight flex-1">
+                            ${t.isDone ? '[X]' : '*'} ${t.name}
+                        </span>
+                        <span class="shrink-0 font-bold ml-2">
+                            ${Math.floor(t.elapsed / 60)}M
+                        </span>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('r-total').innerText = Math.floor(total / 60) + 'm';
+        }
+
+        // 导出逻辑：增加重绘保障
+        async function safeDownload() {
+            const btn = document.getElementById('export-btn');
+            const target = document.getElementById('capture-area');
+            
+            btn.innerText = "正在排版...";
+            btn.disabled = true;
+
+            // 滚动到顶部，防止 html2canvas 偏移偏移
+            window.scrollTo(0,0);
+
+            try {
+                // 给浏览器 300ms 响应样式重绘
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                const canvas = await html2canvas(target, {
+                    backgroundColor: '#F9F8F4',
+                    scale: 2,           // 2倍清晰度足够，3倍有时会导致大图崩溃
+                    useCORS: true,      // 允许跨域字体
+                    logging: false,
+                    width: target.offsetWidth,
+                    height: target.offsetHeight
+                });
+
+                const link = document.createElement('a');
+                link.download = `JOURNAL-EXPORT-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (err) {
+                alert("导出失败，请尝试刷新页面");
+                console.error(err);
+            } finally {
+                btn.innerText = "导出完整小票 (PNG)";
+                btn.disabled = false;
+            }
+        }
+
+        render();
+    </script>
+</body>
+</html>

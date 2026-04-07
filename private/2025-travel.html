@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 自由生长 | Gap Year Travel Journal</title>
+    <style>
+        :root {
+            --bg-color: #F9F8F5;
+            --text-color: #333333;
+            --accent-color: #8C8C8C;
+            --border-color: #E0E0E0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 杂志封面感 Header */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: 200;
+            letter-spacing: 0.5rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .sub-title {
+            font-size: 1rem;
+            color: var(--accent-color);
+            letter-spacing: 0.3rem;
+        }
+
+        /* 章节布局 */
+        section {
+            max-width: 1000px;
+            margin: 0 auto 15rem auto;
+            padding: 0 40px;
+        }
+
+        .chapter-num {
+            font-size: 5rem;
+            font-weight: 100;
+            color: var(--border-color);
+            line-height: 1;
+            margin-bottom: -1.5rem;
+            margin-left: -2rem;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .location-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: inline-block;
+            padding-right: 4rem;
+        }
+
+        .image-container {
+            width: 100%;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            background-color: #eee; /* 占位色 */
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(20%);
+            transition: transform 0.8s ease;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.02);
+        }
+
+        .caption {
+            font-size: 0.95rem;
+            color: var(--accent-color);
+            text-align: right;
+            max-width: 600px;
+            margin-left: auto;
+            font-style: italic;
+            line-height: 1.8;
+        }
+
+        /* 底部总结 */
+        footer {
+            padding: 10rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            margin: 0 40px;
+        }
+
+        .summary {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.1rem;
+            color: var(--text-color);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .main-title { font-size: 2.5rem; }
+            section { margin-bottom: 8rem; }
+            .location-title { font-size: 1.8rem; }
+            .chapter-num { font-size: 3.5rem; margin-left: -1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="sub-title">2025 TRAVEL COLLECTION</div>
+        <h1 class="main-title">自由生长</h1>
+        <div class="sub-title">一份关于离开、寻找与回归的记录 by 阿汪</div>
+    </header>
+
+    <section>
+        <div class="chapter-num">01</div>
+        <h2 class="location-title">三月 · 贵州</h2>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=80" alt="贵州山水">
+        </div>
+        <p class="caption">
+            辞职后的第一个月，我钻进万峰林的晨雾里。<br>
+            没有了打卡机的滴答声，只有梯田间风吹过的声音。
+        </p>
+    </section>
+
+    <section>
+        <div class="chapter-num">02</div>
+        <h2 class="location-title">四月 · 川藏 & 天津</h2>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80" alt="川藏自驾">
+        </div>
+        <p class="caption">
+            在 318 国道上，我看过比电脑桌面更蓝的天。<br>
+            随后在天津的海河边，和五万人一起大声唱着《倔强》，<br>
+            那一刻我觉得，所谓的“出路”，其实就在自己脚下。
+        </p>
+    </section>
+
+    <section>
+        <div class="chapter-num">03</div>
+        <h2 class="location-title">六月 · 哈尔滨 & 济州岛</h2>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" alt="济州岛海边">
+        </div>
+        <p class="caption">
+            从松花江畔的晚风，到济州岛果冻色的海。<br>
+            夏天提前在皮肤上留下了橘子味的印记。
+        </p>
+    </section>
+
+    <section>
+        <div class="chapter-num">04</div>
+        <h2 class="location-title">七月 · 台州</h2>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1590250668095-25e98f060a4b?auto=format&fit=crop&w=1200&q=80" alt="台州老街">
+        </div>
+        <p class="caption">
+            糯叽叽的台州，连空气里都带着姜汁调蛋的甜味。<br>
+            慢下来，才发现生活原本不需要那么多意义。
+        </p>
+    </section>
+
+    <section>
+        <div class="chapter-num">05</div>
+        <h2 class="location-title">九月 · 桂林 & 重庆</h2>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1541339905195-03f4445d4071?auto=format&fit=crop&w=1200&q=80" alt="重庆夜景">
+        </div>
+        <p class="caption">
+            在漓江的水墨画里划过，再到洪崖洞的灯火里穿行。<br>
+            一边是极致的静，一边是魔幻的躁。
+        </p>
+    </section>
+
+    <section>
+        <div class="chapter-num">06</div>
+        <h2 class="location-title">十二月 · 边境与雪</h2>
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=1200&q=80" alt="雪国阿尔山">
+        </div>
+        <p class="caption">
+            延边的咖啡、沈阳的旧工厂、阿尔山的雪原。<br>
+            岁末年终，在零下三十度的极寒里，我听见了内心最滚烫的声音。
+        </p>
+    </section>
+
+    <footer>
+        <p class="summary">“与其等世界改变，不如先让自己改变。” —— 2025，感谢勇敢出发的自己。</p>
+    </footer>
+
+</body>
+</html>
