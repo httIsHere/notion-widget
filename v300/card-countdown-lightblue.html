@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Countdown</title>
+<script src="../lib/global.js?v=20260129"></script>
+<script src="../lib/crypto-js.min.js"></script>
+<style>
+  /* ================= 基础 ================= */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    padding: clamp(10px, 3vw, 28px);
+    background: transparent;
+    /* 手写字体栈：西文手写优先，中文回落到楷体类 */
+    font-family: "Segoe Print", "Bradley Hand", "Chalkboard SE",
+                 "Comic Sans MS";
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ====== 容器查询上下文（自适应核心） ====== */
+  .stage {
+    width: 100%;
+    max-width: 720px;
+    container-type: inline-size;
+  }
+
+  /* ================= 卡片 ================= */
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(14px, 4cqw, 26px);
+    padding: clamp(20px, 5cqw, 38px) clamp(16px, 4cqw, 32px) clamp(24px, 5.5cqw, 44px);
+    border-radius: clamp(18px, 3.6cqw, 30px);
+    background: linear-gradient(160deg, #FBFDFF 0%, #E6F1FB 100%);
+    border: 3px solid rgba(150, 196, 232, 0.35);
+    box-shadow:
+      0 20px 44px -20px rgba(94, 143, 187, 0.38),
+      0 2px 6px rgba(94, 143, 187, 0.06);
+      /* 卡片缓慢上下浮动 */
+    /* animation: floaty 6s ease-in-out infinite;    */
+  }
+
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+
+  /* ================= 标题 + 手绘波浪线 ================= */
+  .head {
+    position: relative;
+    padding-bottom: 9px;
+    font-size: clamp(13px, 3.6cqw, 20px);
+    letter-spacing: 0.06em;
+    color: #4A7392;
+    text-align: center;
+  }
+
+  .head::after {
+    content: "";
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    bottom: 0;
+    height: 6px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='6' viewBox='0 0 40 6'%3E%3Cpath d='M0 3 Q5 0 10 3 T20 3 T30 3 T40 3' fill='none' stroke='%23A9D2F0' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center / 40px 6px;
+    opacity: 0.95;
+  }
+
+  /* ================= 色块区 ================= */
+  .countdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);   /* 去掉秒，改为三列 */
+    width: 100%;
+    gap: clamp(8px, 2.6cqw, 20px);
+  }
+
+  .block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(2px, 1cqw, 8px);
+    padding: clamp(12px, 3.6cqw, 26px) clamp(4px, 1.4cqw, 12px) clamp(10px, 3cqw, 22px);
+    border-radius: clamp(14px, 2.8cqw, 22px);
+    transform: rotate(var(--rot));           /* 轻微歪斜，手作感 */
+    box-shadow: 0 10px 22px -14px rgba(74, 124, 166, 0.55);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.35s ease;
+    animation: bob 5s ease-in-out infinite;
+  }
+
+  /* 每个色块浮沉节奏错开，更有生气 */
+  .block:nth-child(1) { animation-delay: 0s;    --rot: -2.2deg; }
+  .block:nth-child(2) { animation-delay: -1.7s; --rot: 1.4deg;  }
+  .block:nth-child(3) { animation-delay: -3.4s; --rot: -1.2deg; }
+
+  @keyframes bob {
+    0%, 100% { transform: rotate(var(--rot)) translateY(0); }
+    50%      { transform: rotate(var(--rot)) translateY(-5px); }
+  }
+
+  .block:hover {
+    animation-play-state: paused;
+    transform: rotate(0deg) scale(1.06);
+    box-shadow: 0 18px 30px -14px rgba(74, 124, 166, 0.62);
+  }
+
+  /* 奶蓝色系三档色块 */
+  .b1 { background: #A9D2F0; }
+  .b2 { background: #C6E2F6; }
+  .b3 { background: #E1F0FB; }
+
+  /* ================= 数字 ================= */
+  .num {
+    display: block;
+    font-size: clamp(34px, 13.5cqw, 92px);
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #2E5A78;
+    font-variant-numeric: tabular-nums;      /* 等宽数字，避免抖动 */
+    font-feature-settings: "tnum";
+    will-change: transform, opacity;
+  }
+  .b2 .num { color: #33607E; }
+  .b3 .num { color: #3D6C8A; }
+
+  /* 数字变化时的弹跳动画 */
+  @keyframes pop {
+    0%   { transform: scale(0.72); opacity: 0.25; }
+    55%  { transform: scale(1.10); }
+    100% { transform: scale(1);    opacity: 1; }
+  }
+  .num.is-tick { animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  /* ================= 单位标签 ================= */
+  .label {
+    font-size: clamp(11px, 3cqw, 17px);
+    letter-spacing: 0.18em;
+    text-indent: 0.18em;
+    color: rgba(46, 90, 120, 0.62);
+  }
+
+  /* ================= 深色模式 ================= */
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #191919;
+    }
+    .card {
+      background: linear-gradient(160deg, #1E2A35 0%, #152029 100%);
+      border-color: rgba(140, 188, 227, 0.18);
+      box-shadow: 0 20px 44px -20px rgba(0, 0, 0, 0.72);
+    }
+    .head { color: #A9CBE3; }
+    .head::after { opacity: 0.55; }
+    .b1 { background: #2F5570; }
+    .b2 { background: #294A62; }
+    .b3 { background: #223D52; }
+    .num, .b2 .num, .b3 .num { color: #C9E4F7; }
+    .label { color: rgba(201, 228, 247, 0.60); }
+  }
+    html[theme="dark"],
+    html[theme="dark"] body {
+      background-color: #191919;
+    }
+    html[theme="dark"] .card {
+      background: linear-gradient(160deg, #1E2A35 0%, #152029 100%);
+      border-color: rgba(140, 188, 227, 0.18);
+      box-shadow: 0 20px 44px -20px rgba(0, 0, 0, 0.72);
+    }
+    html[theme="dark"] .head { color: #A9CBE3; }
+    html[theme="dark"] .head::after { opacity: 0.55; }
+    html[theme="dark"] .b1 { background: #2F5570; }
+    html[theme="dark"] .b2 { background: #294A62; }
+    html[theme="dark"] .b3 { background: #223D52; }
+    html[theme="dark"] .num, .b2 .num, .b3 .num { color: #C9E4F7; }
+    html[theme="dark"] .label { color: rgba(201, 228, 247, 0.60); }
+
+  /* ================= 无障碍：减少动效 ================= */
+  @media (prefers-reduced-motion: reduce) {
+    .card, .block { animation: none; }
+    .num.is-tick { animation: none; }
+    .block:hover { transform: rotate(0deg); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="stage">
+    <section class="card" role="timer" aria-live="off">
+      <div class="head" id="title"></div>
+
+      <div class="countdown">
+        <div class="block b1">
+          <span class="num" id="d">--</span>
+          <span class="label">Days</span>
+        </div>
+        <div class="block b2">
+          <span class="num" id="h">--</span>
+          <span class="label">Hours</span>
+        </div>
+        <div class="block b3">
+          <span class="num" id="m">--</span>
+          <span class="label">Minutes</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<script>
+(function () {
+  'use strict';
+
+      const params = getAllParams(CryptoJS);
+      handleDarkMode(params);
+      console.log(params)
+  /* ================= 可配置区域 ================= */
+  const CONFIG = {
+    title:  params.title || '距离 2027 年元旦｜2027-01-01',
+    target: params.date || '2027-01-01T00:00:00'      // 目标时间（本地时区）
+  };
+  /* ============================================= */
+
+  const qs = new URLSearchParams(location.search);
+  const titleText = qs.get('title') || CONFIG.title;
+
+  let target = new Date(qs.get('date') || CONFIG.target);
+  if (isNaN(target.getTime())) target = new Date(CONFIG.target);
+  if (isNaN(target.getTime())) target = new Date();
+
+  const el = {
+    title: document.getElementById('title'),
+    d: document.getElementById('d'),
+    h: document.getElementById('h'),
+    m: document.getElementById('m')
+  };
+
+  el.title.textContent = titleText;
+  document.title = titleText;
+
+  const pad2 = n => (n < 10 ? '0' + n : String(n));
+
+  /* 仅在数值真正变化时重播动画 */
+  function setNum(node, value, pad) {
+    const str = pad ? pad2(value) : String(value);
+    if (node.textContent === str) return;
+    node.textContent = str;
+    node.classList.remove('is-tick');
+    void node.offsetWidth;            // 强制回流，重启 CSS 动画
+    node.classList.add('is-tick');
+  }
+
+  function render() {
+    const diff = target.getTime() - Date.now();
+
+    if (diff <= 0) {                  // 已到达目标时间
+      setNum(el.d, 0, true);
+      setNum(el.h, 0, true);
+      setNum(el.m, 0, true);
+      return;
+    }
+
+    const total = Math.floor(diff / 1000);
+    const days  = Math.floor(total / 86400);
+    const hours = Math.floor((total % 86400) / 3600);
+    const mins  = Math.floor((total % 3600) / 60);
+
+    setNum(el.d, days, true);
+    setNum(el.h, hours, true);
+    setNum(el.m, mins,  true);
+  }
+
+  /* 精确对齐到整分钟：去掉秒后无需每秒刷新 */
+  function loop() {
+    render();
+    const wait = 60000 - (Date.now() % 60000) + 80;
+    setTimeout(loop, wait);
+  }
+
+  loop();
+})();
+</script>
+</body>
+</html>
