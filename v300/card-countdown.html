@@ -158,11 +158,11 @@
   <script>
     // ===== 设置你的目标时间 =====
 
-    let targetDate = new Date("2026-12-10").getTime();
+    let targetDate = new Date("2026-12-19 23:59").getTime();
     window.onload = function () {
       const params = getAllParams(CryptoJS);
       console.log(params)
-      params.day && (targetDate = new Date(params.day))
+      params.day && (targetDate = new Date(`${params.day?.split("/").join("-")}T23:59:00`))
       const color = params.font_color;
       params.name && (document.querySelector(".title").innerText = params.name)
       params.msg && (document.getElementById('tip').innerText = params.msg)
