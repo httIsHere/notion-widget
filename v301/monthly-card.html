@@ -295,7 +295,7 @@
             --deep: #3f3d56;
             --glass-bg: rgba(255, 255, 255, .5);
             --glass-border: rgba(255, 255, 255, .6);
-            --shadow: 0 20px 50px rgba(120, 110, 160, .16);
+            --shadow: 0 10px 30px rgba(120, 110, 160, .3);
             --radius: 28px;
         }
 
@@ -325,15 +325,16 @@
         .card {
             position: relative;
             width: 100%;
-            max-width: 420px;
+            max-width: 280px;
             background: var(--glass-bg);
             backdrop-filter: blur(22px) saturate(140%);
             -webkit-backdrop-filter: blur(22px) saturate(140%);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: clamp(20px, 4vw, 30px);
+            padding: clamp(20px, 1vw, 30px);
             overflow: hidden;
+            margin:  0 auto;
         }
 
         /* 卡片内部弥散光斑（衬在磨砂玻璃之下） */
@@ -426,7 +427,7 @@
 
         .weekdays span {
             text-align: center;
-            font-size: clamp(11px, 2.4vw, 13px);
+            font-size: clamp(14px, 3vw, 16px);
             font-weight: 700;
             color: var(--ink-soft);
             letter-spacing: .5px;
@@ -439,7 +440,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            font-size: clamp(13px, 3vw, 16px);
+            font-size: clamp(16px, 5vw, 18px);
             font-weight: 600;
             color: var(--ink);
         }
@@ -454,12 +455,15 @@
             color: #fff;
             box-shadow: 0 8px 18px rgba(168, 140, 220, .32);
         }
+        .day.passed {
+            opacity: 0.4;
+        }
 
         /* ===== 底部摘要 ===== */
         .foot {
             position: relative;
             z-index: 1;
-            margin-top: clamp(14px, 3vw, 20px);
+            /* margin-top: clamp(14px, 3vw, 20px); */
             text-align: center;
             font-size: clamp(12px, 2.6vw, 13px);
             color: var(--ink-soft);
@@ -545,7 +549,9 @@
             for (let d = 1; d <= total; d++) {
                 const cell = document.createElement("div");
                 cell.className = "day";
-                if (d === today.getDate()) cell.classList.add("today");
+                const _d = today.getDate();
+                if (d === _d) cell.classList.add("today");
+                if(d < _d) cell.classList.add("passed");
                 const label = document.createElement("span");
                 label.textContent = d;
                 cell.appendChild(label);
